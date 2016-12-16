@@ -22,7 +22,7 @@ class World(engine: Engine) {
   def createPlayer(): Unit = {
     val player = new Entity
     player.add(new ActionQueueComponent())
-    player.add(PositionComponent(10, 10))
+    player.add(PositionComponent(0, 0))
     player.add(new PlayerMarker)
     engine.addEntity(player)
   }

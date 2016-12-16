@@ -1,7 +1,6 @@
 package net.abesto.labyrinth
 
 import com.badlogic.ashley.core.{ComponentMapper, Engine, Entity, Family}
-import com.badlogic.ashley.utils.ImmutableArray
 import net.abesto.labyrinth.components.PlayerMarker
 import net.abesto.labyrinth.map.MapComponent
 import net.abesto.labyrinth.systems.MapLoaderSystem

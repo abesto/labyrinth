@@ -10,7 +10,7 @@ object Main {
     val engine = new Engine
     val world = new World(engine)
 
-    val renderer = AsciiPanelRenderer(80, 24)
+    val renderer = AsciiPanelRenderer()
     engine.addSystem(renderer)
 
     val app = new ApplicationMain(renderer)
@@ -19,7 +19,7 @@ object Main {
       engine.update(1)
     })
 
-    engine.getSystem(classOf[MapLoaderSystem]).load("sighttest")
+    //engine.getSystem(classOf[MapLoaderSystem]).load("sighttest")
     engine.update(1)
   }
 }
