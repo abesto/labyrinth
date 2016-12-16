@@ -3,7 +3,6 @@ package net.abesto.labyrinth
 import com.badlogic.ashley.core.Engine
 import net.abesto.labyrinth.components.ActionQueueComponent
 import net.abesto.labyrinth.render.AsciiPanelRenderer
-import net.abesto.labyrinth.systems.MapLoaderSystem
 
 object Main {
   def main(args: Array[String]): Unit = {

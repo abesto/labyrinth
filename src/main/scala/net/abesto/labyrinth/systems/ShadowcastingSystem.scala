@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
 import com.badlogic.ashley.core.{ComponentMapper, EntitySystem}
-import net.abesto.labyrinth.EngineAccessors
+import net.abesto.labyrinth.{Constants, EngineAccessors}
 import net.abesto.labyrinth.components.PositionComponent
 import squidpony.squidgrid.FOV
 
@@ -15,10 +15,17 @@ class ShadowcastingSystem extends EntitySystem {
     val fov = new FOV()
 
     val inputResistances: Array[Array[Double]] = map.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0))
-    val outputResistances = fov.calculateFOV(inputResistances, playerPosition.x, playerPosition.y, 7)
+    val outputResistances = fov.calculateFOV(inputResistances, playerPosition.x, playerPosition.y, Constants.sightRadius)
     outputResistances.zipWithIndex.foreach {
       case (column, x) => column.zipWithIndex.foreach {
-        case (visibility, y) => map.tile(x, y).visibility = visibility
+        case (visibility, y) =>
+          val tile = map.tile(x, y)
+          tile.seen ||= visibility > 0
+          tile.visibility = if (tile.seen) {
+            math.max(0.2, visibility)
+          } else {
+            visibility
+          }
       }
     }
   }
