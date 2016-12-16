@@ -9,4 +9,6 @@ case class MapComponent(tiles: Array[Array[MapTile]] = Array(Array())) extends C
 
   def tile(p: PositionComponent) = tiles(p.x)(p.y)
   def tile(x: Int, y: Int) = tiles(x)(y)
+
+  def chars: Array[Array[Char]] = tiles.map(_.map(_.char))
 }

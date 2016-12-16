@@ -5,4 +5,5 @@ abstract case class MapTile(x: Int, y: Int) {
 
   val blocksSight: Boolean
   val canBeStoodOn: Boolean
+  def char: Char
 }
