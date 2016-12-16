@@ -1,27 +1,27 @@
 package net.abesto.labyrinth
 
 import com.badlogic.ashley.core.{Engine, Entity}
-import net.abesto.labyrinth.components.{ActionQueueComponent, PositionComponent}
+import net.abesto.labyrinth.components.{ActionQueueComponent, PlayerMarker, PositionComponent}
 import net.abesto.labyrinth.map.MapComponent
-import net.abesto.labyrinth.systems.ActionQueueSystem
+import net.abesto.labyrinth.systems.{ActionQueueSystem, MapLoaderSystem}
 
 class World(engine: Engine) {
-  val map = createMap()
-  val player = createPlayer()
+  createMap()
+  createPlayer()
   engine.addSystem(new ActionQueueSystem)
+  engine.addSystem(new MapLoaderSystem)
 
   def createMap(): Unit = {
     val map = new Entity()
     map.add(new MapComponent)
     engine.addEntity(map)
-    map
   }
 
-  def createPlayer(): Entity = {
+  def createPlayer(): Unit = {
     val player = new Entity
     player.add(new ActionQueueComponent())
     player.add(PositionComponent(10, 10))
+    player.add(new PlayerMarker)
     engine.addEntity(player)
-    player
   }
 }

@@ -1,14 +1,11 @@
 package net.abesto.labyrinth.map
 
 import com.badlogic.ashley.core.Component
+import net.abesto.labyrinth.components.PositionComponent
 
-class MapComponent extends Component {
-  val WIDTH = 80
-  val HEIGHT = 24
+case class MapComponent(tiles: IndexedSeq[IndexedSeq[MapTile]] = IndexedSeq(IndexedSeq())) extends Component {
+  def height = tiles.size
+  def width = tiles(0).size
 
-  val tiles = 0.until(HEIGHT).map(y =>
-    0.until(WIDTH).map(x =>
-      MapTile(x, y)
-    )
-  )
+  def tile(p: PositionComponent) = tiles(p.y)(p.x)
 }

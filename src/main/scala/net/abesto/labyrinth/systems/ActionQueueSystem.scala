@@ -8,7 +8,6 @@ class ActionQueueSystem extends IteratingSystem(Family.all(classOf[ActionQueueCo
   val aqm = ComponentMapper.getFor(classOf[ActionQueueComponent])
 
   override def processEntity(entity: Entity, deltaTime: Float): Unit = {
-    println(entity)
     val actions = aqm.get(entity).actions
     val engine = getEngine
     while (actions.nonEmpty) {
