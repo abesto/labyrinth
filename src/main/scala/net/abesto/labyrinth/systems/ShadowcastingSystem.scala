@@ -20,9 +20,9 @@ class ShadowcastingSystem extends EntitySystem {
       case (column, x) => column.zipWithIndex.foreach {
         case (visibility, y) =>
           val tile = map.tile(x, y)
-          tile.seen ||= visibility > 0
+          tile.seen ||= visibility > 0.1
           tile.visibility = if (tile.seen) {
-            math.max(0.2, visibility)
+            math.max(0.1, visibility)
           } else {
             visibility
           }
