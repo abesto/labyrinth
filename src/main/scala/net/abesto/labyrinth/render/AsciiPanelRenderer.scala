@@ -1,5 +1,7 @@
 package net.abesto.labyrinth.render
 
+import java.awt.Color
+
 import asciiPanel.{AsciiFont, AsciiPanel}
 import com.badlogic.ashley.core.{ComponentMapper, Engine, Family}
 import net.abesto.labyrinth.EngineAccessors
@@ -19,7 +21,10 @@ case class AsciiPanelRenderer(width: Int, height: Int) extends Renderer {
   def renderMap(): Unit = {
     val m = EngineAccessors.map(getEngine)
     assert(m.width == width && m.height == height)
-    m.tiles.foreach(_.foreach(t => panel.write(tileToChar(t), t.x, t.y)))
+    m.tiles.foreach(_.foreach(t => panel.write(
+      tileToChar(t), t.x, t.y,
+      new Color((255 * t.visibility).toInt, (255 * t.visibility).toInt, (255 * t.visibility).toInt)
+    )))
   }
 
   def renderPlayer(): Unit = {

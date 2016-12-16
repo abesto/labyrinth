@@ -29,8 +29,8 @@ class MapLoaderSystem extends EntitySystem {
         Source.fromURL(getClass.getResource(s"/maps/${toLoad.get}")).getLines().zipWithIndex.map {
           case (line, y) => line.zipWithIndex.map {
             case (char, x) => charToMapTile(char, x, y)
-          }
-        }.toIndexedSeq
+          }.toArray
+        }.toArray
       ))
       toLoad = None
     }
