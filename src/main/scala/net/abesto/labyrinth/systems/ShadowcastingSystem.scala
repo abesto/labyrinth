@@ -14,11 +14,11 @@ class ShadowcastingSystem extends EntitySystem {
     val map = EngineAccessors.map(getEngine)
     val fov = new FOV()
 
-    val inputResistances: Array[Array[Double]] = map.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0)).transpose
+    val inputResistances: Array[Array[Double]] = map.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0))
     val outputResistances = fov.calculateFOV(inputResistances, playerPosition.x, playerPosition.y, 7)
-    outputResistances.transpose.zipWithIndex.foreach {
-      case (row, y) => row.zipWithIndex.foreach {
-        case (visibility, x) => map.tile(x, y).visibility = visibility
+    outputResistances.zipWithIndex.foreach {
+      case (column, x) => column.zipWithIndex.foreach {
+        case (visibility, y) => map.tile(x, y).visibility = visibility
       }
     }
   }

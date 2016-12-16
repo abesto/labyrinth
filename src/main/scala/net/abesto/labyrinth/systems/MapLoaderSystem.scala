@@ -30,7 +30,7 @@ class MapLoaderSystem extends EntitySystem {
           case (line, y) => line.zipWithIndex.map {
             case (char, x) => charToMapTile(char, x, y)
           }.toArray
-        }.toArray
+        }.toArray.transpose
       ))
       toLoad = None
     }
