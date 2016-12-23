@@ -38,6 +38,15 @@ class MazeBuilder(protected var maze: Maze) {
     this
   }
 
+  def linesToHashes(): MazeBuilder = {
+    val originalTileset = maze.tileset
+    maze.translate(Tiles.squidlib)  // So that squidlib can work with it
+    val newChars = DungeonUtility.linesToHashes(maze.chars)
+    mapMaze(t => t.withChar(newChars(t.x)(t.y)))
+    maze.translate(originalTileset)  // Translate back to original tileset
+    this
+  }
+
   def get: Maze = maze
 }
 
@@ -52,6 +61,7 @@ object MazeBuilder {
       case WallHash => new WallTile(x, y, c)
       case StairsDown => new StaircaseDownTile(x, y, c)
       case Water => new WaterTile(x, y, c)
+      case ShallowWater => new ShallowWaterTile(x, y, c)
     }
   }
 
