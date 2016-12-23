@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/game.iml" filepath="$PROJECT_DIR$/.idea/modules/game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/game-build.iml" filepath="$PROJECT_DIR$/.idea/modules/game-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/labyrinth.iml" filepath="$PROJECT_DIR$/.idea/modules/labyrinth.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/labyrinth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/labyrinth-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mapgen.iml" filepath="$PROJECT_DIR$/.idea/modules/mapgen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mapgen-build.iml" filepath="$PROJECT_DIR$/.idea/modules/mapgen-build.iml" />
     </modules>
   </component>
 </project>

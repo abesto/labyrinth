@@ -8,7 +8,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/game" />
+            <option value="$PROJECT_DIR$/game/project" />
             <option value="$PROJECT_DIR$/project" />
+            <option value="$PROJECT_DIR$/tools/mapgen" />
+            <option value="$PROJECT_DIR$/tools/mapgen/project" />
           </set>
         </option>
         <option name="resolveJavadocs" value="true" />

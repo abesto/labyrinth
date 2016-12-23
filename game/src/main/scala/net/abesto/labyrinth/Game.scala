@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Engine
 import net.abesto.labyrinth.components.ActionQueueComponent
 import net.abesto.labyrinth.render.AsciiPanelRenderer
 
-object Main {
+object Game {
   def main(args: Array[String]): Unit = {
     val engine = new Engine
     val world = new World(engine)
@@ -18,7 +18,7 @@ object Main {
       engine.update(1)
     })
 
-    //engine.getSystem(classOf[MapLoaderSystem]).load("sighttest")
+    EngineAccessors.loadMap(engine, "1-dry")
     engine.update(1)
   }
 }

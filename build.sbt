@@ -1,12 +1,3 @@
-name := "labyrinth"
+version in ThisBuild := "1.0"
 
-version := "1.0"
-
-scalaVersion := "2.12.1"
-
-resolvers += Resolver.sonatypeRepo("releases")
-
-libraryDependencies ++= Seq(
-  "com.badlogicgames.ashley" % "ashley" % "1.7.0",
-  "com.squidpony" % "squidlib-util" % "3.0.0-b6"
-)
+scalaVersion in ThisBuild := "2.10.6"
