@@ -16,14 +16,13 @@ class MazeGeneratorSystem extends EntitySystem {
   override def update(deltaTime: Float): Unit = {
     if (shouldGenerate) {
       val mapEntity = EngineAccessors.mapEntity(getEngine)
-      val mapComponent = MazeComponent(
-        new MazeBuilder().generateMaze().hashesToLines().roughFloor().unicodeToAscii().get
-      )
-      mapEntity.add(mapComponent)
+      val builder = MazeBuilder.random().hashesToLines().smoothFloor()
 
-      val startPos = new DungeonUtility().randomFloor(mapComponent.chars)
+      val startPos = new DungeonUtility().randomFloor(builder.get.chars)
       EngineAccessors.player(getEngine).add(PositionComponent(startPos))
 
+      val mapComponent = MazeComponent(builder.roughFloor().get)
+      mapEntity.add(mapComponent)
       shouldGenerate = false
     }
   }

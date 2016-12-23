@@ -15,7 +15,7 @@ class World(engine: Engine) {
 
   def createMap(): Unit = {
     val map = new Entity()
-    map.add(new MazeComponent)
+    map.add(MazeComponent(null))
     engine.addEntity(map)
   }
 

@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
 import com.badlogic.ashley.core.EntitySystem
-import net.abesto.labyrinth.EngineAccessors
+import net.abesto.labyrinth.{EngineAccessors, Tiles}
 import net.abesto.labyrinth.components.PositionComponent
 import net.abesto.labyrinth.maze._
 
@@ -12,8 +12,8 @@ class MazeLoaderSystem extends EntitySystem {
     toLoad = Some(name)
   }
 
-  def tileCallback(c: Char, x: Int, y: Int): Unit = c match {
-    case '@' =>
+  def tileCallback(k: Tiles.Kind.Value, x: Int, y: Int): Unit = k match {
+    case Tiles.Kind.Player =>
       EngineAccessors.player(getEngine).add(PositionComponent(x, y))
     case _ =>
   }
@@ -22,7 +22,7 @@ class MazeLoaderSystem extends EntitySystem {
     if (toLoad.isDefined) {
       val mapEntity = EngineAccessors.mapEntity(getEngine)
       mapEntity.add(
-        MazeComponent(new MazeBuilder().loadMaze(toLoad.get, tileCallback).hashesToLines().unicodeToAscii().get
+        MazeComponent(MazeBuilder.fromFile(toLoad.get, tileCallback).hashesToLines().get
       ))
       toLoad = None
     }

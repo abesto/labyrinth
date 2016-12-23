@@ -11,15 +11,15 @@ class ShadowcastingSystem extends EntitySystem {
   override def update(deltaTime: Float): Unit = {
     val player = EngineAccessors.player(getEngine)
     val playerPosition = pm.get(player)
-    val map = EngineAccessors.map(getEngine)
+    val maze = EngineAccessors.map(getEngine).maze
     val fov = new FOV()
 
-    val inputResistances: Array[Array[Double]] = map.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0))
+    val inputResistances: Array[Array[Double]] = maze.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0))
     val outputResistances = fov.calculateFOV(inputResistances, playerPosition.x, playerPosition.y, Constants.sightRadius)
     outputResistances.zipWithIndex.foreach {
       case (column, x) => column.zipWithIndex.foreach {
         case (visibility, y) =>
-          val tile = map.tile(x, y)
+          val tile = maze.tile(x, y)
           tile.seen ||= visibility > 0.1
           tile.visibility = if (tile.seen) {
             math.max(0.1, visibility)

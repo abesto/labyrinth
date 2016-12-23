@@ -23,6 +23,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="SBT: com.badlogicgames.ashley:ashley:1.7.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: uk.com.robust-it:cloning:1.9.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.objenesis:objenesis:2.1:jar" level="project" />
     <orderEntry type="library" name="SBT: com.badlogicgames.gdx:gdx:1.7.1:jar" level="project" />
     <orderEntry type="library" name="SBT: com.github.tommyettinger:regexodus:0.1.5:jar" level="project" />
     <orderEntry type="library" name="SBT: com.squidpony:squidlib-util:3.0.0-b6:jar" level="project" />
@@ -36,5 +38,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="TEST" name="SBT: org.scala-lang:scala-reflect:2.10.6:jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="SBT: org.scalactic:scalactic_2.10:3.0.1:jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="SBT: org.scalatest:scalatest_2.10:3.0.1:jar" level="project" />
   </component>
 </module>
