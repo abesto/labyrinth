@@ -11,7 +11,7 @@ class ShadowcastingSystem extends EntitySystem {
   override def update(deltaTime: Float): Unit = {
     val player = EngineAccessors.player(getEngine)
     val playerPosition = pm.get(player)
-    val maze = EngineAccessors.map(getEngine).maze
+    val maze = EngineAccessors.maze(getEngine).maze
     val fov = new FOV()
 
     val inputResistances: Array[Array[Double]] = maze.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0))

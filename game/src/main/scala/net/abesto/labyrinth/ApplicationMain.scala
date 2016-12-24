@@ -3,13 +3,13 @@ package net.abesto.labyrinth
 import java.awt.event.ActionEvent
 import javax.swing.{AbstractAction, JFrame, KeyStroke}
 
-import net.abesto.labyrinth.actions.Action
+import com.badlogic.ashley.core.Engine
 import net.abesto.labyrinth.render.Renderer
 
-class ApplicationMain(renderer: Renderer) extends JFrame {
-  def setup(actionHandler: (Action => Unit)): Unit = {
+class ApplicationMain(engine: Engine, renderer: Renderer) extends JFrame {
+  def setup(): Unit = {
     setupLayout()
-    setupActions(actionHandler)
+    setupActions()
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     setVisible(true)
   }
@@ -19,13 +19,14 @@ class ApplicationMain(renderer: Renderer) extends JFrame {
     pack()
   }
 
-  def setupActions(handleAction: (Action => Unit)): Unit = {
+  def setupActions(): Unit = {
     val rootPaneActionMap = getRootPane.getActionMap
     InputMap.actionMap.foreach {
       case (actionName, action) =>
         rootPaneActionMap.put(actionName, new AbstractAction() {
           override def actionPerformed(e: ActionEvent): Unit = {
-            handleAction(action)
+            action(engine)
+            engine.update(1)
           }
         })
     }

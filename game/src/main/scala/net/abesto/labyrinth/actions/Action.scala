@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.actions
 
-import com.badlogic.ashley.core.{Engine, Entity}
+import com.badlogic.ashley.core.Engine
 
 trait Action {
-  def apply(engine: Engine, entity: Entity): Unit
+  def apply(engine: Engine): Unit
 }

@@ -58,7 +58,10 @@ object MazeBuilder {
     tileset.toKind(c) match {
       case SmoothFloor => new FloorTile(x, y, c)
       case Player => new FloorTile(x, y, tileset.toChar(SmoothFloor))
-      case WallHash => new WallTile(x, y, c)
+      case WallCornerNorthWest | WallEastWestTNorth | WallCornerNorthEast |
+           WallNorthSouthTWest | WallHash           | WallNorthSouthTEast |
+           WallCornerSouthWest | WallEastWestTSouth | WallCornerSouthEast |
+           WallNorthSouth | WallEastWest | WallCross => new WallTile(x, y, c)
       case StairsDown => new StaircaseDownTile(x, y, c)
       case Water => new WaterTile(x, y, c)
       case ShallowWater => new ShallowWaterTile(x, y, c)

@@ -16,7 +16,7 @@ object EngineAccessors {
 
   def mapEntity(e: Engine): Entity = getSingle(e, Family.all(classOf[MazeComponent]))
 
-  def map(e: Engine): MazeComponent = {
+  def maze(e: Engine): MazeComponent = {
      mapComponentMapper.get(mapEntity(e))
   }
 

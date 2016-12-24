@@ -12,11 +12,8 @@ object Game {
     val renderer = AsciiPanelRenderer()
     engine.addSystem(renderer)
 
-    val app = new ApplicationMain(renderer)
-    app.setup(action => {
-      EngineAccessors.player(engine).getComponent(classOf[ActionQueueComponent]).actions.enqueue(action)
-      engine.update(1)
-    })
+    val app = new ApplicationMain(engine, renderer)
+    app.setup()
 
     EngineAccessors.loadMap(engine, "1-dry")
     engine.update(1)

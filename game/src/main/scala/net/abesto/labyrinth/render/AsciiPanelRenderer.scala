@@ -12,7 +12,7 @@ case class AsciiPanelRenderer() extends Renderer {
   protected val pm: ComponentMapper[PositionComponent] = ComponentMapper.getFor(classOf[PositionComponent])
 
   def renderMap(): Unit = {
-    val m = EngineAccessors.map(getEngine).maze
+    val m = EngineAccessors.maze(getEngine).maze
     m.translate(Tiles.dwarfFortress)
     m.tiles.foreach(_.foreach(t => panel.write(
       t.char.character, t.x, t.y,

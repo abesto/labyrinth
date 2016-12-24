@@ -3,7 +3,8 @@ package net.abesto.labyrinth
 import java.awt.event.KeyEvent
 import javax.swing.KeyStroke
 
-import net.abesto.labyrinth.actions.{Action, WalkAction}
+import com.badlogic.ashley.core.{Engine}
+import net.abesto.labyrinth.signals.{MoveData, Signals}
 
 object InputMap {
   object Actions {
@@ -36,10 +37,13 @@ object InputMap {
     'j' -> Actions.down
   )
 
-  val actionMap = Map[String, Action](
-    Actions.left -> WalkAction(-1, 0),
-    Actions.right -> WalkAction(1, 0),
-    Actions.up -> WalkAction(0, -1),
-    Actions.down -> WalkAction(0, 1)
+  def walk(x: Int, y: Int): (Engine) => Unit =
+    (e: Engine) => Signals.walk.dispatch(MoveData(x, y, EngineAccessors.player(e)))
+
+  val actionMap = Map(
+    Actions.left -> walk(-1, 0),
+    Actions.right -> walk(1, 0),
+    Actions.up -> walk(0, -1),
+    Actions.down -> walk(0, 1)
   )
 }
