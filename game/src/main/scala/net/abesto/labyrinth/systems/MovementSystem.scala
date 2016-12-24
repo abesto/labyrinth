@@ -6,6 +6,8 @@ import net.abesto.labyrinth.components.PositionComponent
 import net.abesto.labyrinth.{Constants, EngineAccessors}
 import net.abesto.labyrinth.signals.{MoveData, Signals}
 
+import scala.io.Source
+
 class MovementSystem extends EventHandlerSystem[MoveData] {
   subscribe(Signals.tryWalking)
   val pm: ComponentMapper[PositionComponent] = ComponentMapper.getFor(classOf[PositionComponent])

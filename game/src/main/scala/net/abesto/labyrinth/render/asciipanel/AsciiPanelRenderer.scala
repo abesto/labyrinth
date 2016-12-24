@@ -23,12 +23,16 @@ case class AsciiPanelRenderer() extends Renderer {
     Coord.get(Constants.fullWidth, Constants.messageAreaHeight)
   )
 
+  val popup = new AsciiPanelPopup(panel)
+
   override def update(deltaTime: Float): Unit = {
     mazeFrame.render(
       EngineAccessors.maze(getEngine).maze,
       EngineAccessors.player(getEngine)
     )
     messageAreaFrame.render()
+    popup.render()
+
     panel.repaint()
   }
 }

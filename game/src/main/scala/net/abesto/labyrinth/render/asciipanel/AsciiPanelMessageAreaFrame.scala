@@ -32,11 +32,7 @@ class AsciiPanelMessageAreaFrame(panel: AsciiPanel, topLeft: Coord, size: Coord)
 
   def render(): Unit = {
     panel.clear(' ', topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, AsciiPanel.white, AsciiPanel.black)
-    lines.zipWithIndex.foreach {
-      case (line, y) => line.zipWithIndex.foreach {
-        case (c, x) => write(c, x, y, AsciiPanel.white, AsciiPanel.black)
-      }
-    }
+    write(lines, 0, 0, AsciiPanel.white, AsciiPanel.black)
   }
 
   // Later on, this should fetch messages from a centralized MessageHistory

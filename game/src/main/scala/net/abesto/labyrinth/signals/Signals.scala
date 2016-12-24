@@ -8,4 +8,7 @@ object Signals {
   val hasWalked = new Signal[Entity]()
 
   val message = new Signal[String]()
+
+  val showPopup = new Signal[PopupData]()
+  val hidePopup = new Signal[Null]()
 }
