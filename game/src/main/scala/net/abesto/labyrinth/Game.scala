@@ -1,7 +1,6 @@
 package net.abesto.labyrinth
 
 import com.badlogic.ashley.core.Engine
-import net.abesto.labyrinth.components.ActionQueueComponent
 import net.abesto.labyrinth.render.AsciiPanelRenderer
 
 object Game {
