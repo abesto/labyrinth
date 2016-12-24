@@ -38,7 +38,7 @@ object InputMap {
   )
 
   def walk(x: Int, y: Int): (Engine) => Unit =
-    (e: Engine) => Signals.walk.dispatch(MoveData(x, y, EngineAccessors.player(e)))
+    (e: Engine) => Signals.tryWalking.dispatch(MoveData(x, y, EngineAccessors.player(e)))
 
   val actionMap = Map(
     Actions.left -> walk(-1, 0),

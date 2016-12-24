@@ -3,16 +3,22 @@ package net.abesto.labyrinth
 import com.badlogic.ashley.core.{Engine, Entity}
 import net.abesto.labyrinth.components.{PlayerMarker, PositionComponent}
 import net.abesto.labyrinth.maze.MazeComponent
-import net.abesto.labyrinth.systems.{MazeGeneratorSystem, MazeLoaderSystem, MovementSystem, ShadowcastingSystem}
+import net.abesto.labyrinth.systems._
 
 class World(engine: Engine) {
+  // Player, Maze
   createMap()
   createPlayer()
   engine.addSystem(new MazeLoaderSystem)
   engine.addSystem(new MazeGeneratorSystem)
 
+  // Player actions
   engine.addSystem(new MovementSystem)
 
+  // Consequences of player actions
+  engine.addSystem(new ShallowWaterMakesWet)
+
+  // Rendering, feedback
   engine.addSystem(new ShadowcastingSystem)
 
   def createMap(): Unit = {

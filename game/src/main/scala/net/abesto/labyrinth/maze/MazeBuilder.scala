@@ -71,7 +71,7 @@ object MazeBuilder {
   def random(): MazeBuilder = {
     val tileset = Tiles.squidlib // Because we're using the output of squidlib
     new MazeBuilder(Maze(tileset,
-      new DungeonGenerator(Constants.width, Constants.height).generate().zipWithIndex.map {
+      new DungeonGenerator(Constants.mazeWidth, Constants.mazeHeight).generate().zipWithIndex.map {
         case (column, x) => column.zipWithIndex.map {
           case (c, y) => charToMazeTile(tileset, c, x, y)
         }

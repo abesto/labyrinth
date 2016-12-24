@@ -1,7 +1,13 @@
 package net.abesto.labyrinth
 
 object Constants {
-  val width = 70
-  val height = 40
+  val mazeWidth = 70
+  val mazeHeight = 40
+
+  val messageAreaHeight = 5
+
+  val fullWidth: Int = mazeWidth
+  val fullHeight: Int = mazeHeight + messageAreaHeight
+
   val sightRadius = 10
 }
