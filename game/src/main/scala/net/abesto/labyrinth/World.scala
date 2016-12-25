@@ -1,7 +1,7 @@
 package net.abesto.labyrinth
 
 import com.badlogic.ashley.core.{Engine, Entity}
-import net.abesto.labyrinth.components.{PlayerMarker, PositionComponent}
+import net.abesto.labyrinth.components.{LayerComponent, PlayerMarker, PositionComponent, TileComponent}
 import net.abesto.labyrinth.maze.MazeComponent
 import net.abesto.labyrinth.systems._
 
@@ -31,6 +31,8 @@ class World(engine: Engine) {
     val player = new Entity
     player.add(PositionComponent(0, 0))
     player.add(new PlayerMarker)
+    player.add(LayerComponent(LayerComponent.Layers.Creature))
+    player.add(TileComponent(Tiles.Kind.Player))
     engine.addEntity(player)
   }
 }

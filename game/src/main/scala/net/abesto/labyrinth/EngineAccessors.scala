@@ -1,12 +1,16 @@
 package net.abesto.labyrinth
 
+import scala.collection.JavaConverters._
 import com.badlogic.ashley.core.{ComponentMapper, Engine, Entity, Family}
-import net.abesto.labyrinth.components.PlayerMarker
+import net.abesto.labyrinth.components.{LayerComponent, PlayerMarker, PositionComponent}
 import net.abesto.labyrinth.maze.MazeComponent
 import net.abesto.labyrinth.systems.MazeLoaderSystem
+import squidpony.squidmath.Coord
 
 object EngineAccessors {
-  val mapComponentMapper: ComponentMapper[MazeComponent] = ComponentMapper.getFor(classOf[MazeComponent])
+  val mazeComponentMapper: ComponentMapper[MazeComponent] = ComponentMapper.getFor(classOf[MazeComponent])
+  val positionComponentMapper: ComponentMapper[PositionComponent] = ComponentMapper.getFor(classOf[PositionComponent])
+  val layerComponentMapper: ComponentMapper[LayerComponent] = ComponentMapper.getFor(classOf[LayerComponent])
 
   def getSingle(e: Engine, family: Family.Builder): Entity = {
     val es = e.getEntitiesFor(family.get)
@@ -17,7 +21,7 @@ object EngineAccessors {
   def mapEntity(e: Engine): Entity = getSingle(e, Family.all(classOf[MazeComponent]))
 
   def maze(e: Engine): MazeComponent = {
-     mapComponentMapper.get(mapEntity(e))
+     mazeComponentMapper.get(mapEntity(e))
   }
 
   def loadMap(e: Engine, name: String): Unit = {
@@ -25,4 +29,12 @@ object EngineAccessors {
   }
 
   def player(e: Engine): Entity = getSingle(e, Family.all(classOf[PlayerMarker]))
+
+  def entitiesAt(e: Engine, coord: Coord, layer: LayerComponent.Layers.Value): Stream[Entity] =
+    e.getEntitiesFor(Family.all(classOf[PositionComponent], classOf[LayerComponent]).get).iterator()
+      .asScala.toStream.filter(e =>
+      positionComponentMapper.get(e).coord.equals(coord) && layerComponentMapper.get(e).layer == layer
+    )
+  def creaturesAt: (Engine, Coord) => Stream[Entity] = entitiesAt(_, _, LayerComponent.Layers.Creature).ensuring(_.length <= 1)
+  def itemsAt: (Engine, Coord) => Stream[Entity] = entitiesAt(_, _, LayerComponent.Layers.Item)
 }

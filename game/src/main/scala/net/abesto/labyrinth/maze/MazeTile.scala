@@ -2,7 +2,11 @@ package net.abesto.labyrinth.maze
 
 import java.awt.Color
 
+import squidpony.squidmath.Coord
+
 abstract case class MazeTile(x: Int, y: Int) {
+  val coord: Coord = Coord.get(x, y)
+
   var visibility: Double = 1
   var seen: Boolean = false
 

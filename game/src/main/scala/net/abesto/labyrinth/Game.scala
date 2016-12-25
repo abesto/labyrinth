@@ -2,7 +2,7 @@ package net.abesto.labyrinth
 
 import com.badlogic.ashley.core.{Engine, Entity}
 import com.badlogic.ashley.signals.{Listener, Signal}
-import net.abesto.labyrinth.components.PositionComponent
+import net.abesto.labyrinth.components.{LayerComponent, PositionComponent, TileComponent}
 import net.abesto.labyrinth.render.asciipanel.AsciiPanelRenderer
 import net.abesto.labyrinth.signals.{PopupData, Signals}
 
@@ -24,8 +24,12 @@ object Game {
     engine.update(1)
 
     // This next part is to be replaced by a proper item placement and triggering system
-    val maze = EngineAccessors.maze(engine).maze
-    maze.tile(35, 10).char.character = maze.tileset.toChar(Tiles.Kind.Book)
+    val book = new Entity()
+    book.add(PositionComponent(35, 10))
+    book.add(LayerComponent(LayerComponent.Layers.Item))
+    book.add(TileComponent(Tiles.Kind.Book))
+    engine.addEntity(book)
+
     Signals.hasWalked.add(new Listener[Entity] {
       override def receive(signal: Signal[Entity], p: Entity): Unit = {
         val pos: PositionComponent = p.getComponent(classOf[PositionComponent])
