@@ -30,7 +30,7 @@ class AsciiPanelPopup(panel: AsciiPanel) {
     }
     val titleWidth = title.length + 4
     // at least two spaces per side
-    val lines = text.split('\n')
+    val lines = text.replace("\n", "\n\n").split('\n')
     val textWidth = lines.maxBy(_.length).length
     val boxWidth = math.max(titleWidth, textWidth) + 4
     // 2 empty columns around the text, plus the box
