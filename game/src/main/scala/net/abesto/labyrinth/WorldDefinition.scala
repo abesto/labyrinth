@@ -1,7 +1,10 @@
 package net.abesto.labyrinth
 
 import com.artemis._
-import com.artemis.managers.TagManager
+import com.artemis.io.JsonArtemisSerializer
+import com.artemis.managers.{TagManager, WorldSerializationManager}
+import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
+import net.abesto.labyrinth.Tiles.Kind.Book
 import net.abesto.labyrinth.components._
 import net.abesto.labyrinth.render.Renderer
 import net.abesto.labyrinth.systems._
@@ -10,6 +13,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 object WorldDefinition {
   protected def buildWorldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
     .`with`(
+      new WorldSerializationManager(),
       new TagManager(),
       new EventSystem(),
       // Maze
@@ -26,6 +30,10 @@ object WorldDefinition {
 
   def buildWorld(renderer: Renderer): World = {
     val world = new World(buildWorldConfiguration(renderer))
+    val manager = world.getSystem(classOf[WorldSerializationManager])
+    val serializer = new JsonArtemisSerializer(world).prettyPrint(true)
+    manager.setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
+    Helpers.setSerializer(serializer)
     createMap(world)
     createPlayer(world)
     world
@@ -42,7 +50,7 @@ object WorldDefinition {
     world.getSystem(classOf[TagManager]).register(Constants.Tags.player, player)
     player.edit()
       .add(new PositionComponent())
-      .add(new LayerComponent(LayerComponent.Layers.Creature))
+      .add(new LayerComponent(LayerComponent.Layer.Creature))
       .add(new TileComponent(Tiles.Kind.Player))
   }
 }

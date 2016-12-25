@@ -1,20 +1,30 @@
 package net.abesto.labyrinth.components
 
 import com.artemis.Component
+import com.esotericsoftware.jsonbeans.{Json, JsonSerializable, JsonValue}
+import enumeratum._
+import net.abesto.labyrinth.ArtemisJsonEnumEntry
+
+import scala.collection.immutable.IndexedSeq
 
 
 class LayerComponent() extends Component {
-  var layer: LayerComponent.Layers.Value = _
+  var layer: LayerComponent.Layer = _
 
-  def this(_layer: LayerComponent.Layers.Value) {
+  def this(layer: LayerComponent.Layer) {
     this()
-    layer = _layer
+    this.layer = layer
   }
 }
 
 object LayerComponent {
-  object Layers extends Enumeration {
+  sealed abstract class Layer extends ArtemisJsonEnumEntry(Layer)
+
+  object Layer extends Enum[Layer] {
+    val values: IndexedSeq[Layer] = findValues
+
     // First layer that has entities on any given tile shall be rendered
-    val Creature, Item = Value
+    case object Creature extends Layer
+    case object Item extends Layer
   }
 }

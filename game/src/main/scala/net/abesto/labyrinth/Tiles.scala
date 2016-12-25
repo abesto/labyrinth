@@ -1,35 +1,57 @@
 package net.abesto.labyrinth
 
+import enumeratum._
+
+import scala.collection.immutable.IndexedSeq
 import scala.util.Random
 
 object Tiles {
-  object Kind extends Enumeration {
-    val
+  sealed abstract class Kind extends ArtemisJsonEnumEntry(Kind)
+
+  object Kind extends Enum[Kind] {
+    val values: IndexedSeq[Kind] = findValues
+
     // Walls
-    WallCornerNorthWest, WallCornerNorthEast, WallCornerSouthWest, WallCornerSouthEast,
-    WallEastWest, WallNorthSouth,
-    WallEastWestTNorth, WallEastWestTSouth,
-    WallNorthSouthTWest, WallNorthSouthTEast,
-    WallCross,
+    case object WallCornerNorthWest extends Kind
+    case object WallCornerNorthEast extends Kind
+    case object WallCornerSouthWest extends Kind
+    case object WallCornerSouthEast extends Kind
+
+    case object WallEastWest extends Kind
+    case object WallNorthSouth extends Kind
+
+    case object WallEastWestTNorth extends Kind
+    case object WallEastWestTSouth extends Kind
+
+    case object WallNorthSouthTWest extends Kind
+    case object WallNorthSouthTEast extends Kind
+
+    case object WallCross extends Kind
 
     // Other dungeon features
-    SmoothFloor, RoughFloor,
-    StairsDown, StairsUp,
-    WallHash, Water, ShallowWater,
-    Book,
+    case object SmoothFloor extends Kind
+    case object RoughFloor extends Kind
+
+    case object StairsDown extends Kind
+    case object StairsUp extends Kind
+
+    case object WallHash extends Kind
+    case object Water extends Kind
+    case object ShallowWater extends Kind
+
+    case object Book extends Kind
 
     // Characters
-    Player
-
-    = Value
+    case object Player extends Kind
   }
+
   import Kind._
 
-  class Tileset(spec: (Kind.Value, Seq[Char])*) {
-    protected val kindToChars: Map[Kind.Value, Seq[Char]] = Map(spec:_*)
-    protected val charToKind: Map[Char, Kind.Value] = kindToChars.flatMap(p => p._2.map((_, p._1)))
+  class Tileset(spec: (Kind, Seq[Char])*) {
+    protected val kindToChars: Map[Kind, Seq[Char]] = Map(spec:_*)
+    protected val charToKind: Map[Char, Kind] = kindToChars.flatMap(p => p._2.map((_, p._1)))
 
-    def toChar(kind: Kind.Value): Char = {
+    def toChar(kind: Kind): Char = {
       val chars = kindToChars(kind)
       if (chars.length == 1) {
         chars.head
@@ -38,7 +60,7 @@ object Tiles {
       }
     }
 
-    def toKind(char: Char): Kind.Value = charToKind(char)
+    def toKind(char: Char): Kind = charToKind(char)
 
     def translate(char: Char, to: Tileset): Char = {
       val kind = toKind(char)

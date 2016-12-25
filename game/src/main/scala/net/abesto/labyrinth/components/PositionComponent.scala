@@ -4,19 +4,27 @@ import com.artemis.Component
 import squidpony.squidmath.Coord
 
 class PositionComponent() extends Component {
-  var coord: Coord = _
+  var x: Int = _
+  var y: Int = _
 
   def this(coord: Coord) {
     this()
-    this.coord = coord
+    this.x = coord.getX
+    this.y = coord.getY
   }
 
   def this(x: Int, y: Int) {
-    this(Coord.get(x, y))
+    this()
+    this.x = x
+    this.y = y
+  }
+
+  def coord: Coord = Coord.get(x, y)
+  def coord_=(coord: Coord): Unit = {
+    x = coord.getX
+    y = coord.getY
   }
 
   def +(other: PositionComponent): PositionComponent = new PositionComponent(coord.add(other.coord))
-  def x: Int = coord.getX
-  def y: Int = coord.getY
 }
 

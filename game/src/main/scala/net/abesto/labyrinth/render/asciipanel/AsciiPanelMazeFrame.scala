@@ -30,7 +30,7 @@ class AsciiPanelMazeFrame(world: World, panel: AsciiPanel, topLeft: Coord, size:
   }
 
   def coalesceChar(m: Maze, t: MazeTile): Char =
-    0.until(LayerComponent.Layers.maxId).map(LayerComponent.Layers(_)).flatMap(
+    LayerComponent.Layer.values.toStream.flatMap(
       l => {
         val entityIds = Helpers.entityIdsOfAspect(world,
           Aspect.all(classOf[PositionComponent], classOf[LayerComponent])

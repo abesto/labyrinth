@@ -56,7 +56,7 @@ object MazeBuilder {
 
   def charToMazeTile(tileset: Tiles.Tileset, c: Char, x: Int, y: Int): MazeTile = {
     tileset.toKind(c) match {
-      case SmoothFloor => new FloorTile(x, y, c)
+      case SmoothFloor | RoughFloor => new FloorTile(x, y, c)
       case Player => new FloorTile(x, y, tileset.toChar(SmoothFloor))
       case WallCornerNorthWest | WallEastWestTNorth | WallCornerNorthEast |
            WallNorthSouthTWest | WallHash           | WallNorthSouthTEast |
@@ -79,7 +79,7 @@ object MazeBuilder {
     ))
   }
 
-  def fromFile(name: String, tileCallback: (Tiles.Kind.Value, Int, Int) => Unit = (_, _, _) => Unit): MazeBuilder = {
+  def fromFile(name: String, tileCallback: (Tiles.Kind, Int, Int) => Unit = (_, _, _) => Unit): MazeBuilder = {
     val tileset = Tiles.squidlib // Because maps are stored in unicode - easier to work with
     new MazeBuilder(Maze(tileset,
       Source.fromURL(getClass.getResource(s"/maps/$name")).getLines().zipWithIndex.map {

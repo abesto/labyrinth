@@ -1,0 +1,44 @@
+{
+	"entities": {
+		"2": {
+			"archetype": 5,
+			"components": {
+				"LayerComponent": {
+					"layer": {
+						"class": "net.abesto.labyrinth.components.LayerComponent$Layer$Item$"
+					}
+				},
+				"PopupTriggerComponent": {
+					"text": "foobar",
+					"title": "Lorem Ipsum"
+				},
+				"PositionComponent": {
+					"x": 35,
+					"y": 10
+				},
+				"TileComponent": {
+					"kind": {
+						"class": "net.abesto.labyrinth.Tiles$Kind$Book$"
+					}
+				}
+			}
+		}
+	},
+	"archetypes": {
+		"5": [
+			"PositionComponent",
+			"PopupTriggerComponent",
+			"LayerComponent",
+			"TileComponent"
+		]
+	},
+	"componentIdentifiers": {
+		"net.abesto.labyrinth.components.PopupTriggerComponent": "PopupTriggerComponent",
+		"net.abesto.labyrinth.components.LayerComponent": "LayerComponent",
+		"net.abesto.labyrinth.components.TileComponent": "TileComponent",
+		"net.abesto.labyrinth.components.PositionComponent": "PositionComponent"
+	},
+	"metadata": {
+		"version": 1
+	}
+}
