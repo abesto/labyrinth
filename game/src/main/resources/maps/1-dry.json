@@ -1,7 +1,7 @@
 {
 	"entities": {
-		"2": {
-			"archetype": 5,
+		"0": {
+			"archetype": 0,
 			"components": {
 				"LayerComponent": {
 					"layer": {
@@ -9,8 +9,7 @@
 					}
 				},
 				"PopupTriggerComponent": {
-					"text": "foobar",
-					"title": "Lorem Ipsum"
+					"source": "/books/1-dry"
 				},
 				"PositionComponent": {
 					"x": 35,
@@ -25,7 +24,7 @@
 		}
 	},
 	"archetypes": {
-		"5": [
+		"0": [
 			"PositionComponent",
 			"PopupTriggerComponent",
 			"LayerComponent",
