@@ -1,14 +1,22 @@
 package net.abesto.labyrinth.components
 
-import com.badlogic.ashley.core.Component
+import com.artemis.Component
 import squidpony.squidmath.Coord
 
-case class PositionComponent(coord: Coord) extends Component {
+class PositionComponent() extends Component {
+  var coord: Coord = _
+
+  def this(coord: Coord) {
+    this()
+    this.coord = coord
+  }
+
+  def this(x: Int, y: Int) {
+    this(Coord.get(x, y))
+  }
+
   def +(other: PositionComponent): PositionComponent = new PositionComponent(coord.add(other.coord))
   def x: Int = coord.getX
   def y: Int = coord.getY
 }
 
-object PositionComponent {
-  def apply(x: Int, y: Int): PositionComponent = new PositionComponent(Coord.get(x, y))
-}

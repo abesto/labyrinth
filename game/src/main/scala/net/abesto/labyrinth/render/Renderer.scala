@@ -2,8 +2,8 @@ package net.abesto.labyrinth.render
 
 import javax.swing.JPanel
 
-import com.badlogic.ashley.core.EntitySystem
+import com.artemis.BaseSystem
 
-trait Renderer extends EntitySystem {
+trait Renderer extends BaseSystem {
   val panel: JPanel
 }

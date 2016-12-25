@@ -3,10 +3,10 @@ package net.abesto.labyrinth
 import java.awt.event.ActionEvent
 import javax.swing.{AbstractAction, JFrame, KeyStroke}
 
-import com.badlogic.ashley.core.Engine
+import com.artemis.World
 import net.abesto.labyrinth.render.Renderer
 
-class ApplicationMain(engine: Engine, renderer: Renderer) extends JFrame {
+class ApplicationMain(world: World, renderer: Renderer) extends JFrame {
   def setup(): Unit = {
     setupLayout()
     setupActions()
@@ -25,8 +25,9 @@ class ApplicationMain(engine: Engine, renderer: Renderer) extends JFrame {
       case (actionName, action) =>
         rootPaneActionMap.put(actionName, new AbstractAction() {
           override def actionPerformed(e: ActionEvent): Unit = {
-            action(engine)
-            engine.update(1)
+            action(world)
+            world.setDelta(1)
+            world.process()
           }
         })
     }

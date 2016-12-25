@@ -1,5 +1,5 @@
 package net.abesto.labyrinth.components
 
-import com.badlogic.ashley.core.Component
+import com.artemis.Component
 
 class WetComponent extends Component {}

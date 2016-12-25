@@ -1,11 +1,17 @@
 package net.abesto.labyrinth.systems
 
-import com.badlogic.ashley.core.EntitySystem
-import net.abesto.labyrinth.{EngineAccessors, Tiles}
-import net.abesto.labyrinth.components.PositionComponent
+import com.artemis.managers.TagManager
+import com.artemis.{BaseSystem, ComponentMapper}
+import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.maze._
+import net.abesto.labyrinth.{Constants, Tiles}
+import squidpony.squidmath.Coord
 
-class MazeLoaderSystem extends EntitySystem {
+class MazeLoaderSystem extends BaseSystem {
+  var tagManager: TagManager = _
+  var mazeMapper: ComponentMapper[MazeComponent] = _
+  var positionMapper: ComponentMapper[PositionComponent] = _
+
   var toLoad: Option[String] = None
 
   def load(name: String): Unit = {
@@ -14,17 +20,16 @@ class MazeLoaderSystem extends EntitySystem {
 
   def tileCallback(k: Tiles.Kind.Value, x: Int, y: Int): Unit = k match {
     case Tiles.Kind.Player =>
-      EngineAccessors.player(getEngine).add(PositionComponent(x, y))
+      positionMapper.get(tagManager.getEntityId(Constants.Tags.player)).coord = Coord.get(x, y)
     case _ =>
   }
 
-  override def update(deltaTime: Float): Unit = {
-    if (toLoad.isDefined) {
-      val mapEntity = EngineAccessors.mapEntity(getEngine)
-      mapEntity.add(
-        MazeComponent(MazeBuilder.fromFile(toLoad.get, tileCallback).hashesToLines().get
-      ))
-      toLoad = None
-    }
+  override def checkProcessing(): Boolean = toLoad.isDefined
+
+  override def processSystem(): Unit = {
+    val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
+    val mazeComponent = mazeMapper.get(mazeEntityId)
+    mazeComponent.maze = MazeBuilder.fromFile(toLoad.get, tileCallback).hashesToLines().get
+    toLoad = None
   }
 }

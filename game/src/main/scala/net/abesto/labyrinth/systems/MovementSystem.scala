@@ -1,26 +1,41 @@
 package net.abesto.labyrinth.systems
 
-import com.badlogic.ashley.core.ComponentMapper
-import com.badlogic.ashley.signals.Signal
-import net.abesto.labyrinth.components.PositionComponent
-import net.abesto.labyrinth.{Constants, EngineAccessors}
-import net.abesto.labyrinth.signals.{MoveData, Signals}
+import com.artemis.managers.TagManager
+import com.artemis.{BaseSystem, ComponentMapper}
+import net.abesto.labyrinth.Constants
+import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
+import net.abesto.labyrinth.events.{HasWalkedEvent, TryWalkingEvent}
+import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
 
-class MovementSystem extends EventHandlerSystem[MoveData] {
-  subscribe(Signals.tryWalking)
-  val pm: ComponentMapper[PositionComponent] = ComponentMapper.getFor(classOf[PositionComponent])
+import scala.collection.immutable.Queue
 
-  def withinBounds(p: PositionComponent): Boolean = p.coord.isWithin(Constants.mazeWidth, Constants.mazeHeight)
 
-  override protected def handle(deltaTime: Float, signal: Signal[MoveData], data: MoveData): Unit = signal match {
-    case Signals.`tryWalking` =>
-      val maze = EngineAccessors.maze(getEngine)
-      val oldPosition = pm.get(data.what)
-      val newPosition = oldPosition + data.vector
-      val canWalk = withinBounds(newPosition) && maze.tile(newPosition).canBeStoodOn
-      if (canWalk) {
-        data.what.add(newPosition)
-        Signals.hasWalked.dispatch(data.what)
-      }
+class MovementSystem extends BaseSystem {
+  var eventSystem: EventSystem = _
+  var tagManager: TagManager = _
+  var positionMapper: ComponentMapper[PositionComponent] = _
+  var mazeMapper: ComponentMapper[MazeComponent] = _
+
+  var inboxWalk: Queue[TryWalkingEvent] = Queue()
+  @Subscribe
+  def enqueueWalk(e: TryWalkingEvent): Unit = {
+    inboxWalk :+= e
+  }
+
+  override def processSystem(): Unit = {
+    inboxWalk.foreach(walk)
+    inboxWalk = Queue()
+  }
+
+  def walk(e: TryWalkingEvent): Unit = {
+    val maze = mazeMapper.get(tagManager.getEntityId(Constants.Tags.maze)).maze
+    val oldPosition = positionMapper.get(e.entityId).coord
+    val newPosition = oldPosition.add(e.vector)
+    val withinBounds = newPosition.isWithin(Constants.mazeWidth, Constants.mazeHeight)
+    val canWalk = withinBounds && maze.tile(newPosition).canBeStoodOn
+    if (canWalk) {
+      positionMapper.get(e.entityId).coord = newPosition
+      eventSystem.dispatch(HasWalkedEvent(e.entityId))
+    }
   }
 }

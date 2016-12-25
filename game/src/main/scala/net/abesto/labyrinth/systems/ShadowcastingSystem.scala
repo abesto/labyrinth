@@ -1,17 +1,21 @@
 package net.abesto.labyrinth.systems
 
-import com.badlogic.ashley.core.{ComponentMapper, EntitySystem}
-import net.abesto.labyrinth.{Constants, EngineAccessors}
-import net.abesto.labyrinth.components.PositionComponent
+import com.artemis.managers.TagManager
+import com.artemis.{BaseSystem, ComponentMapper}
+import net.abesto.labyrinth.Constants
+import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import squidpony.squidgrid.FOV
 
-class ShadowcastingSystem extends EntitySystem {
-  val pm = ComponentMapper.getFor(classOf[PositionComponent])
+class ShadowcastingSystem extends BaseSystem {
+  var positionMapper: ComponentMapper[PositionComponent] = _
+  var mazeMapper: ComponentMapper[MazeComponent] = _
+  var tagManager: TagManager = _
 
-  override def update(deltaTime: Float): Unit = {
-    val player = EngineAccessors.player(getEngine)
-    val playerPosition = pm.get(player)
-    val maze = EngineAccessors.maze(getEngine).maze
+  override def processSystem(): Unit = {
+    val playerEntityId = tagManager.getEntityId(Constants.Tags.player)
+    val playerPosition = positionMapper.get(playerEntityId)
+    val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
+    val maze = mazeMapper.get(mazeEntityId).maze
     val fov = new FOV()
 
     val inputResistances: Array[Array[Double]] = maze.tiles.map(_.map(t => if (t.blocksSight) 1.0 else 0.0))

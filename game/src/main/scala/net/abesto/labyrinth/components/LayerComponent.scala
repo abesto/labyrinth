@@ -1,8 +1,15 @@
 package net.abesto.labyrinth.components
 
-import com.badlogic.ashley.core.Component
+import com.artemis.Component
 
-case class LayerComponent(layer: LayerComponent.Layers.Value) extends Component {
+
+class LayerComponent() extends Component {
+  var layer: LayerComponent.Layers.Value = _
+
+  def this(_layer: LayerComponent.Layers.Value) {
+    this()
+    layer = _layer
+  }
 }
 
 object LayerComponent {

@@ -2,9 +2,11 @@ package net.abesto.labyrinth.maze
 
 import net.abesto.labyrinth.Tiles
 import net.abesto.labyrinth.components.PositionComponent
+import squidpony.squidmath.Coord
 
 case class Maze(var tileset: Tiles.Tileset, var tiles: Array[Array[MazeTile]]) {
-  def tile(p: PositionComponent): MazeTile = tiles(p.x)(p.y)
+  def tile(p: PositionComponent): MazeTile = tile(p.coord)
+  def tile(c: Coord): MazeTile = tiles(c.x)(c.y)
   def tile(x: Int, y: Int): MazeTile = tiles(x)(y)
 
   def chars: Array[Array[Char]] = tiles.map(_.map(_.char.character))

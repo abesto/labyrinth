@@ -1,23 +1,28 @@
 package net.abesto.labyrinth.render.asciipanel
 
 import asciiPanel.AsciiPanel
-import com.badlogic.ashley.core.{ComponentMapper, Engine}
-import net.abesto.labyrinth.{EngineAccessors, Tiles}
-import net.abesto.labyrinth.components.{LayerComponent, PositionComponent, TileComponent}
+import com.artemis.managers.TagManager
+import com.artemis.{Aspect, ComponentMapper, World}
+import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent, TileComponent}
 import net.abesto.labyrinth.maze.{Maze, MazeTile}
+import net.abesto.labyrinth.{Constants, Helpers, Tiles}
 import squidpony.squidmath.Coord
 
 import scala.util.Random
 
-class AsciiPanelMazeFrame(engine: Engine, panel: AsciiPanel, topLeft: Coord, size: Coord) extends AsciiPanelFrame(panel, topLeft, size) {
-  protected val pm: ComponentMapper[PositionComponent] = ComponentMapper.getFor(classOf)
-  protected val tm: ComponentMapper[TileComponent] = ComponentMapper.getFor(classOf)
+class AsciiPanelMazeFrame(world: World, panel: AsciiPanel, topLeft: Coord, size: Coord) extends AsciiPanelFrame(panel, topLeft, size) {
+  var tagManager: TagManager = _
+  var mazeMapper: ComponentMapper[MazeComponent] = _
+  var positionMapper: ComponentMapper[PositionComponent] = _
+  var layerMapper: ComponentMapper[LayerComponent] = _
+  var tileMapper: ComponentMapper[TileComponent] = _
 
   def render(): Unit = {
-    val m = EngineAccessors.maze(engine).maze
-    m.translate(Tiles.dwarfFortress)
-    m.tiles.foreach(_.foreach(t => write(
-      coalesceChar(m, t),
+    val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
+    val maze = mazeMapper.get(mazeEntityId).maze
+    maze.translate(Tiles.dwarfFortress)
+    maze.tiles.foreach(_.foreach(t => write(
+      coalesceChar(maze, t),
       t.x, t.y,
       t.foregroundColorWithShadow,
       t.char.backgroundColor
@@ -26,15 +31,19 @@ class AsciiPanelMazeFrame(engine: Engine, panel: AsciiPanel, topLeft: Coord, siz
 
   def coalesceChar(m: Maze, t: MazeTile): Char =
     0.until(LayerComponent.Layers.maxId).map(LayerComponent.Layers(_)).flatMap(
-    l => {
-      val entities = EngineAccessors.entitiesAt(engine, t.coord, l).toArray
-      if (entities.isEmpty) {
-        None
-      } else {
-        Some(
-          tm.get(entities(Random.nextInt(entities.length))).kind
+      l => {
+        val entityIds = Helpers.entityIdsOfAspect(world,
+          Aspect.all(classOf[PositionComponent], classOf[LayerComponent])
+        ).filter(
+          id => layerMapper.get(id).layer == l && positionMapper.get(id).coord.equals(t.coord)
         )
+        if (entityIds.isEmpty) {
+          None
+        } else {
+          Some(
+            tileMapper.get(entityIds(Random.nextInt(entityIds.length))).kind
+          )
+        }
       }
-    }
-  ).headOption.map(m.tileset.toChar(_)).getOrElse(t.char.character)
+    ).headOption.map(m.tileset.toChar(_)).getOrElse(t.char.character)
 }

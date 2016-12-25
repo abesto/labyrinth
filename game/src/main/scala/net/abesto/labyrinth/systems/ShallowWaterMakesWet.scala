@@ -1,27 +1,43 @@
 package net.abesto.labyrinth.systems
 
-import com.badlogic.ashley.core.{ComponentMapper, Entity}
-import com.badlogic.ashley.signals.Signal
-import net.abesto.labyrinth.EngineAccessors
-import net.abesto.labyrinth.components.{PositionComponent, WetComponent}
+import com.artemis.managers.TagManager
+import com.artemis.{BaseSystem, ComponentMapper}
+import net.abesto.labyrinth.Constants
+import net.abesto.labyrinth.components.{MazeComponent, PositionComponent, WetComponent}
+import net.abesto.labyrinth.events.{HasWalkedEvent, MessageEvent}
 import net.abesto.labyrinth.maze.ShallowWaterTile
-import net.abesto.labyrinth.signals.Signals
+import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
 
-class ShallowWaterMakesWet extends EventHandlerSystem[Entity] {
-  subscribe(Signals.hasWalked)
-  val pm: ComponentMapper[PositionComponent] = ComponentMapper.getFor(classOf)
-  val wm: ComponentMapper[WetComponent] = ComponentMapper.getFor(classOf)
+import scala.collection.immutable.Queue
 
-  override protected def handle(deltaTime: Float, signal: Signal[Entity], entity: Entity): Unit = signal match {
-    case Signals.hasWalked =>
-      val maze = EngineAccessors.maze(getEngine)
-      val position = pm.get(entity)
-      val tile = maze.tile(position)
-      if (tile.isInstanceOf[ShallowWaterTile] && !wm.has(entity)) {
-        entity.add(new WetComponent)
-        // The following should be handled by a separate observation system, but until https://github.com/libgdx/ashley/pull/90
-        // is merged, it's not quite feasible
-        Signals.message.dispatch("You wade into the shallow water. Your clothes are soaked!")
-      }
+class ShallowWaterMakesWet extends BaseSystem {
+  var eventSystem: EventSystem = _
+  var tagManager: TagManager = _
+  var positionMapper: ComponentMapper[PositionComponent] = _
+  var wetMapper: ComponentMapper[WetComponent] = _
+  var mazeMapper: ComponentMapper[MazeComponent] = _
+
+  var hasWalkedInbox: Queue[HasWalkedEvent] = Queue()
+
+  @Subscribe
+  def enqueueHasWalked(e: HasWalkedEvent): Unit = {
+    hasWalkedInbox :+= e
+  }
+
+  def processHasWalked(e: HasWalkedEvent) {
+    val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
+    val maze = mazeMapper.get(mazeEntityId).maze
+    val position = positionMapper.get(e.entityId)
+    val tile = maze.tile(position)
+    if (tile.isInstanceOf[ShallowWaterTile] && !wetMapper.has(e.entityId)) {
+      wetMapper.create(e.entityId)
+      // The following should be handled by a separate observation system
+      eventSystem.dispatch(MessageEvent("You wade into the shallow water. Your clothes are soaked!"))
+    }
+  }
+
+  override def processSystem(): Unit = {
+    hasWalkedInbox.foreach(processHasWalked)
+    hasWalkedInbox = Queue()
   }
 }

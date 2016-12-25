@@ -1,9 +1,9 @@
 resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++= Seq(
-  "com.badlogicgames.ashley" % "ashley" % "1.7.0",
+  "net.onedaybeard.artemis" % "artemis-odb" % "2.1.0",
+  "net.mostlyoriginal.artemis-odb" % "contrib-eventbus" % "1.2.1",
   "com.squidpony" % "squidlib-util" % "3.0.0-b6",
-  "uk.com.robust-it" % "cloning" % "1.9.3",
 
   "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 )

@@ -10,4 +10,9 @@ object Constants {
   val fullHeight: Int = mazeHeight + messageAreaHeight
 
   val sightRadius = 10
+
+  object Tags {
+    val maze = "MAZE"
+    val player = "PLAYER"
+  }
 }
