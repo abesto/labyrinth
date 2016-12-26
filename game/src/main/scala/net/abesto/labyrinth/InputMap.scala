@@ -5,10 +5,10 @@ import javax.swing.KeyStroke
 
 import com.artemis.World
 import com.artemis.managers.TagManager
+import enumeratum._
 import net.abesto.labyrinth.events.{HidePopupEvent, TryWalkingEvent}
 import net.mostlyoriginal.api.event.common.{Event, EventSystem}
 import squidpony.squidmath.Coord
-import enumeratum._
 
 import scala.language.implicitConversions
 

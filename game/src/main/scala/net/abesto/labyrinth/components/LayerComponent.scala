@@ -1,7 +1,6 @@
 package net.abesto.labyrinth.components
 
 import com.artemis.Component
-import com.esotericsoftware.jsonbeans.{Json, JsonSerializable, JsonValue}
 import enumeratum._
 import net.abesto.labyrinth.ArtemisJsonEnumEntry
 

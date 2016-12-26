@@ -1,5 +1,4 @@
 import sbt._
-import Keys._
 
 object LabyrinthBuild extends Build {
   lazy val root: Project = Project(id = "labyrinth",

@@ -2,9 +2,9 @@ package net.abesto.labyrinth.systems
 
 import com.artemis.managers.TagManager
 import com.artemis.{Aspect, ComponentMapper}
-import net.abesto.labyrinth.{Helpers, InputMap}
+import net.abesto.labyrinth.Helpers
 import net.abesto.labyrinth.components.{PopupTriggerComponent, PositionComponent}
-import net.abesto.labyrinth.events.{ActivateInputMapEvent, HasWalkedEvent, ShowPopupEvent}
+import net.abesto.labyrinth.events.{HasWalkedEvent, ShowPopupEvent}
 import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
 import net.mostlyoriginal.api.event.common.EventSystem
 

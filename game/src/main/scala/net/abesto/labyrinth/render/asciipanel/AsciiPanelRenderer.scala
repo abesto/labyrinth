@@ -1,19 +1,13 @@
 package net.abesto.labyrinth.render.asciipanel
 
-import java.awt.Color
-
 import asciiPanel.{AsciiFont, AsciiPanel}
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{Aspect, ComponentMapper}
+import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent, TileComponent}
-import net.abesto.labyrinth.events.{HidePopupEvent, MessageEvent, ShowPopupEvent}
-import net.abesto.labyrinth.maze.{Maze, MazeTile}
 import net.abesto.labyrinth.render.Renderer
-import net.abesto.labyrinth.{Constants, Tiles}
-import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
+import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
-
-import scala.util.Random
 
 case class AsciiPanelRenderer() extends Renderer {
   var tagManager: TagManager = _

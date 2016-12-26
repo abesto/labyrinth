@@ -7,7 +7,7 @@ import com.artemis.{Aspect, World}
 import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
 import org.reflections.Reflections
 
-import scala.collection.immutable.{IndexedSeq, Queue}
+import scala.collection.immutable.IndexedSeq
 
 object Helpers {
   def entityIdsOfAspect(world: World, aspectBuilder: Aspect.Builder): IndexedSeq[Int] = {

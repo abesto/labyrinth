@@ -3,8 +3,6 @@ package net.abesto.labyrinth
 import com.artemis._
 import com.artemis.io.JsonArtemisSerializer
 import com.artemis.managers.{TagManager, WorldSerializationManager}
-import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
-import net.abesto.labyrinth.Tiles.Kind.Book
 import net.abesto.labyrinth.components._
 import net.abesto.labyrinth.render.Renderer
 import net.abesto.labyrinth.systems._
