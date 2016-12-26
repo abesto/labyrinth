@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="game" external.linked.project.path="$MODULE_DIR$/../../game" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/../../game/target/scala-2.10/classes" />
-    <output-test url="file://$MODULE_DIR$/../../game/target/scala-2.10/test-classes" />
+    <output url="file://$MODULE_DIR$/../../game/target/scala-2.12/classes" />
+    <output-test url="file://$MODULE_DIR$/../../game/target/scala-2.12/test-classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../game">
       <sourceFolder url="file://$MODULE_DIR$/../../game/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../game/src/main/scala" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../game/src/main/scala-2.10" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.10/src_managed/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../game/src/main/scala-2.12" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.12/src_managed/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../game/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../game/src/test/scala" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../game/src/test/scala-2.10" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.10/src_managed/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../game/src/test/scala-2.12" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.12/src_managed/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../game/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.10/resource_managed/main" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.12/resource_managed/main" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../game/src/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.10/resource_managed/test" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../game/target/scala-2.12/resource_managed/test" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../game/target" />
       <excludeFolder url="file://$MODULE_DIR$/../../game/target/resolution-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../../game/target/scala-2.10" />
+      <excludeFolder url="file://$MODULE_DIR$/../../game/target/scala-2.11" />
       <excludeFolder url="file://$MODULE_DIR$/../../game/target/streams" />
       <excludeFolder url="file://$MODULE_DIR$/../../game/target/test-reports" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="SBT: net.onedaybeard.artemis:artemis-odb:2.1.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang:scala-reflect:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.beachape:enumeratum_2.12:1.5.4:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.beachape:enumeratum-macros_2.12:1.5.4:jar" level="project" />
     <orderEntry type="library" name="SBT: org.reflections:reflections:0.9.10:jar" level="project" />
     <orderEntry type="library" name="SBT: org.javassist:javassist:3.18.2-GA:jar" level="project" />
     <orderEntry type="library" name="SBT: com.google.guava:guava:18.0:jar" level="project" />
@@ -31,8 +38,6 @@
     <orderEntry type="library" name="SBT: net.onedaybeard.artemis:artemis-odb-serializer-json:2.1.0:jar" level="project" />
     <orderEntry type="library" name="SBT: net.onedaybeard.artemis:artemis-odb-serializer:2.1.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.esotericsoftware:jsonbeans:0.7:jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="SBT: org.scalatest:scalatest_2.10:3.0.1:jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="SBT: org.scalactic:scalactic_2.10:3.0.1:jar" level="project" />
     <orderEntry type="module-library">
       <library name="SBT: unmanaged-jars">
         <CLASSES>
@@ -42,13 +47,10 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.10.6:jar" level="project" />
     <orderEntry type="library" name="SBT: com.squidpony:squidlib-util:3.0.0-b6:jar" level="project" />
     <orderEntry type="library" name="SBT: com.github.tommyettinger:regexodus:0.1.5:jar" level="project" />
     <orderEntry type="library" name="SBT: net.mostlyoriginal.artemis-odb:contrib-core:1.2.1:jar" level="project" />
     <orderEntry type="library" name="SBT: net.mostlyoriginal.artemis-odb:contrib-eventbus:1.2.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.beachape:enumeratum-macros_2.10:1.5.4:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.beachape:enumeratum_2.10:1.5.4:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-reflect:2.10.6:jar" level="project" />
+    <orderEntry type="module" module-name="macros" exported="" />
   </component>
 </module>

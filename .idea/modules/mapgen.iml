@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="mapgen" external.linked.project.path="$MODULE_DIR$/../../tools/mapgen" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10/classes" />
-    <output-test url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10/test-classes" />
+    <output url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.12/classes" />
+    <output-test url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.12/test-classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../tools/mapgen">
       <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/main/scala" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/main/scala-2.10" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10/src_managed/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/main/scala-2.12" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.12/src_managed/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/test/scala" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/test/scala-2.10" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10/src_managed/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/test/scala-2.12" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.12/src_managed/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10/resource_managed/main" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.12/resource_managed/main" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/src/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10/resource_managed/test" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.12/resource_managed/test" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../tools/mapgen/target" />
       <excludeFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/resolution-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.10" />
+      <excludeFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/scala-2.11" />
       <excludeFolder url="file://$MODULE_DIR$/../../tools/mapgen/target/streams" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="game" exported="" />
+    <orderEntry type="library" name="SBT: org.scala-lang:scala-reflect:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.beachape:enumeratum_2.12:1.5.4:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.beachape:enumeratum-macros_2.12:1.5.4:jar" level="project" />
     <orderEntry type="library" name="SBT: org.reflections:reflections:0.9.10:jar" level="project" />
     <orderEntry type="library" name="SBT: org.javassist:javassist:3.18.2-GA:jar" level="project" />
     <orderEntry type="library" name="SBT: com.google.guava:guava:18.0:jar" level="project" />
@@ -40,13 +47,9 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.10.6:jar" level="project" />
     <orderEntry type="library" name="SBT: com.squidpony:squidlib-util:3.0.0-b6:jar" level="project" />
     <orderEntry type="library" name="SBT: com.github.tommyettinger:regexodus:0.1.5:jar" level="project" />
     <orderEntry type="library" name="SBT: net.mostlyoriginal.artemis-odb:contrib-core:1.2.1:jar" level="project" />
     <orderEntry type="library" name="SBT: net.mostlyoriginal.artemis-odb:contrib-eventbus:1.2.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.beachape:enumeratum-macros_2.10:1.5.4:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.beachape:enumeratum_2.10:1.5.4:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-reflect:2.10.6:jar" level="project" />
   </component>
 </module>

@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/game-build.iml" filepath="$PROJECT_DIR$/.idea/modules/game-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/labyrinth.iml" filepath="$PROJECT_DIR$/.idea/modules/labyrinth.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/labyrinth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/labyrinth-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/macros.iml" filepath="$PROJECT_DIR$/.idea/modules/macros.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/macros-build.iml" filepath="$PROJECT_DIR$/.idea/modules/macros-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mapgen.iml" filepath="$PROJECT_DIR$/.idea/modules/mapgen.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mapgen-build.iml" filepath="$PROJECT_DIR$/.idea/modules/mapgen-build.iml" />
     </modules>

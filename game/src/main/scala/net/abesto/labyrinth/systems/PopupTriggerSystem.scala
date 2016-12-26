@@ -1,29 +1,23 @@
 package net.abesto.labyrinth.systems
 
 import com.artemis.managers.TagManager
-import com.artemis.{Aspect, BaseSystem, ComponentMapper}
-import net.abesto.labyrinth.{Constants, Helpers}
-import net.abesto.labyrinth.components.{MazeComponent, PopupTriggerComponent, PositionComponent}
+import com.artemis.{Aspect, ComponentMapper}
+import net.abesto.labyrinth.Helpers
+import net.abesto.labyrinth.components.{PopupTriggerComponent, PositionComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, ShowPopupEvent}
-import net.abesto.labyrinth.maze.ShallowWaterTile
-import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
+import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.mostlyoriginal.api.event.common.EventSystem
 
-import scala.collection.immutable.Queue
 import scala.io.Source
 
-class PopupTriggerSystem extends BaseSystem {
+@SubscribeDeferredContainer
+class PopupTriggerSystem extends EventHandlerSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var popupTriggerMapper: ComponentMapper[PopupTriggerComponent] = _
 
-  var hasWalkedInbox: Queue[HasWalkedEvent] = Queue()
-
-  @Subscribe
-  def enqueueHasWalked(e: HasWalkedEvent): Unit = {
-    hasWalkedInbox :+= e
-  }
-
+  @SubscribeDeferred
   def processHasWalked(e: HasWalkedEvent) {
     val position = positionMapper.get(e.entityId).coord
     Helpers.entityIdsOfAspect(world,
@@ -35,10 +29,5 @@ class PopupTriggerSystem extends BaseSystem {
       val text = lines.mkString("\n")
       eventSystem.dispatch(ShowPopupEvent(title, text))
     })
-  }
-
-  override def processSystem(): Unit = {
-    hasWalkedInbox.foreach(processHasWalked)
-    hasWalkedInbox = Queue()
   }
 }

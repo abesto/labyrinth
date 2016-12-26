@@ -1,7 +1,8 @@
 package net.abesto.labyrinth
 
+import net.abesto.labyrinth.events.LoadMazeEvent
 import net.abesto.labyrinth.render.asciipanel.AsciiPanelRenderer
-import net.abesto.labyrinth.systems.MazeLoaderSystem
+import net.mostlyoriginal.api.event.common.EventSystem
 
 object Game {
   def main(args: Array[String]): Unit = {
@@ -12,7 +13,7 @@ object Game {
     app.setup()
 
     // Kick things off
-    world.getSystem(classOf[MazeLoaderSystem]).load("1-dry")
+    world.getSystem(classOf[EventSystem]).dispatch(LoadMazeEvent("1-dry"))
     world.setDelta(1)
     world.process()
   }

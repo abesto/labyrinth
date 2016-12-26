@@ -1,32 +1,21 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, TryWalkingEvent}
-import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
+import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.mostlyoriginal.api.event.common.EventSystem
 
-import scala.collection.immutable.Queue
-
-
-class MovementSystem extends BaseSystem {
+@SubscribeDeferredContainer
+class MovementSystem extends EventHandlerSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _
 
-  var inboxWalk: Queue[TryWalkingEvent] = Queue()
-  @Subscribe
-  def enqueueWalk(e: TryWalkingEvent): Unit = {
-    inboxWalk :+= e
-  }
-
-  override def processSystem(): Unit = {
-    inboxWalk.foreach(walk)
-    inboxWalk = Queue()
-  }
-
+  @SubscribeDeferred
   def walk(e: TryWalkingEvent): Unit = {
     val maze = mazeMapper.get(tagManager.getEntityId(Constants.Tags.maze)).maze
     val oldPosition = positionMapper.get(e.entityId).coord
