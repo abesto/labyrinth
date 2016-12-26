@@ -1,6 +1,6 @@
 package net.abesto.labyrinth
 
-import net.abesto.labyrinth.events.LoadMazeEvent
+import net.abesto.labyrinth.events.{ActivateInputMapEvent, LoadMazeEvent}
 import net.abesto.labyrinth.render.asciipanel.AsciiPanelRenderer
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -13,7 +13,11 @@ object Game {
     app.setup()
 
     // Kick things off
-    world.getSystem(classOf[EventSystem]).dispatch(LoadMazeEvent("1-dry"))
+    val eventSystem = world.getSystem(classOf[EventSystem])
+    eventSystem.registerEvents(app)
+
+    eventSystem.dispatch(LoadMazeEvent("1-dry"))
+    eventSystem.dispatch(ActivateInputMapEvent(InputMap.mainInputMap))
     world.setDelta(1)
     world.process()
   }
