@@ -2,4 +2,6 @@ package net.abesto.labyrinth.events
 
 import net.mostlyoriginal.api.event.common.Event
 
-class StartCastingEvent extends Event
+case class TypingSpellEvent(char: Char) extends Event {
+
+}

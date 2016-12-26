@@ -5,9 +5,10 @@ object Constants {
   val mazeHeight = 40
 
   val messageAreaHeight = 5
+  val castingPromptHeight = 1
 
   val fullWidth: Int = mazeWidth
-  val fullHeight: Int = mazeHeight + messageAreaHeight
+  val fullHeight: Int = mazeHeight + messageAreaHeight + castingPromptHeight
 
   val sightRadius = 10
 

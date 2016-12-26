@@ -23,8 +23,7 @@ object WorldDefinition {
       new ShallowWaterMakesWet(),
       new PopupTriggerSystem(),
       new ShadowcastingSystem(),
-      // Input map handling
-      new PopupInputMapSystem(),
+      new InputMapManager(),
       // Finally, render
       renderer
     ).build()

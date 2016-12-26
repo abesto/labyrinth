@@ -10,6 +10,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
 case class AsciiPanelRenderer() extends Renderer {
+  var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var mazeMapper: ComponentMapper[MazeComponent] = _
   var positionMapper: ComponentMapper[PositionComponent] = _
@@ -17,8 +18,8 @@ case class AsciiPanelRenderer() extends Renderer {
   var tileMapper: ComponentMapper[TileComponent] = _
 
   val panel = new AsciiPanel(
-    Constants.mazeWidth,
-    Constants.mazeHeight + Constants.messageAreaHeight,
+    Constants.fullWidth,
+    Constants.fullHeight,
     AsciiFont.TALRYTH_15_15)
 
   lazy val mazeFrame: AsciiPanelMazeFrame = {
@@ -33,13 +34,22 @@ case class AsciiPanelRenderer() extends Renderer {
     val o = new AsciiPanelMessageAreaFrame(panel,
       Coord.get(0, 0),
       Coord.get(Constants.fullWidth, Constants.messageAreaHeight))
-    world.getSystem(classOf[EventSystem]).registerEvents(o)
+    eventSystem.registerEvents(o)
     o
   }
 
   lazy val popup: AsciiPanelPopup = {
     val o = new AsciiPanelPopup(panel)
-    world.getSystem(classOf[EventSystem]).registerEvents(o)
+    eventSystem.registerEvents(o)
+    o
+  }
+
+  lazy val castingPrompt: AsciiPanelSpellInputFrame = {
+    val o = new AsciiPanelSpellInputFrame(panel,
+      Coord.get(0, Constants.fullHeight - Constants.castingPromptHeight),
+      Coord.get(Constants.fullWidth, Constants.castingPromptHeight)
+    )
+    eventSystem.registerEvents(o)
     o
   }
 
@@ -47,6 +57,7 @@ case class AsciiPanelRenderer() extends Renderer {
     mazeFrame.render()
     messageAreaFrame.render()
     popup.render()
+    castingPrompt.render()
 
     panel.repaint()
   }
