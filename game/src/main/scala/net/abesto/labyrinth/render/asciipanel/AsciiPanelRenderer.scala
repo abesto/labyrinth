@@ -22,36 +22,31 @@ case class AsciiPanelRenderer() extends Renderer {
     Constants.fullHeight,
     AsciiFont.TALRYTH_15_15)
 
-  lazy val mazeFrame: AsciiPanelMazeFrame = {
-    val o = new AsciiPanelMazeFrame(world, panel,
+  def artemisify[T](o: T): T = {
+    world.inject(o)
+    eventSystem.registerEvents(o)
+    o
+  }
+
+  lazy val mazeFrame: AsciiPanelMazeFrame = artemisify(
+    new AsciiPanelMazeFrame(world, panel,
       Coord.get(0, Constants.messageAreaHeight),
       Coord.get(Constants.mazeWidth, Constants.mazeHeight))
-    world.inject(o)
-    o
-  }
+  )
 
-  lazy val messageAreaFrame: AsciiPanelMessageAreaFrame = {
-    val o = new AsciiPanelMessageAreaFrame(panel,
+  lazy val messageAreaFrame: AsciiPanelMessageAreaFrame = artemisify(
+    new AsciiPanelMessageAreaFrame(panel,
       Coord.get(0, 0),
       Coord.get(Constants.fullWidth, Constants.messageAreaHeight))
-    eventSystem.registerEvents(o)
-    o
-  }
+  )
 
-  lazy val popup: AsciiPanelPopup = {
-    val o = new AsciiPanelPopup(panel)
-    eventSystem.registerEvents(o)
-    o
-  }
+  lazy val popup: AsciiPanelPopup = artemisify(new AsciiPanelPopup(panel))
 
-  lazy val castingPrompt: AsciiPanelSpellInputFrame = {
-    val o = new AsciiPanelSpellInputFrame(panel,
+  lazy val castingPrompt: AsciiPanelSpellInputFrame = artemisify(
+    new AsciiPanelSpellInputFrame(panel,
       Coord.get(0, Constants.fullHeight - Constants.castingPromptHeight),
-      Coord.get(Constants.fullWidth, Constants.castingPromptHeight)
-    )
-    eventSystem.registerEvents(o)
-    o
-  }
+      Coord.get(Constants.fullWidth, Constants.castingPromptHeight))
+  )
 
   override def processSystem(): Unit = {
     mazeFrame.render()

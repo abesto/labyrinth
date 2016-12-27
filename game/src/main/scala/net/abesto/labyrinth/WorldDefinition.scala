@@ -19,6 +19,7 @@ object WorldDefinition {
       new MazeGeneratorSystem(),
       // Player actions
       new MovementSystem(),
+      new SpellInputSystem(),
       // Consequences, feedback
       new ShallowWaterMakesWet(),
       new PopupTriggerSystem(),
@@ -36,6 +37,7 @@ object WorldDefinition {
     Helpers.setSerializer(serializer)
     createMap(world)
     createPlayer(world)
+    createSpellInput(world)
     world
   }
 
@@ -52,5 +54,11 @@ object WorldDefinition {
       .add(new PositionComponent())
       .add(new LayerComponent(LayerComponent.Layer.Creature))
       .add(new TileComponent(Tiles.Kind.Player))
+  }
+
+  protected def createSpellInput(world: World): Unit = {
+    val entity = world.createEntity()
+    world.getSystem(classOf[TagManager]).register(Constants.Tags.spellInput, entity)
+    entity.edit().add(new SpellInputComponent)
   }
 }

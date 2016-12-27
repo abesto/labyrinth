@@ -4,17 +4,16 @@ import java.awt.event.ActionEvent
 import javax.swing.{AbstractAction, JFrame, KeyStroke}
 
 import com.artemis.World
-import net.abesto.labyrinth.InputMap.Action
+import net.abesto.labyrinth.InputMap.InputMap
 import net.abesto.labyrinth.events.{ActivateInputMapEvent, DeactivateInputMapEvent}
 import net.abesto.labyrinth.render.Renderer
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class ApplicationMain(world: World, renderer: Renderer) extends JFrame {
-  var inputMapStack: List[Map[KeyStroke, Action]] = List.empty
+  var inputMapStack: List[InputMap] = List.empty
 
   def setup(): Unit = {
     setupLayout()
-    setupActions()
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     setVisible(true)
   }
@@ -24,11 +23,12 @@ class ApplicationMain(world: World, renderer: Renderer) extends JFrame {
     pack()
   }
 
-  def setupActions(): Unit = {
+  def setupActions(inputMap: InputMap): Unit = {
     val rootPaneActionMap = getRootPane.getActionMap
-    InputMap.actionMap.foreach {
-      case (actionName, action) =>
-        rootPaneActionMap.put(actionName, new AbstractAction() {
+    rootPaneActionMap.clear()
+    InputMap.actionMap(world, inputMap).foreach {
+      case (event, action) =>
+        rootPaneActionMap.put(event, new AbstractAction() {
           override def actionPerformed(e: ActionEvent): Unit = {
             action(world)
             world.setDelta(1)
@@ -38,12 +38,13 @@ class ApplicationMain(world: World, renderer: Renderer) extends JFrame {
     }
   }
 
-  def activateInputMap(inputMap: Map[KeyStroke, Action]): Unit = {
+  def activateInputMap(inputMap: InputMap): Unit = {
     val rootPaneInputMap = getRootPane.getInputMap
     rootPaneInputMap.clear()
     inputMap.foreach {
-      case (keystroke, actionName) => rootPaneInputMap.put(keystroke, actionName)
+      case (keystrokes, actionName) => keystrokes.foreach(keystroke => rootPaneInputMap.put(keystroke, actionName))
     }
+    setupActions(inputMap)
   }
 
   @Subscribe

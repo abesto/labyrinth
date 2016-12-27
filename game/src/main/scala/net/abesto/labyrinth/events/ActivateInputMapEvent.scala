@@ -1,10 +1,8 @@
 package net.abesto.labyrinth.events
 
-import javax.swing.KeyStroke
-
-import net.abesto.labyrinth.InputMap.Action
+import net.abesto.labyrinth.InputMap.InputMap
 import net.mostlyoriginal.api.event.common.Event
 
-case class ActivateInputMapEvent(inputMap: Map[KeyStroke, Action]) extends Event {
+case class ActivateInputMapEvent(inputMap: InputMap) extends Event {
 
 }
