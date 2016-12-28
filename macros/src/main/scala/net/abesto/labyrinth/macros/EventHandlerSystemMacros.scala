@@ -32,7 +32,7 @@ object EventHandlerSystemMacros {
         }
 
         q"""
-          $mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents with DeferredEventHandlerSystemImpl { $self =>
+          $mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents with net.abesto.labyrinth.macros.DeferredEventHandlerSystemImpl { $self =>
             import net.mostlyoriginal.api.event.common.Subscribe
             ..$newStats
           }

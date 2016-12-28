@@ -3,16 +3,55 @@ package net.abesto.labyrinth
 import java.util.function.Consumer
 
 import com.artemis.io.JsonArtemisSerializer
-import com.artemis.{Aspect, World}
+import com.artemis.managers.TagManager
+import com.artemis.{Aspect, AspectSubscriptionManager, ComponentMapper, World}
 import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
+import net.abesto.labyrinth.components.LayerComponent.Layer
+import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent}
+import net.abesto.labyrinth.maze.Maze
 import org.reflections.Reflections
+import squidpony.squidmath.Coord
 
 import scala.collection.immutable.IndexedSeq
 
 object Helpers {
+  var aspectSubscriptionManager: AspectSubscriptionManager = _
+  var tagManager: TagManager = _
+  var positionMapper: ComponentMapper[PositionComponent] = _
+  var layerMapper: ComponentMapper[LayerComponent] = _
+  var mazeMapper: ComponentMapper[MazeComponent] = _
+
+  var injected: World = _
+  def inject(world: World): Unit = {
+    if (injected != world) {
+      world.inject(this)
+      injected = world
+    }
+  }
+
   def entityIdsOfAspect(world: World, aspectBuilder: Aspect.Builder): IndexedSeq[Int] = {
-    val entityIdsBag = world.getAspectSubscriptionManager.get(aspectBuilder).getEntities
+    inject(world)
+    val entityIdsBag = aspectSubscriptionManager.get(aspectBuilder).getEntities
     0.until(entityIdsBag.size).map(entityIdsBag.get)
+  }
+
+  def entityIdsAtPosition(world: World, layer: Layer, coord: Coord): Seq[Int] = {
+    inject(world)
+    entityIdsOfAspect(world,
+      Aspect.all(classOf[PositionComponent], classOf[LayerComponent])
+    ).filter(
+      id => layerMapper.get(id).layer == layer && positionMapper.get(id).coord.equals(coord)
+    )
+  }
+
+  def maze(world: World): Maze = {
+    inject(world)
+    mazeMapper.get(tagManager.getEntityId(Constants.Tags.maze)).maze
+  }
+
+  def playerEntityId(world: World): Int = {
+    inject(world)
+    tagManager.getEntityId(Constants.Tags.player)
   }
 
   protected var serializer: JsonArtemisSerializer = _

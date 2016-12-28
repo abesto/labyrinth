@@ -1,17 +1,20 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.{BaseSystem, ComponentMapper, Entity}
 import com.artemis.managers.TagManager
-import net.abesto.labyrinth.Constants
+import com.artemis.{BaseSystem, ComponentMapper}
+import net.abesto.labyrinth.{Constants, Helpers}
 import net.abesto.labyrinth.components.SpellInputComponent
-import net.abesto.labyrinth.events.{SpellInputAbortEvent, SpellInputFinishEvent, SpellInputOperationEvent, SpellInputStartEvent}
-import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, DeferredEventHandlerSystemImpl, SubscribeDeferred}
+import net.abesto.labyrinth.events._
+import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
+import net.abesto.labyrinth.magic.SpellParser
+import net.mostlyoriginal.api.event.common.EventSystem
 
 import scala.util.Random
 
 @DeferredEventHandlerSystem
-class SpellInputSystem extends BaseSystem {
+class SpellInputSystem(parser: SpellParser) extends BaseSystem {
   var tagManager: TagManager = _
+  var eventSystem: EventSystem = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _
 
   def spellInputEntityId: Int = tagManager.getEntityId(Constants.Tags.spellInput)
@@ -23,6 +26,7 @@ class SpellInputSystem extends BaseSystem {
   def reset(): Unit = {
     spellInput.input = ""
     spellInput.cursorPosition = 0
+    spellInput.spell = None
   }
 
   @SubscribeDeferred
@@ -37,6 +41,7 @@ class SpellInputSystem extends BaseSystem {
     val p = e.op(spellInput.input, spellInput.cursorPosition)
     spellInput.input = p._1
     spellInput.cursorPosition = math.min(spellInput.input.length, math.max(0, p._2))
+    spellInput.spell = parser.parse(spellInput.input)
   }
 
   @SubscribeDeferred
@@ -48,8 +53,8 @@ class SpellInputSystem extends BaseSystem {
   @SubscribeDeferred
   def finish(e: SpellInputFinishEvent): Unit = {
     spellInput.isActive = false
+    eventSystem.dispatch(SpellCastEvent(Helpers.playerEntityId(world), spellInput.spell))
     reset()
-    // TODO emit another event with the full spell
   }
 }
 
