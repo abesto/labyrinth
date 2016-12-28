@@ -4,6 +4,7 @@ import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
 
+@compileTimeOnly("SubscribeDeferred  should've been removed by EventHandlerSystemMacros. Did you forget to add DeferredEventHandlerSystem to the containing class?")
 class SubscribeDeferred extends StaticAnnotation
 
 @compileTimeOnly("SubscribeDeferredContainer should've been removed by EventHandlerSystemMacros")
@@ -18,26 +19,24 @@ object EventHandlerSystemMacros {
 
     val result = annottees map (_.tree) match {
       // Match a class, and expand.
-      case (classDef @ q"$mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents { $self => ..$stats }") :: _ =>
-        val extraEntries: Seq[c.universe.Tree] = for {
-          q"@SubscribeDeferred def $tname[..$tparams]($_: $eventType): $tpt = $expr" <- stats
-          lname = TermName(s"__listen${tname.toString}")
-        } yield {
-          q"""
-           subscribe[$eventType]($tname)
-           @Subscribe def $lname[..$tparams](e: $eventType): Unit = enqueue(e)
-           """
+      case (q"$mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents { $self => ..$stats }") :: _ =>
+        val newStats = stats.map {
+          case q"@SubscribeDeferred def $tname[..$tparams]($arg: $eventType): $tpt = $expr" =>
+            val lname = TermName(s"__listen${tname.toString}")
+            q"""
+             def $tname[..$tparams]($arg: $eventType): $tpt = $expr
+             subscribe[$eventType]($tname)
+             @Subscribe def $lname[..$tparams](e: $eventType): Unit = enqueue(e)
+             """
+          case other => other
         }
 
-        if(extraEntries.nonEmpty) {
-          q"""
-            $mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents with DeferredEventHandlerSystemImpl { $self =>
-              import net.mostlyoriginal.api.event.common.Subscribe
-              ..$stats
-              ..$extraEntries
-            }
-          """
-        } else classDef
+        q"""
+          $mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents with DeferredEventHandlerSystemImpl { $self =>
+            import net.mostlyoriginal.api.event.common.Subscribe
+            ..$newStats
+          }
+        """
       // Not a class.
       case _ => c.abort(c.enclosingPosition, "Invalid annotation target: not a class")
     }
