@@ -20,12 +20,16 @@ class SpellInputSystem extends EventHandlerSystem {
   val promptOptions: Seq[String] = Seq("Cast", "Invoke", "Mumble", "Incant", "Whisper", "Chant")
   def randomPrompt: String = promptOptions(Random.nextInt(promptOptions.length))
 
+  def reset(): Unit = {
+    spellInput.input = ""
+    spellInput.cursorPosition = 0
+  }
+
   @SubscribeDeferred
   def startCasting(e: SpellInputStartEvent): Unit = {
     spellInput.isActive = true
     spellInput.prompt = randomPrompt
-    spellInput.input = ""
-    spellInput.cursorPosition = 0
+    reset()
   }
 
   @SubscribeDeferred
@@ -38,11 +42,13 @@ class SpellInputSystem extends EventHandlerSystem {
   @SubscribeDeferred
   def abort(e: SpellInputAbortEvent): Unit = {
     spellInput.isActive = false
+    reset()
   }
 
   @SubscribeDeferred
   def finish(e: SpellInputFinishEvent): Unit = {
     spellInput.isActive = false
+    reset()
     // TODO emit another event with the full spell
   }
 }
