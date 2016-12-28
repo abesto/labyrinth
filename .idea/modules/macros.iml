@@ -17,13 +17,15 @@
       <sourceFolder url="file://$MODULE_DIR$/../../macros/target/scala-2.12/resource_managed/main" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../macros/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../macros/target/scala-2.12/resource_managed/test" type="java-test-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/../../macros/target" />
       <excludeFolder url="file://$MODULE_DIR$/../../macros/target/resolution-cache" />
       <excludeFolder url="file://$MODULE_DIR$/../../macros/target/streams" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: net.mostlyoriginal.artemis-odb:contrib-core:1.2.1:jar" level="project" />
     <orderEntry type="library" name="SBT: org.scala-lang:scala-reflect:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: net.onedaybeard.artemis:artemis-odb:2.1.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: net.mostlyoriginal.artemis-odb:contrib-eventbus:1.2.1:jar" level="project" />
   </component>
 </module>

@@ -1,16 +1,16 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.{ComponentMapper, Entity}
+import com.artemis.{BaseSystem, ComponentMapper, Entity}
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
-import net.abesto.labyrinth.events.{SpellInputAbortEvent, SpellInputOperationEvent, SpellInputFinishEvent, SpellInputStartEvent}
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.events.{SpellInputAbortEvent, SpellInputFinishEvent, SpellInputOperationEvent, SpellInputStartEvent}
+import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, DeferredEventHandlerSystemImpl, SubscribeDeferred}
 
 import scala.util.Random
 
-@SubscribeDeferredContainer
-class SpellInputSystem extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class SpellInputSystem extends BaseSystem {
   var tagManager: TagManager = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _
 

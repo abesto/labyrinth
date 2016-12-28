@@ -1,16 +1,16 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.ComponentMapper
+import com.artemis.{BaseSystem, ComponentMapper}
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.GenerateMazeEvent
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.macros._
 import net.abesto.labyrinth.maze._
 import squidpony.squidgrid.mapping.DungeonUtility
 
-@SubscribeDeferredContainer
-class MazeGeneratorSystem extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class MazeGeneratorSystem extends BaseSystem {
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

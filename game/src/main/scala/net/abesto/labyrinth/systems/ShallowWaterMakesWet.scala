@@ -1,16 +1,16 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.ComponentMapper
+import com.artemis.{BaseSystem, ComponentMapper}
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent, WetComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, MessageEvent}
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, DeferredEventHandlerSystemImpl, SubscribeDeferred}
 import net.abesto.labyrinth.maze.ShallowWaterTile
 import net.mostlyoriginal.api.event.common.EventSystem
 
-@SubscribeDeferredContainer
-class ShallowWaterMakesWet extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class ShallowWaterMakesWet extends BaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

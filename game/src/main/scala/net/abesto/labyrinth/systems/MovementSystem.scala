@@ -1,15 +1,15 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.ComponentMapper
+import com.artemis.{BaseSystem, ComponentMapper}
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, TryWalkingEvent}
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, DeferredEventHandlerSystemImpl, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
 
-@SubscribeDeferredContainer
-class MovementSystem extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class MovementSystem extends BaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

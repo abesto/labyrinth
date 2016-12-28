@@ -1,0 +1,33 @@
+<idea-plugin version="2">
+  <id>net.abesto.labyrinth.idea</id>
+  <name>Labyrinth</name>
+  <version>1.0</version>
+  <vendor email="abesto0@gmail.com" url="https://abesto.net">abesto</vendor>
+
+  <description><![CDATA[
+  <ul>
+  <li>Provides support for Scala macros used across Labyrinth</li>
+  </ul>
+    ]]></description>
+
+  <change-notes><![CDATA[
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="145.0"/>
+
+  <depends>org.intellij.scala</depends>
+
+  <extensions defaultExtensionNs="org.intellij.scala">
+    <syntheticMemberInjector implementation="net.abesto.labyrinth.idea.EventHandlerSystemInjector"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>

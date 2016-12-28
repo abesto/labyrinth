@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/game.iml" filepath="$PROJECT_DIR$/.idea/modules/game.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/game-build.iml" filepath="$PROJECT_DIR$/.idea/modules/game-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea-plugin/idea-plugin.iml" filepath="$PROJECT_DIR$/idea-plugin/idea-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/labyrinth.iml" filepath="$PROJECT_DIR$/.idea/modules/labyrinth.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/labyrinth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/labyrinth-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/macros.iml" filepath="$PROJECT_DIR$/.idea/modules/macros.iml" />

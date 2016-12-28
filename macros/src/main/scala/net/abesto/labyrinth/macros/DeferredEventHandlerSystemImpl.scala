@@ -1,4 +1,4 @@
-package net.abesto.labyrinth.systems
+package net.abesto.labyrinth.macros
 
 import com.artemis.BaseSystem
 import net.mostlyoriginal.api.event.common.Event
@@ -7,7 +7,7 @@ import scala.collection.immutable.Queue
 import scala.collection.mutable
 
 
-class EventHandlerSystem extends BaseSystem {
+trait DeferredEventHandlerSystemImpl extends BaseSystem {
   var handlers: mutable.Map[Manifest[_], Handler[_]] = mutable.Map()
 
   class Handler[T <: Event](f: T => Unit) {

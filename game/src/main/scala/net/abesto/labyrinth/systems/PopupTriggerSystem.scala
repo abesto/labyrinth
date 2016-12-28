@@ -1,17 +1,17 @@
 package net.abesto.labyrinth.systems
 
 import com.artemis.managers.TagManager
-import com.artemis.{Aspect, ComponentMapper}
+import com.artemis.{Aspect, BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Helpers
 import net.abesto.labyrinth.components.{PopupTriggerComponent, PositionComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, ShowPopupEvent}
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, DeferredEventHandlerSystemImpl, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
 
 import scala.io.Source
 
-@SubscribeDeferredContainer
-class PopupTriggerSystem extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class PopupTriggerSystem extends BaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

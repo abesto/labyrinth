@@ -7,7 +7,7 @@ import scala.reflect.macros.whitebox
 class SubscribeDeferred extends StaticAnnotation
 
 @compileTimeOnly("SubscribeDeferredContainer should've been removed by EventHandlerSystemMacros")
-class SubscribeDeferredContainer extends StaticAnnotation {
+class DeferredEventHandlerSystem extends StaticAnnotation {
   def macroTransform(annottees: Any*): Any = macro EventHandlerSystemMacros.impl
 }
 
@@ -31,7 +31,7 @@ object EventHandlerSystemMacros {
 
         if(extraEntries.nonEmpty) {
           q"""
-            $mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents { $self =>
+            $mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents with DeferredEventHandlerSystemImpl { $self =>
               import net.mostlyoriginal.api.event.common.Subscribe
               ..$stats
               ..$extraEntries

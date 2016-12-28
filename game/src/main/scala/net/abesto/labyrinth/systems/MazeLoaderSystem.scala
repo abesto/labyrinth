@@ -1,18 +1,18 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.ComponentMapper
+import com.artemis.{BaseSystem, ComponentMapper}
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.{TagManager, WorldSerializationManager}
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.LoadMazeEvent
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.macros._
 import net.abesto.labyrinth.maze._
 import net.abesto.labyrinth.{Constants, Tiles}
 import squidpony.squidmath.Coord
 
 
-@SubscribeDeferredContainer
-class MazeLoaderSystem extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class MazeLoaderSystem extends BaseSystem {
   var tagManager: TagManager = _
   var serializationManager: WorldSerializationManager = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

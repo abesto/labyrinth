@@ -1,13 +1,14 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.BaseSystem
 import net.abesto.labyrinth.InputMap
 import net.abesto.labyrinth.InputMap.InputMap
 import net.abesto.labyrinth.events._
-import net.abesto.labyrinth.macros.{SubscribeDeferred, SubscribeDeferredContainer}
+import net.abesto.labyrinth.macros._
 import net.mostlyoriginal.api.event.common.EventSystem
 
-@SubscribeDeferredContainer
-class InputMapManager extends EventHandlerSystem {
+@DeferredEventHandlerSystem
+class InputMapManager extends BaseSystem {
   var eventSystem: EventSystem = _
 
   protected def activate(m: InputMap): Unit = {
