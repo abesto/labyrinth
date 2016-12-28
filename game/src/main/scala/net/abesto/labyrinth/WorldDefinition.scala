@@ -4,7 +4,7 @@ import com.artemis._
 import com.artemis.io.JsonArtemisSerializer
 import com.artemis.managers.{TagManager, WorldSerializationManager}
 import net.abesto.labyrinth.components._
-import net.abesto.labyrinth.magic.{AreaTarget, SpellParser, SpellWordList, TestEffect}
+import net.abesto.labyrinth.magic._
 import net.abesto.labyrinth.render.Renderer
 import net.abesto.labyrinth.systems._
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -34,6 +34,7 @@ object WorldDefinition {
 
   protected def buildSpellWordList(): SpellWordList = new SpellWordList(Seq(
     new TestEffect().withString("test"),
+    new DryEffect().withString("dry"),
     AreaTarget(Coord.get(0, 0), Coord.get(1, 1)).withString("me"),
     AreaTarget(Coord.get(1, 0), Coord.get(1, 1)).withString("east"),
     AreaTarget(Coord.get(-1, 0), Coord.get(1, 1)).withString("west"),
