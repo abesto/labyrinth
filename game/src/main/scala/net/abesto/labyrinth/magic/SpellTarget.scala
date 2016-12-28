@@ -9,7 +9,7 @@ abstract class SpellTarget extends SpellWord {
     affectedTiles()
   }
 
-  def affectedTiles(): Seq[Coord]
+  protected def affectedTiles(): Seq[Coord]
 
   def compose(lh: SpellTarget): SpellTarget
 }
