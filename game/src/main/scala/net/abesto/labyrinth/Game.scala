@@ -2,6 +2,7 @@ package net.abesto.labyrinth
 
 import net.abesto.labyrinth.events.{ActivateInputMapEvent, LoadMazeEvent}
 import net.abesto.labyrinth.render.asciipanel.AsciiPanelRenderer
+import net.abesto.labyrinth.ui.{ApplicationMain, InputMap}
 import net.mostlyoriginal.api.event.common.EventSystem
 
 object Game {

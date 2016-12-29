@@ -1,16 +1,16 @@
-package net.abesto.labyrinth
+package net.abesto.labyrinth.ui
 
 import java.awt.event.KeyEvent
 import javax.swing.KeyStroke
 
 import com.artemis.World
 import com.artemis.managers.TagManager
-import enumeratum._
+import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.events._
 import net.mostlyoriginal.api.event.common.{Event, EventSystem}
 import squidpony.squidmath.Coord
 
-import scala.collection.immutable.{IndexedSeq, Seq}
+import scala.collection.immutable.Seq
 import scala.language.implicitConversions
 
 object InputMap {

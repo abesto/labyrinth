@@ -1,10 +1,10 @@
-package net.abesto.labyrinth
+package net.abesto.labyrinth.ui
 
 import java.awt.event.ActionEvent
-import javax.swing.{AbstractAction, JFrame, KeyStroke}
+import javax.swing.{AbstractAction, JFrame, SwingUtilities}
 
 import com.artemis.World
-import net.abesto.labyrinth.InputMap.InputMap
+import InputMap.InputMap
 import net.abesto.labyrinth.events.{ActivateInputMapEvent, DeactivateInputMapEvent}
 import net.abesto.labyrinth.render.Renderer
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -13,9 +13,12 @@ class ApplicationMain(world: World, renderer: Renderer) extends JFrame {
   var inputMapStack: List[InputMap] = List.empty
 
   def setup(): Unit = {
-    setupLayout()
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    setVisible(true)
+    Thread.setDefaultUncaughtExceptionHandler(new SwingExceptionHandler(this))
+    SwingUtilities.invokeLater(() => {
+      setupLayout()
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+      setVisible(true)
+    })
   }
 
   def setupLayout(): Unit = {

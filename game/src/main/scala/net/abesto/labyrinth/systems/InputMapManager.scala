@@ -1,10 +1,10 @@
 package net.abesto.labyrinth.systems
 
 import com.artemis.BaseSystem
-import net.abesto.labyrinth.InputMap
-import net.abesto.labyrinth.InputMap.InputMap
+import net.abesto.labyrinth.ui.InputMap.InputMap
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.macros._
+import net.abesto.labyrinth.ui.InputMap
 import net.mostlyoriginal.api.event.common.EventSystem
 
 @DeferredEventHandlerSystem
