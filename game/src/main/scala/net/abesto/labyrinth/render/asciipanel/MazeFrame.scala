@@ -3,9 +3,8 @@ package net.abesto.labyrinth.render.asciipanel
 import java.awt.Color
 
 import asciiPanel.AsciiPanel
-import com.artemis.annotations.Wire
 import com.artemis.managers.TagManager
-import com.artemis.{Aspect, ComponentMapper, World}
+import com.artemis.{ComponentMapper, World}
 import net.abesto.labyrinth.components._
 import net.abesto.labyrinth.maze.{Maze, MazeTile}
 import net.abesto.labyrinth.systems.Helpers
@@ -14,7 +13,7 @@ import squidpony.squidmath.Coord
 
 import scala.util.Random
 
-class AsciiPanelMazeFrame(world: World, panel: AsciiPanel, topLeft: Coord, size: Coord) extends AsciiPanelFrame(panel, topLeft, size) {
+class MazeFrame(world: World, panel: AsciiPanel, topLeft: Coord, size: Coord) extends Frame(panel, topLeft, size) {
   var tagManager: TagManager = _
   var mazeMapper: ComponentMapper[MazeComponent] = _
   var positionMapper: ComponentMapper[PositionComponent] = _

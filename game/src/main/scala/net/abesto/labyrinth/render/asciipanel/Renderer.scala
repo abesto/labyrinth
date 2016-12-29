@@ -5,11 +5,11 @@ import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent, TileComponent}
-import net.abesto.labyrinth.render.Renderer
+import net.abesto.labyrinth.render.{Renderer => BaseRenderer}
 import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
-case class AsciiPanelRenderer() extends Renderer {
+case class Renderer() extends BaseRenderer {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var mazeMapper: ComponentMapper[MazeComponent] = _
@@ -28,22 +28,22 @@ case class AsciiPanelRenderer() extends Renderer {
     o
   }
 
-  lazy val mazeFrame: AsciiPanelMazeFrame = artemisify(
-    new AsciiPanelMazeFrame(world, panel,
+  lazy val mazeFrame: MazeFrame = artemisify(
+    new MazeFrame(world, panel,
       Coord.get(0, Constants.messageAreaHeight),
       Coord.get(Constants.mazeWidth, Constants.mazeHeight))
   )
 
-  lazy val messageAreaFrame: AsciiPanelMessageAreaFrame = artemisify(
-    new AsciiPanelMessageAreaFrame(panel,
+  lazy val messageAreaFrame: MessageAreaFrame = artemisify(
+    new MessageAreaFrame(panel,
       Coord.get(0, 0),
       Coord.get(Constants.fullWidth, Constants.messageAreaHeight))
   )
 
-  lazy val popup: AsciiPanelPopup = artemisify(new AsciiPanelPopup(panel))
+  lazy val popup: Popup = artemisify(new Popup(panel))
 
-  lazy val castingPrompt: AsciiPanelSpellInputFrame = artemisify(
-    new AsciiPanelSpellInputFrame(panel,
+  lazy val castingPrompt: SpellInputFrame = artemisify(
+    new SpellInputFrame(panel,
       Coord.get(0, Constants.fullHeight - Constants.castingPromptHeight),
       Coord.get(Constants.fullWidth, Constants.castingPromptHeight))
   )

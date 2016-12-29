@@ -9,7 +9,7 @@ import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
 import squidpony.squidmath.Coord
 
-class AsciiPanelSpellInputFrame(panel: AsciiPanel, topLeft: Coord, size: Coord) extends AsciiPanelFrame(panel, topLeft, size) {
+class SpellInputFrame(panel: AsciiPanel, topLeft: Coord, size: Coord) extends Frame(panel, topLeft, size) {
   var tagManger: TagManager = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _
 

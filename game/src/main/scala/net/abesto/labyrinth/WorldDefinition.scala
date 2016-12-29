@@ -43,17 +43,6 @@ object WorldDefinition {
     AreaTarget(Coord.get(0, 1), Coord.get(1, 1)).withString("south")
   ))
 
-  def buildWorld(renderer: Renderer): World = {
-    val world = new World(buildWorldConfiguration(renderer))
-    val serializer = new JsonArtemisSerializer(world).prettyPrint(true)
-    world.getSystem(classOf[WorldSerializationManager]).setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
-    world.getSystem(classOf[Helpers]).setSerializer(serializer)
-    createMap(world)
-    createPlayer(world)
-    createSpellInput(world)
-    world
-  }
-
   protected def createMap(world: World): Unit = {
     val maze = world.createEntity()
     maze.edit().add(new MazeComponent)
@@ -73,5 +62,16 @@ object WorldDefinition {
     val entity = world.createEntity()
     world.getSystem(classOf[TagManager]).register(Constants.Tags.spellInput, entity)
     entity.edit().add(new SpellInputComponent)
+  }
+
+  def buildWorld(renderer: Renderer): World = {
+    val world = new World(buildWorldConfiguration(renderer))
+    val serializer = new JsonArtemisSerializer(world).prettyPrint(true)
+    world.getSystem(classOf[WorldSerializationManager]).setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
+    world.getSystem(classOf[Helpers]).setSerializer(serializer)
+    createMap(world)
+    createPlayer(world)
+    createSpellInput(world)
+    world
   }
 }

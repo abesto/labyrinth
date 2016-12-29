@@ -7,7 +7,7 @@ import net.abesto.labyrinth.events.{HidePopupEvent, ShowPopupEvent}
 import net.mostlyoriginal.api.event.common.Subscribe
 import squidpony.squidmath.Coord
 
-class AsciiPanelPopup(panel: AsciiPanel) {
+class Popup(panel: AsciiPanel) {
   var show: Boolean = false
   var title: String = ""
   var text: String = ""
@@ -41,7 +41,7 @@ class AsciiPanelPopup(panel: AsciiPanel) {
     val left = centerX - boxWidth / 2
     val top = centerY - boxHeight / 2
 
-    val frame = AsciiPanelFrame(panel, Coord.get(left, top), Coord.get(boxWidth, boxHeight))
+    val frame = Frame(panel, Coord.get(left, top), Coord.get(boxWidth, boxHeight))
 
     // First, the border
     frame.clear(Color.darkGray)

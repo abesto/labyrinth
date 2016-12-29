@@ -5,7 +5,7 @@ import java.awt.Color
 import asciiPanel.AsciiPanel
 import squidpony.squidmath.Coord
 
-case class AsciiPanelFrame(panel: AsciiPanel, topLeft: Coord, size: Coord) {
+case class Frame(panel: AsciiPanel, topLeft: Coord, size: Coord) {
   val bottomRight: Coord = topLeft.add(size)
 
   def write(c: Char, x: Int, y: Int, fg: Color, bg: Color): Unit = {
