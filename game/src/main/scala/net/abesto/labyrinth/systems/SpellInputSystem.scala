@@ -1,8 +1,9 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.annotations.Wire
 import com.artemis.managers.TagManager
 import com.artemis.{BaseSystem, ComponentMapper}
-import net.abesto.labyrinth.{Constants, Helpers}
+import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
@@ -16,6 +17,7 @@ class SpellInputSystem(parser: SpellParser) extends BaseSystem {
   var tagManager: TagManager = _
   var eventSystem: EventSystem = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _
+  var helpers: Helpers = _
 
   def spellInputEntityId: Int = tagManager.getEntityId(Constants.Tags.spellInput)
   def spellInput: SpellInputComponent = spellInputMapper.get(spellInputEntityId)
@@ -53,7 +55,7 @@ class SpellInputSystem(parser: SpellParser) extends BaseSystem {
   @SubscribeDeferred
   def finish(e: SpellInputFinishEvent): Unit = {
     spellInput.isActive = false
-    eventSystem.dispatch(SpellCastEvent(Helpers.playerEntityId(world), spellInput.spell))
+    eventSystem.dispatch(SpellCastEvent(helpers.playerEntityId, spellInput.spell))
     reset()
   }
 }

@@ -3,11 +3,13 @@ package net.abesto.labyrinth.render.asciipanel
 import java.awt.Color
 
 import asciiPanel.AsciiPanel
+import com.artemis.annotations.Wire
 import com.artemis.managers.TagManager
 import com.artemis.{Aspect, ComponentMapper, World}
 import net.abesto.labyrinth.components._
 import net.abesto.labyrinth.maze.{Maze, MazeTile}
-import net.abesto.labyrinth.{Constants, Helpers, Tiles}
+import net.abesto.labyrinth.systems.Helpers
+import net.abesto.labyrinth.{Constants, Tiles}
 import squidpony.squidmath.Coord
 
 import scala.util.Random
@@ -19,6 +21,7 @@ class AsciiPanelMazeFrame(world: World, panel: AsciiPanel, topLeft: Coord, size:
   var layerMapper: ComponentMapper[LayerComponent] = _
   var tileMapper: ComponentMapper[TileComponent] = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _
+  var helpers: Helpers = _
 
   def render(): Unit = {
     val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
@@ -39,7 +42,7 @@ class AsciiPanelMazeFrame(world: World, panel: AsciiPanel, topLeft: Coord, size:
   def coalesceChar(m: Maze, t: MazeTile): Char =
     LayerComponent.Layer.values.toStream.flatMap(
       l => {
-        val entityIds = Helpers.entityIdsAtPosition(world, l, t.coord)
+        val entityIds = helpers.entityIdsAtPosition(l, t.coord)
         if (entityIds.isEmpty) {
           None
         } else {

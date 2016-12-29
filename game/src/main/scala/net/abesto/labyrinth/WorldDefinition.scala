@@ -16,6 +16,7 @@ object WorldDefinition {
       new WorldSerializationManager(),
       new TagManager(),
       new EventSystem(),
+      new Helpers(),
       // Maze
       new MazeLoaderSystem(),
       new MazeGeneratorSystem(),
@@ -44,10 +45,9 @@ object WorldDefinition {
 
   def buildWorld(renderer: Renderer): World = {
     val world = new World(buildWorldConfiguration(renderer))
-    val manager = world.getSystem(classOf[WorldSerializationManager])
     val serializer = new JsonArtemisSerializer(world).prettyPrint(true)
-    manager.setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
-    Helpers.setSerializer(serializer)
+    world.getSystem(classOf[WorldSerializationManager]).setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
+    world.getSystem(classOf[Helpers]).setSerializer(serializer)
     createMap(world)
     createPlayer(world)
     createSpellInput(world)
