@@ -2,12 +2,11 @@ package net.abesto.labyrinth.render.asciipanel
 
 import java.awt.Color
 
-import asciiPanel.AsciiPanel
 import net.abesto.labyrinth.events.{HidePopupEvent, ShowPopupEvent}
 import net.mostlyoriginal.api.event.common.Subscribe
 import squidpony.squidmath.Coord
 
-class Popup(panel: AsciiPanel) {
+class Popup extends Frame(0, 0, 0, 0) {
   var show: Boolean = false
   var title: String = ""
   var text: String = ""
@@ -41,19 +40,20 @@ class Popup(panel: AsciiPanel) {
     val left = centerX - boxWidth / 2
     val top = centerY - boxHeight / 2
 
-    val frame = Frame(panel, Coord.get(left, top), Coord.get(boxWidth, boxHeight))
+    topLeft = Coord.get(left, top)
+    size = Coord.get(boxWidth, boxHeight)
 
     // First, the border
-    frame.clear(Color.darkGray)
+    clear(Color.darkGray)
     // Next, the interior should be black as the background for the text
-    frame.clear(frame.topLeft.add(1), frame.bottomRight.subtract(1), Color.black)
+    clear(topLeft.add(1), bottomRight.subtract(1), Color.black)
     // Write the title onto top of the frame, with brighter background than the frame
-    frame.write(s"  $title  ",
+    write(s"  $title  ",
       (boxWidth - titleWidth) / 2, 0,
       Color.black, Color.gray.brighter
     )
     // Finally, write the text into the frame
-    frame.write(lines, 2, 2, Color.white, Color.black)
+    write(lines, 2, 2, Color.white, Color.black)
   }
 }
 

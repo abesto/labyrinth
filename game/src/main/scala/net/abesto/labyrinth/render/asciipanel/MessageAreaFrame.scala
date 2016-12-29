@@ -3,10 +3,8 @@ package net.abesto.labyrinth.render.asciipanel
 import asciiPanel.AsciiPanel
 import net.abesto.labyrinth.events.MessageEvent
 import net.mostlyoriginal.api.event.common.Subscribe
-import squidpony.squidmath.Coord
 
-class MessageAreaFrame(panel: AsciiPanel, topLeft: Coord, size: Coord)
-  extends Frame(panel, topLeft, size) {
+class MessageAreaFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends Frame(topLeftX, topLeftY, width, height) {
   protected var lastMessageCount: Int = 0
   protected var messages: Seq[String] = Seq.empty
   protected var lines: Seq[String] = Seq.empty

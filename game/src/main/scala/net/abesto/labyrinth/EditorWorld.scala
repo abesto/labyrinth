@@ -10,8 +10,8 @@ import net.abesto.labyrinth.systems._
 import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
-object WorldDefinition {
-  protected def buildWorldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
+object EditorWorld {
+  protected def worldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
     .`with`(
       new WorldSerializationManager(),
       new TagManager(),
@@ -20,20 +20,12 @@ object WorldDefinition {
       // Maze
       new MazeLoaderSystem(),
       new MazeGeneratorSystem(),
-      // Player actions
-      new MovementSystem(),
-      new SpellInputSystem(new SpellParser(buildSpellWordList())),
-      // Consequences, feedback
-      new SpellCastingSystem(),
-      new ShallowWaterMakesWet(),
-      new PopupTriggerSystem(),
-      new ShadowcastingSystem(),
       new InputMapManager(),
       // Finally, render
       renderer
     ).build()
 
-  protected def buildSpellWordList(): SpellWordList = new SpellWordList(Seq(
+  protected def spellWordList(): SpellWordList = new SpellWordList(Seq(
     new TestEffect().withString("test"),
     new DryEffect().withString("dry"),
     AreaTarget(Coord.get(0, 0), Coord.get(1, 1)).withString("me"),
@@ -43,13 +35,13 @@ object WorldDefinition {
     AreaTarget(Coord.get(0, 1), Coord.get(1, 1)).withString("south")
   ))
 
-  protected def createMap(world: World): Unit = {
+  protected def maze(world: World): Unit = {
     val maze = world.createEntity()
     maze.edit().add(new MazeComponent)
     world.getSystem(classOf[TagManager]).register(Constants.Tags.maze, maze)
   }
 
-  protected def createPlayer(world: World): Unit = {
+  protected def player(world: World): Unit = {
     val player = world.createEntity()
     world.getSystem(classOf[TagManager]).register(Constants.Tags.player, player)
     player.edit()
@@ -58,20 +50,20 @@ object WorldDefinition {
       .add(new TileComponent(Tiles.Kind.Player))
   }
 
-  protected def createSpellInput(world: World): Unit = {
+  protected def spellInput(world: World): Unit = {
     val entity = world.createEntity()
     world.getSystem(classOf[TagManager]).register(Constants.Tags.spellInput, entity)
     entity.edit().add(new SpellInputComponent)
   }
 
-  def buildWorld(renderer: Renderer): World = {
-    val world = new World(buildWorldConfiguration(renderer))
+  def world(renderer: Renderer): World = {
+    val world = new World(worldConfiguration(renderer))
     val serializer = new JsonArtemisSerializer(world).prettyPrint(true)
     world.getSystem(classOf[WorldSerializationManager]).setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
     world.getSystem(classOf[Helpers]).setSerializer(serializer)
-    createMap(world)
-    createPlayer(world)
-    createSpellInput(world)
+    maze(world)
+    player(world)
+    spellInput(world)
     world
   }
 }

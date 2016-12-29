@@ -2,14 +2,12 @@ package net.abesto.labyrinth.render.asciipanel
 
 import java.awt.Color
 
-import asciiPanel.AsciiPanel
 import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
-import squidpony.squidmath.Coord
 
-class SpellInputFrame(panel: AsciiPanel, topLeft: Coord, size: Coord) extends Frame(panel, topLeft, size) {
+class SpellInputFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends Frame(topLeftX, topLeftY, width, height) {
   var tagManger: TagManager = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _
 

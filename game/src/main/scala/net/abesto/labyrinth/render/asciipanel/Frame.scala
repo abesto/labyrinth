@@ -3,10 +3,16 @@ package net.abesto.labyrinth.render.asciipanel
 import java.awt.Color
 
 import asciiPanel.AsciiPanel
+import com.artemis.World
 import squidpony.squidmath.Coord
 
-case class Frame(panel: AsciiPanel, topLeft: Coord, size: Coord) {
-  val bottomRight: Coord = topLeft.add(size)
+abstract class Frame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) {
+  var world: World = _
+  var panel: AsciiPanel = _
+
+  var topLeft: Coord = Coord.get(topLeftX, topLeftY)
+  var size: Coord = Coord.get(width, height)
+  def bottomRight: Coord = topLeft.add(size)
 
   def write(c: Char, x: Int, y: Int, fg: Color, bg: Color): Unit = {
     val pos = topLeft.add(Coord.get(x, y))
@@ -33,5 +39,7 @@ case class Frame(panel: AsciiPanel, topLeft: Coord, size: Coord) {
   def clear(color: Color): Unit = {
     clear(topLeft, bottomRight, color)
   }
+
+  def render(): Unit
 }
 

@@ -4,12 +4,12 @@ import java.awt.event.ActionEvent
 import javax.swing.{AbstractAction, JFrame, SwingUtilities}
 
 import com.artemis.World
-import InputMap.InputMap
 import net.abesto.labyrinth.events.{ActivateInputMapEvent, DeactivateInputMapEvent}
 import net.abesto.labyrinth.render.Renderer
+import net.abesto.labyrinth.ui.InputMap.InputMap
 import net.mostlyoriginal.api.event.common.Subscribe
 
-class ApplicationMain(world: World, renderer: Renderer) extends JFrame {
+class ApplicationMainFrame(world: World, renderer: Renderer) extends JFrame {
   var inputMapStack: List[InputMap] = List.empty
 
   def setup(): Unit = {

@@ -1,16 +1,20 @@
 package net.abesto.labyrinth
 
 import net.abesto.labyrinth.events.{ActivateInputMapEvent, LoadMazeEvent}
-import net.abesto.labyrinth.render.asciipanel.Renderer
-import net.abesto.labyrinth.ui.{ApplicationMain, InputMap}
+import net.abesto.labyrinth.render.asciipanel.GameRenderer
+import net.abesto.labyrinth.ui.{ApplicationMainFrame, InputMap}
 import net.mostlyoriginal.api.event.common.EventSystem
 
-object Game {
+object Main {
   def main(args: Array[String]): Unit = {
-    val renderer = Renderer()
-    val world = WorldDefinition.buildWorld(renderer)
+    game()
+  }
 
-    val app = new ApplicationMain(world, renderer)
+  def game(): Unit = {
+    val renderer = new GameRenderer()
+    val world = GameWorld.world(renderer)
+
+    val app = new ApplicationMainFrame(world, renderer)
     app.setup()
 
     // Kick things off
