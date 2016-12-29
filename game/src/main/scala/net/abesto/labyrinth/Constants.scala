@@ -13,6 +13,7 @@ object Constants {
   val sightRadius = 10
 
   object Tags {
+    val state = "STATE"
     val maze = "MAZE"
     val player = "PLAYER"
     val spellInput = "SPELL_INPUT"

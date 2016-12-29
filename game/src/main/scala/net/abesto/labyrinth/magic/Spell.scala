@@ -12,6 +12,7 @@ class Spell {
   var words: Seq[SpellWord] = _
 
   def cast(world: World): Unit = {
+    world.inject(this)
     val tiles = target.affectedTiles(world)
     val entities = tiles.flatMap(helpers.entityIdsAtPosition(Layer.Creature, _))
     if (entities.isEmpty) {

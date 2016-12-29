@@ -10,17 +10,29 @@ import net.abesto.labyrinth.systems._
 import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
-object EditorWorld {
+object World {
   protected def worldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
     .`with`(
       new WorldSerializationManager(),
       new TagManager(),
       new EventSystem(),
       new Helpers(),
+      // State transition
+      new StateTransitionSystem(),
+      new StateSystemsManager(),
+      // Handle user input
+      new InputHandlerSystem(),
       // Maze
       new MazeLoaderSystem(),
       new MazeGeneratorSystem(),
-      new InputMapManager(),
+      // Player actions
+      new MovementSystem(),
+      new SpellInputSystem(new SpellParser(spellWordList())),
+      // Consequences, feedback
+      new SpellCastingSystem(),
+      new ShallowWaterMakesWet(),
+      new PopupTriggerSystem(),
+      new ShadowcastingSystem(),
       // Finally, render
       renderer
     ).build()
@@ -56,6 +68,12 @@ object EditorWorld {
     entity.edit().add(new SpellInputComponent)
   }
 
+  protected def state(world: World): Unit = {
+    val entity = world.createEntity()
+    world.getSystem(classOf[TagManager]).register(Constants.Tags.state, entity)
+    entity.edit().add(new StateComponent)
+  }
+
   def world(renderer: Renderer): World = {
     val world = new World(worldConfiguration(renderer))
     val serializer = new JsonArtemisSerializer(world).prettyPrint(true)
@@ -64,6 +82,7 @@ object EditorWorld {
     maze(world)
     player(world)
     spellInput(world)
+    state(world)
     world
   }
 }

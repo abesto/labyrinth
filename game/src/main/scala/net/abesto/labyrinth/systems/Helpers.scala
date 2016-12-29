@@ -2,13 +2,14 @@ package net.abesto.labyrinth.systems
 
 import java.util.function.Consumer
 
-import com.artemis.annotations.{AspectDescriptor, Wire}
+import com.artemis._
+import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.JsonArtemisSerializer
 import com.artemis.managers.TagManager
-import com.artemis._
 import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
 import net.abesto.labyrinth.components.LayerComponent.Layer
-import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent}
+import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent, StateComponent}
+import net.abesto.labyrinth.fsm.InState
 import net.abesto.labyrinth.maze.Maze
 import net.abesto.labyrinth.{ArtemisJsonEnumEntry, Constants}
 import org.reflections.Reflections
@@ -22,6 +23,7 @@ class Helpers extends BaseSystem {
   protected var positionMapper: ComponentMapper[PositionComponent] = _
   protected var layerMapper: ComponentMapper[LayerComponent] = _
   protected var mazeMapper: ComponentMapper[MazeComponent] = _
+  protected var stateMapper: ComponentMapper[StateComponent] = _
 
   @AspectDescriptor(all=Array(classOf[PositionComponent], classOf[LayerComponent]))
   protected var positionLayerAspect: Aspect.Builder = _
@@ -41,6 +43,7 @@ class Helpers extends BaseSystem {
 
   def maze: Maze = mazeMapper.get(tagManager.getEntityId(Constants.Tags.maze)).maze
   def playerEntityId: Int = tagManager.getEntityId(Constants.Tags.player)
+  def state: StateComponent = stateMapper.get(tagManager.getEntityId(Constants.Tags.state))
 
   protected var serializer: JsonArtemisSerializer = _
 
@@ -76,6 +79,18 @@ class Helpers extends BaseSystem {
         registerSerializableEnum(withName, field.get(companionObj).asInstanceOf[IndexedSeq[Any]])
       }
     })
+  }
+
+  val clsInState: Class[InState] = classOf[InState]
+  def isEnabledInCurrentState(o: Any): Boolean = {
+    val clsState = state.current.getClass
+    val cls = o.getClass
+    val wantedClsStates = cls.getAnnotationsByType(clsInState).map(_.value)
+    if (wantedClsStates.isEmpty) {
+      true  // Un-annotated things are left the heck alone
+    } else {
+      wantedClsStates.exists(_.isAssignableFrom(clsState))
+    }
   }
 
   override def processSystem(): Unit = {}

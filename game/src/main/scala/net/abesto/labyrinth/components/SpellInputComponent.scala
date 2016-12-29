@@ -6,7 +6,6 @@ import net.abesto.labyrinth.magic.Spell
 
 @Transient
 class SpellInputComponent extends Component {
-  var isActive: Boolean = false
   var prompt: String = ""
   var input: String = ""
   var cursorPosition: Int = 0

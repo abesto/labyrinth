@@ -1,11 +1,13 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.annotations.Wire
 import com.artemis.managers.TagManager
 import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
 import net.abesto.labyrinth.events._
+import net.abesto.labyrinth.fsm.InState
+import net.abesto.labyrinth.fsm.States.GameSpellInputState
+import net.abesto.labyrinth.fsm.Transitions.{SpellInputAbortEvent, SpellInputFinishEvent, SpellInputStartEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.abesto.labyrinth.magic.SpellParser
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -13,6 +15,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import scala.util.Random
 
 @DeferredEventHandlerSystem
+@InState(classOf[GameSpellInputState])
 class SpellInputSystem(parser: SpellParser) extends BaseSystem {
   var tagManager: TagManager = _
   var eventSystem: EventSystem = _
@@ -33,7 +36,6 @@ class SpellInputSystem(parser: SpellParser) extends BaseSystem {
 
   @SubscribeDeferred
   def startCasting(e: SpellInputStartEvent): Unit = {
-    spellInput.isActive = true
     spellInput.prompt = randomPrompt
     reset()
   }
@@ -48,13 +50,11 @@ class SpellInputSystem(parser: SpellParser) extends BaseSystem {
 
   @SubscribeDeferred
   def abort(e: SpellInputAbortEvent): Unit = {
-    spellInput.isActive = false
     reset()
   }
 
   @SubscribeDeferred
   def finish(e: SpellInputFinishEvent): Unit = {
-    spellInput.isActive = false
     eventSystem.dispatch(SpellCastEvent(helpers.playerEntityId, spellInput.spell))
     reset()
   }

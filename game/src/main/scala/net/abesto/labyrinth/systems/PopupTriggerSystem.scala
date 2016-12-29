@@ -1,10 +1,11 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.annotations.{AspectDescriptor, Wire}
+import com.artemis.annotations.AspectDescriptor
 import com.artemis.managers.TagManager
 import com.artemis.{Aspect, BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.components.{PopupTriggerComponent, PositionComponent}
-import net.abesto.labyrinth.events.{HasWalkedEvent, ShowPopupEvent}
+import net.abesto.labyrinth.events.HasWalkedEvent
+import net.abesto.labyrinth.fsm.Transitions
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -31,7 +32,7 @@ class PopupTriggerSystem extends BaseSystem {
         val lines = Source.fromURL(getClass.getResource(trigger.source)).getLines()
         val title = lines.next()
         val text = lines.mkString("\n")
-        eventSystem.dispatch(ShowPopupEvent(title, text))
+        eventSystem.dispatch(new Transitions.ShowPopupEvent(title, text))
       })
   }
 }

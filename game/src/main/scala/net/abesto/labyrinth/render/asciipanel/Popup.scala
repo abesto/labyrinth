@@ -2,7 +2,7 @@ package net.abesto.labyrinth.render.asciipanel
 
 import java.awt.Color
 
-import net.abesto.labyrinth.events.{HidePopupEvent, ShowPopupEvent}
+import net.abesto.labyrinth.fsm.Transitions.{HidePopupEvent, ShowPopupEvent}
 import net.mostlyoriginal.api.event.common.Subscribe
 import squidpony.squidmath.Coord
 

@@ -1,14 +1,17 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.{BaseSystem, ComponentMapper}
 import com.artemis.managers.TagManager
+import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, TryWalkingEvent}
-import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, DeferredEventHandlerSystemImpl, SubscribeDeferred}
+import net.abesto.labyrinth.fsm.InState
+import net.abesto.labyrinth.fsm.States.GameMazeState
+import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
 
 @DeferredEventHandlerSystem
+@InState(classOf[GameMazeState])
 class MovementSystem extends BaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _

@@ -1,12 +1,16 @@
 package net.abesto.labyrinth.render.asciipanel
 
+import java.awt.Color
+
 import asciiPanel.{AsciiFont, AsciiPanel}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.render.{Renderer => RendererTrait}
+import net.abesto.labyrinth.systems.Helpers
 import net.mostlyoriginal.api.event.common.EventSystem
 
 case class Renderer(protected val frames: Frame*) extends RendererTrait {
-  protected var eventSystem: EventSystem = _
+  var eventSystem: EventSystem = _
+  var helpers: Helpers = _
 
   val panel = new AsciiPanel(
     Constants.fullWidth,
@@ -26,7 +30,9 @@ case class Renderer(protected val frames: Frame*) extends RendererTrait {
   }
 
   override def processSystem(): Unit = {
-    frames.foreach(_.render())
+    val (enabled, disabled) = frames.partition(helpers.isEnabledInCurrentState(_))
+    disabled.foreach(_.clear(Color.black))
+    enabled.foreach(_.render())
     panel.repaint()
   }
 }
