@@ -5,7 +5,7 @@ import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
 import net.abesto.labyrinth.events._
-import net.abesto.labyrinth.fsm.InState
+import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.GameSpellInputState
 import net.abesto.labyrinth.fsm.Transitions.{SpellInputAbortEvent, SpellInputFinishEvent, SpellInputStartEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
@@ -14,8 +14,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 import scala.util.Random
 
+@InStates(Array(classOf[GameSpellInputState]))
 @DeferredEventHandlerSystem
-@InState(classOf[GameSpellInputState])
 class SpellInputSystem(parser: SpellParser) extends BaseSystem {
   var tagManager: TagManager = _
   var eventSystem: EventSystem = _

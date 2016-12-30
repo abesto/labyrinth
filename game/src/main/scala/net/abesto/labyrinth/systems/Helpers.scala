@@ -9,7 +9,7 @@ import com.artemis.managers.TagManager
 import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
 import net.abesto.labyrinth.components.LayerComponent.Layer
 import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent, StateComponent}
-import net.abesto.labyrinth.fsm.InState
+import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.maze.Maze
 import net.abesto.labyrinth.{ArtemisJsonEnumEntry, Constants}
 import org.reflections.Reflections
@@ -81,16 +81,11 @@ class Helpers extends BaseSystem {
     })
   }
 
-  val clsInState: Class[InState] = classOf[InState]
+  val clsInStates: Class[InStates] = classOf[InStates]
   def isEnabledInCurrentState(o: Any): Boolean = {
     val clsState = state.current.getClass
     val cls = o.getClass
-    val wantedClsStates = cls.getAnnotationsByType(clsInState).map(_.value)
-    if (wantedClsStates.isEmpty) {
-      true  // Un-annotated things are left the heck alone
-    } else {
-      wantedClsStates.exists(_.isAssignableFrom(clsState))
-    }
+    Option(cls.getAnnotation(clsInStates)).forall(_.value().exists(_.isAssignableFrom(clsState)))
   }
 
   override def processSystem(): Unit = {}

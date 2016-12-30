@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface InStates {
-    InState[] value();
+    Class<? extends States.State>[] value();
 }

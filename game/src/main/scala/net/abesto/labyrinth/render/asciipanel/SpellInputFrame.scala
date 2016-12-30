@@ -6,10 +6,10 @@ import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.SpellInputComponent
-import net.abesto.labyrinth.fsm.InState
+import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.GameSpellInputState
 
-@InState(classOf[GameSpellInputState])
+@InStates(Array(classOf[GameSpellInputState]))
 class SpellInputFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends Frame(topLeftX, topLeftY, width, height) {
   var tagManger: TagManager = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _

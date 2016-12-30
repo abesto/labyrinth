@@ -15,7 +15,9 @@ abstract class Frame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) {
   def bottomRight: Coord = topLeft.add(size)
 
   def write(c: Char, x: Int, y: Int, fg: Color, bg: Color): Unit = {
-    val pos = topLeft.add(Coord.get(x, y))
+    val pos = topLeft.add(Coord.get(
+      if (x < 0) width + x else x,
+      if (y < 0) height + y else y))
     assert(pos.isWithinRectangle(
       topLeft.getX, topLeft.getY,
       bottomRight.getX, bottomRight.getY))

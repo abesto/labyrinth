@@ -49,7 +49,10 @@
           <root url="jar://$MODULE_DIR$/../../game/lib/ascii-panel-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../../AsciiPanel/src/main/java" />
+          <root url="file://$MODULE_DIR$/../../../AsciiPanel/src/test/java" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>

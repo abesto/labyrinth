@@ -4,8 +4,11 @@ import com.artemis.managers.TagManager
 import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
+import net.abesto.labyrinth.fsm.InStates
+import net.abesto.labyrinth.fsm.States.GameState
 import squidpony.squidgrid.FOV
 
+@InStates(Array(classOf[GameState]))
 class ShadowcastingSystem extends BaseSystem {
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

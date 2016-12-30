@@ -22,6 +22,7 @@ object World {
       new StateSystemsManager(),
       // Handle user input
       new InputHandlerSystem(),
+      new MainMenuSystem(),
       // Maze
       new MazeLoaderSystem(),
       new MazeGeneratorSystem(),
