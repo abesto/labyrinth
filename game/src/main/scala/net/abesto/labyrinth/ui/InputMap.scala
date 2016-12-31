@@ -7,6 +7,8 @@ import com.artemis.World
 import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.events._
+import net.abesto.labyrinth.fsm.States._
+import net.abesto.labyrinth.fsm.Transitions.{HidePopupEvent, SpellInputAbortEvent, SpellInputFinishEvent, SpellInputStartEvent}
 import net.mostlyoriginal.api.event.common.{Event, EventSystem}
 import squidpony.squidmath.Coord
 
@@ -42,31 +44,39 @@ object InputMap {
       w.getSystem(classOf[TagManager]).getEntityId(Constants.Tags.player)
     )
 
-  val mainInputMap: InputMap = Map(
-    Seq(leftArrow, k('h')) -> walk(-1, 0),
-    Seq(rightArrow, k('l')) -> walk(1, 0),
-    Seq(downArrow, k('j')) -> walk(0, 1),
-    Seq(upArrow, k('k')) -> walk(0, -1),
-    'z' -> new SpellInputStartEvent
+  protected val rawInputMap: Map[Class[_ <: State], InputMap] = Map(
+    classOf[GameMazeState] -> Map(
+      Seq(leftArrow, k('h')) -> walk(-1, 0),
+      Seq(rightArrow, k('l')) -> walk(1, 0),
+      Seq(downArrow, k('j')) -> walk(0, 1),
+      Seq(upArrow, k('k')) -> walk(0, -1),
+      'z' -> new SpellInputStartEvent
+    ),
+    classOf[GamePopupState] -> Map(
+      space -> new HidePopupEvent
+    ),
+    classOf[GameSpellInputState] -> (
+      ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ')).map(c => ks(c) ->
+        e(SpellInputOperationEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
+      ).toMap ++ Map[InputMapKey, InputMapValue](
+        enter -> new SpellInputFinishEvent,
+        escape -> new SpellInputAbortEvent,
+        backspace -> SpellInputOperationEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),
+        leftArrow -> SpellInputOperationEvent((s, cp) => (s, cp - 1)),
+        rightArrow -> SpellInputOperationEvent((s, cp) => (s, cp + 1)),
+        delete -> SpellInputOperationEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
+      )
+    ),
+    classOf[MainMenuState] -> Map(
+      upArrow -> MainMenuMoveEvent(_ - 1),
+      downArrow -> MainMenuMoveEvent(_ + 1),
+      enter -> new MainMenuSelectedEvent
+    ),
+    classOf[EditorState] -> Map()
   )
 
-  val popupInputMap: InputMap = Map(
-    space -> new HidePopupEvent
-  )
-
-  protected val spellCastingChars: InputMap =
-    ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ')).map(c => ks(c) ->
-      e(SpellInputOperationEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
-    ).toMap
-
-  val spellCastingInputMap: InputMap = Map[InputMapKey, InputMapValue](
-    enter -> new SpellInputFinishEvent,
-    escape -> new SpellInputAbortEvent,
-    backspace -> SpellInputOperationEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),
-    leftArrow -> SpellInputOperationEvent((s, cp) => (s, cp - 1)),
-    rightArrow -> SpellInputOperationEvent((s, cp) => (s, cp + 1)),
-    delete -> SpellInputOperationEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
-  ) ++ spellCastingChars
+  val inputMap: Map[Class[_ <: State], Map[KeyStroke, (World) => Event]] =
+    rawInputMap.mapValues(_.flatMap(p => p._1.map(_ -> p._2)))
 
   protected def dispatchEvent(e: Event): (World) => Unit =
     (w: World) => w.getSystem(classOf[EventSystem]).dispatch(e)

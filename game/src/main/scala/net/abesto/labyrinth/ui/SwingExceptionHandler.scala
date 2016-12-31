@@ -40,6 +40,7 @@ class SwingExceptionHandler(parent: JFrame) extends Thread.UncaughtExceptionHand
     val stackTrace: String = generateStackTrace(e)
     // show an error dialog
     JOptionPane.showMessageDialog(parent, stackTrace, "Exception Occurred in " + t, JOptionPane.ERROR_MESSAGE)
+    e.printStackTrace()
     parent.dispose()
   }
 }
