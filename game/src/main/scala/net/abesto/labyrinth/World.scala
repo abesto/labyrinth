@@ -50,7 +50,9 @@ object World {
 
   protected def maze(world: World): Unit = {
     val maze = world.createEntity()
-    maze.edit().add(new MazeComponent)
+    maze.edit()
+      .add(new MazeComponent)
+      .add(new MazeHighlightComponent)
     world.getSystem(classOf[TagManager]).register(Constants.Tags.maze, maze)
   }
 

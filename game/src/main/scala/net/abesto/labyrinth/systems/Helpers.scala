@@ -8,7 +8,7 @@ import com.artemis.io.JsonArtemisSerializer
 import com.artemis.managers.TagManager
 import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
 import net.abesto.labyrinth.components.LayerComponent.Layer
-import net.abesto.labyrinth.components.{LayerComponent, MazeComponent, PositionComponent, StateComponent}
+import net.abesto.labyrinth.components._
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.maze.Maze
 import net.abesto.labyrinth.{ArtemisJsonEnumEntry, Constants}
@@ -24,6 +24,7 @@ class Helpers extends BaseSystem {
   protected var layerMapper: ComponentMapper[LayerComponent] = _
   protected var mazeMapper: ComponentMapper[MazeComponent] = _
   protected var stateMapper: ComponentMapper[StateComponent] = _
+  protected var highlightMapper: ComponentMapper[MazeHighlightComponent] = _
 
   @AspectDescriptor(all=Array(classOf[PositionComponent], classOf[LayerComponent]))
   protected var positionLayerAspect: Aspect.Builder = _
@@ -41,7 +42,10 @@ class Helpers extends BaseSystem {
     )
   }
 
-  def maze: Maze = mazeMapper.get(tagManager.getEntityId(Constants.Tags.maze)).maze
+  def mazeEntityId: Int = tagManager.getEntityId(Constants.Tags.maze)
+  def maze: Maze = mazeMapper.get(mazeEntityId).maze
+  def highlight: MazeHighlightComponent = highlightMapper.get(mazeEntityId)
+
   def playerEntityId: Int = tagManager.getEntityId(Constants.Tags.player)
   def state: StateComponent = stateMapper.get(tagManager.getEntityId(Constants.Tags.state))
 

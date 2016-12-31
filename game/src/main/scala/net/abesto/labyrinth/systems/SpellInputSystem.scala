@@ -3,6 +3,7 @@ package net.abesto.labyrinth.systems
 import com.artemis.managers.TagManager
 import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
+import net.abesto.labyrinth.components.MazeHighlightComponent.Type.SpellTarget
 import net.abesto.labyrinth.components.SpellInputComponent
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.InStates
@@ -46,6 +47,11 @@ class SpellInputSystem(parser: SpellParser) extends BaseSystem {
     spellInput.input = p._1
     spellInput.cursorPosition = math.min(spellInput.input.length, math.max(0, p._2))
     spellInput.spell = parser.parse(spellInput.input)
+
+   spellInput.spell match {
+     case Some(spell) => helpers.highlight.set(SpellTarget, spell.target.affectedTiles(world))
+     case None => helpers.highlight.clear(SpellTarget)
+   }
   }
 
   @SubscribeDeferred
