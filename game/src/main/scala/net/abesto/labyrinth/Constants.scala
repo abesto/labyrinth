@@ -2,7 +2,7 @@ package net.abesto.labyrinth
 
 import javax.swing.KeyStroke
 
-import net.abesto.labyrinth.events.{EditorGenerateMazeEvent, EditorMoveMazeCursorEvent}
+import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent}
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
@@ -11,6 +11,7 @@ import squidpony.squidmath.Coord
 import net.abesto.labyrinth.ui.InputMap._
 import Tiles.Kind._
 import com.artemis.World
+import net.abesto.labyrinth.maze.{FloorTile, ShallowWaterTile, WallTile}
 
 
 object Constants {
@@ -47,13 +48,28 @@ object Constants {
     def asInputMapEntry: (Seq[KeyStroke], (World) => Event) = Seq(key) -> ((_: World) => event)
   }
 
+  lazy val cursorMazeActions: Seq[EditorAction] = Seq(
+    EditorAction(UpArrow, upArrow, "Maze cursor up", EditorMoveMazeCursorEvent(_.add(Coord.get(0, -1)))),
+    EditorAction(DownArrow, downArrow, "Maze cursor down", EditorMoveMazeCursorEvent(_.add(Coord.get(0, 1)))),
+    EditorAction(LeftArrow, leftArrow, "Maze cursor left", EditorMoveMazeCursorEvent(_.add(Coord.get(-1, 0)))),
+    EditorAction(RightArrow, rightArrow, "Maze cursor right", EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0))))
+  )
+
+  class HashWallTile(x: Int, y: Int) extends WallTile(x, y, '#')
+  class SmoothFloorTile(x: Int, y: Int) extends FloorTile(x, y, '.')
+  class DefaultShallowWaterTile(x: Int, y: Int) extends ShallowWaterTile(x, y, '~')
+
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
-    States[EditorState] -> Seq(
-      EditorAction(UpArrow, upArrow, "Maze cursor up", EditorMoveMazeCursorEvent(_.add(Coord.get(0, -1)))),
-      EditorAction(DownArrow, downArrow, "Maze cursor down", EditorMoveMazeCursorEvent(_.add(Coord.get(0, 1)))),
-      EditorAction(LeftArrow, leftArrow, "Maze cursor left", EditorMoveMazeCursorEvent(_.add(Coord.get(-1, 0)))),
-      EditorAction(RightArrow, rightArrow, "Maze cursor right", EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0)))),
-      EditorAction(AlphaNum('g'), 'g', "Generate new maze", new EditorGenerateMazeEvent)
-    )
+    States[EditorState] -> (cursorMazeActions ++ Seq(
+      EditorAction(AlphaNum('g'), 'g', "Generate new maze", new EditorGenerateMazeEvent),
+      EditorAction(AlphaNum('t'), 't', "Edit Tiles", new OpenTileEditorEvent),
+      EditorAction(AlphaNum('q'), 'q', "Quit to Main Menu", new CloseEditorEvent)
+    )),
+    States[TileEditorState] -> (cursorMazeActions ++ Seq(
+      EditorAction(AlphaNum('w'), 'w', "Wall", new EditorChangeTileEvent[HashWallTile]),
+      EditorAction(SmoothFloor, '.', "Smooth Floor", new EditorChangeTileEvent[SmoothFloorTile]),
+      EditorAction(AlphaNum('s'), 's', "Shallow Water", new EditorChangeTileEvent[DefaultShallowWaterTile]),
+      EditorAction(AlphaNum('q'), 'q', "Back", new CloseTileEditorEvent)
+    ))
   )
 }

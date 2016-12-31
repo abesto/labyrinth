@@ -9,6 +9,7 @@ object States {
   }
 
   sealed class EditorState extends State
+  sealed class TileEditorState extends EditorState
 
   sealed class GameState extends State
   sealed class GameMazeState extends GameState
@@ -36,13 +37,15 @@ object States {
 object Transitions {
   import States._
 
-  val s = new EditorState
-
   // Main menu
   class NewGameEvent extends Transition[MainMenuState, GameMazeState]
   class LoadGameEvent extends Transition[MainMenuState, MainMenuState]  // Not implemented yet, come right back to the menu
   class OpenEditorEvent extends Transition[MainMenuState, EditorState]
   class MainMenuQuitEvent extends Transition[MainMenuState, MainMenuState]   // Not implemented yet, come right back to the menu
+
+  // Editor
+  class OpenTileEditorEvent extends Transition[EditorState, TileEditorState]
+  class CloseTileEditorEvent extends Transition[TileEditorState, EditorState]
   class CloseEditorEvent extends Transition[EditorState, MainMenuState]
 
   // Casting spells

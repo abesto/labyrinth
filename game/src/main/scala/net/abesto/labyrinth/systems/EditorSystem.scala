@@ -3,11 +3,12 @@ package net.abesto.labyrinth.systems
 import com.artemis.BaseSystem
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
-import net.abesto.labyrinth.events.{EditorGenerateMazeEvent, EditorMoveMazeCursorEvent, GenerateMazeEvent}
+import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent, GenerateMazeEvent}
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
 import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, OpenEditorEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
+import net.abesto.labyrinth.maze.MazeTile
 import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
@@ -38,5 +39,12 @@ class EditorSystem extends BaseSystem {
   @SubscribeDeferred
   def generateMaze(e: EditorGenerateMazeEvent): Unit = {
     eventSystem.dispatch(new GenerateMazeEvent)
+  }
+
+  @SubscribeDeferred
+  def changeTile(e: EditorChangeTileEvent[_ <: MazeTile]): Unit = {
+    helpers.highlight.get(EditorMazeCursor).foreach(
+      coord => helpers.maze.update(e.makeTile(coord.getX, coord.getY))
+    )
   }
 }

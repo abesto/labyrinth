@@ -9,6 +9,10 @@ case class Maze(var tileset: Tiles.Tileset, var tiles: Array[Array[MazeTile]]) {
   def tile(c: Coord): MazeTile = tiles(c.x)(c.y)
   def tile(x: Int, y: Int): MazeTile = tiles(x)(y)
 
+  def update(t: MazeTile): Unit = {
+    tiles(t.x)(t.y)  = t
+  }
+
   def chars: Array[Array[Char]] = tiles.map(_.map(_.char.character))
 
   def transform(f: (MazeTile) => MazeTile): Unit = {
