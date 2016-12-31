@@ -76,7 +76,8 @@ object InputMap {
       upArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(0, -1))),
       downArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(0, 1))),
       leftArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(-1, 0))),
-      rightArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0)))
+      rightArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0))),
+      k('g') -> new EditorGenerateMazeEvent
     )
   )
 

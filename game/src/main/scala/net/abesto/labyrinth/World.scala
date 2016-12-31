@@ -25,9 +25,9 @@ object World {
       new MainMenuSystem(),
       // The Level Editor
       new EditorSystem(),
+      new MazeGeneratorSystem(),
       // -- GAME SYSTEMS -- //
       new MazeLoaderSystem(),
-      new MazeGeneratorSystem(),
       // Player actions
       new MovementSystem(),
       new SpellInputSystem(new SpellParser(spellWordList())),
