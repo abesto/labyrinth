@@ -1,8 +1,17 @@
 package net.abesto.labyrinth
 
+import javax.swing.KeyStroke
+
+import net.abesto.labyrinth.events.{EditorGenerateMazeEvent, EditorMoveMazeCursorEvent}
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
+import net.mostlyoriginal.api.event.common.Event
+import squidpony.squidmath.Coord
+import net.abesto.labyrinth.ui.InputMap._
+import Tiles.Kind._
+import com.artemis.World
+
 
 object Constants {
   val mazeWidth = 70
@@ -11,7 +20,9 @@ object Constants {
   val messageAreaHeight = 5
   val castingPromptHeight = 1
 
-  val fullWidth: Int = mazeWidth
+  val sidebarWidth = 40
+
+  val fullWidth: Int = mazeWidth + sidebarWidth
   val fullHeight: Int = mazeHeight + messageAreaHeight + castingPromptHeight
 
   val sightRadius = 10
@@ -30,5 +41,19 @@ object Constants {
     "Load Game" -> new LoadGameEvent,
     "Level Editor" -> new OpenEditorEvent,
     "Quit" -> new MainMenuQuitEvent
+  )
+
+  case class EditorAction(tile: Tiles.Kind, key: KeyStroke, description: String, event: Event) {
+    def asInputMapEntry: (Seq[KeyStroke], (World) => Event) = Seq(key) -> ((_: World) => event)
+  }
+
+  lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
+    States[EditorState] -> Seq(
+      EditorAction(UpArrow, upArrow, "Maze cursor up", EditorMoveMazeCursorEvent(_.add(Coord.get(0, -1)))),
+      EditorAction(DownArrow, downArrow, "Maze cursor down", EditorMoveMazeCursorEvent(_.add(Coord.get(0, 1)))),
+      EditorAction(LeftArrow, leftArrow, "Maze cursor left", EditorMoveMazeCursorEvent(_.add(Coord.get(-1, 0)))),
+      EditorAction(RightArrow, rightArrow, "Maze cursor right", EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0)))),
+      EditorAction(AlphaNum('g'), 'g', "Generate new maze", new EditorGenerateMazeEvent)
+    )
   )
 }

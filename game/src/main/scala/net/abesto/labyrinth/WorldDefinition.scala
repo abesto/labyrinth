@@ -10,7 +10,7 @@ import net.abesto.labyrinth.systems._
 import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
-object World {
+object WorldDefinition {
   protected def worldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
     .`with`(
       new WorldSerializationManager(),

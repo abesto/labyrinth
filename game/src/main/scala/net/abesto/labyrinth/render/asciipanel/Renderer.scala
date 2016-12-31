@@ -13,5 +13,9 @@ class Renderer() extends RendererImpl(
   new SpellInputFrame(
     0, Constants.fullHeight - Constants.castingPromptHeight,
     Constants.fullWidth, Constants.castingPromptHeight),
-  new MainMenuFrame(0, 0, Constants.fullWidth, Constants.fullHeight)
+  new MainMenuFrame(0, 0, Constants.fullWidth, Constants.fullHeight),
+  new EditorActionsFrame(
+    Constants.mazeWidth, Constants.messageAreaHeight,
+    Constants.sidebarWidth, Constants.mazeHeight
+  )
 )

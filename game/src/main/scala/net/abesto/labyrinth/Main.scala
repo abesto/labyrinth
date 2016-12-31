@@ -6,7 +6,7 @@ import net.abesto.labyrinth.ui.ApplicationMainFrame
 object Main {
   def main(args: Array[String]): Unit = {
     val renderer = new Renderer()
-    val world = World.world(renderer)
+    val world = WorldDefinition.world(renderer)
 
     val app = new ApplicationMainFrame(world, renderer)
     app.setup()

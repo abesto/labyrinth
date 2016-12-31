@@ -15,7 +15,7 @@ class InputHandlerSystem extends BaseSystem {
 
   @SubscribeDeferred
   def input(e: KeyEvent): Unit = {
-    val inputMap = InputMap.inputMap(helpers.state.current.getClass)
+    val inputMap = InputMap.inputMap(helpers.state.current)
     inputMap.get(KeyStroke.getKeyStrokeForEvent(e.awt)).foreach(
       f => eventSystem.dispatch(f(world))
     )

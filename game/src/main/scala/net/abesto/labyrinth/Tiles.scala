@@ -44,6 +44,17 @@ object Tiles {
 
     // Characters
     case object Player extends Kind
+
+    // Interface elements
+    case object UpArrow extends Kind
+    case object DownArrow extends Kind
+    case object LeftArrow extends Kind
+    case object RightArrow extends Kind
+
+    // Alphanumeric
+    case class AlphaNum(char: Char) extends Kind {
+      assert(char.isLetterOrDigit)
+    }
   }
 
   import Kind._
@@ -52,16 +63,23 @@ object Tiles {
     protected val kindToChars: Map[Kind, Seq[Char]] = Map(spec:_*)
     protected val charToKind: Map[Char, Kind] = kindToChars.flatMap(p => p._2.map((_, p._1)))
 
-    def toChar(kind: Kind): Char = {
-      val chars = kindToChars(kind)
-      if (chars.length == 1) {
-        chars.head
-      } else {
-        chars(Random.nextInt(chars.length))
-      }
+    def toChar(kind: Kind): Char = kind match {
+      case AlphaNum(c) => c
+      case _ =>
+        val chars = kindToChars(kind)
+        if (chars.length == 1) {
+          chars.head
+        } else {
+          chars(Random.nextInt(chars.length))
+        }
     }
 
-    def toKind(char: Char): Kind = charToKind(char)
+    def toKind(char: Char): Kind =
+      if (char.isLetterOrDigit) {
+        AlphaNum(char)
+      } else {
+        charToKind(char)
+      }
 
     def translate(char: Char, to: Tileset): Char = {
       val kind = toKind(char)
@@ -92,7 +110,10 @@ object Tiles {
     Book -> 8,
 
     // Characters
-    Player -> 1
+    Player -> 1,
+
+    // Interface elements
+    UpArrow -> 24, DownArrow -> 25, RightArrow -> 26, LeftArrow -> 27
   )
 
   // In Unicode
@@ -112,7 +133,10 @@ object Tiles {
     Book -> '◘',
 
     // Characters
-    Player -> '☺'
+    Player -> '☺',
+
+    // Interface elements
+    UpArrow -> '↑', DownArrow -> '↓', RightArrow -> '→', LeftArrow -> '←'
   )
 }
 
