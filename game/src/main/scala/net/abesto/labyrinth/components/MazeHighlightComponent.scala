@@ -36,6 +36,6 @@ object MazeHighlightComponent {
     val values: IndexedSeq[Type] = findValues
 
     case object SpellTarget extends Type(Color.green.darker().darker())
-    case object EditorCursor extends Type(Color.lightGray)
+    case object EditorMazeCursor extends Type(Color.yellow.darker().darker())
   }
 }

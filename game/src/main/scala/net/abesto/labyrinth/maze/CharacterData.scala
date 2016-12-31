@@ -4,6 +4,8 @@ import java.awt.Color
 
 import asciiPanel.{AsciiCharacterData, AsciiPanel}
 
+import scala.language.implicitConversions
+
 class CharacterData(c: Char, fg: Color = AsciiPanel.white, bg: Color = AsciiPanel.black) extends AsciiCharacterData {
   character = c
   foregroundColor = fg

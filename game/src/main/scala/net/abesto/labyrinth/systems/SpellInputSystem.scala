@@ -33,6 +33,7 @@ class SpellInputSystem(parser: SpellParser) extends BaseSystem {
     spellInput.input = ""
     spellInput.cursorPosition = 0
     spellInput.spell = None
+    helpers.highlight.clear(SpellTarget)
   }
 
   @SubscribeDeferred

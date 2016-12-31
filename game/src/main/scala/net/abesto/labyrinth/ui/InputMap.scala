@@ -72,7 +72,12 @@ object InputMap {
       downArrow -> MainMenuMoveEvent(_ + 1),
       enter -> new MainMenuSelectedEvent
     ),
-    classOf[EditorState] -> Map()
+    classOf[EditorState] -> Map(
+      upArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(0, -1))),
+      downArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(0, 1))),
+      leftArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(-1, 0))),
+      rightArrow -> EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0)))
+    )
   )
 
   val inputMap: Map[Class[_ <: State], Map[KeyStroke, (World) => Event]] =

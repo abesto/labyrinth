@@ -43,6 +43,7 @@ object Transitions {
   class LoadGameEvent extends Transition[MainMenuState, MainMenuState]  // Not implemented yet, come right back to the menu
   class OpenEditorEvent extends Transition[MainMenuState, EditorState]
   class MainMenuQuitEvent extends Transition[MainMenuState, MainMenuState]   // Not implemented yet, come right back to the menu
+  class CloseEditorEvent extends Transition[EditorState, MainMenuState]
 
   // Casting spells
   class SpellInputStartEvent extends Transition[GameMazeState, GameSpellInputState]

@@ -23,7 +23,9 @@ object World {
       // Handle user input
       new InputHandlerSystem(),
       new MainMenuSystem(),
-      // Maze
+      // The Level Editor
+      new EditorSystem(),
+      // -- GAME SYSTEMS -- //
       new MazeLoaderSystem(),
       new MazeGeneratorSystem(),
       // Player actions
@@ -34,6 +36,7 @@ object World {
       new ShallowWaterMakesWet(),
       new PopupTriggerSystem(),
       new ShadowcastingSystem(),
+      // -- END OF GAME SYSTEMS -- //
       // Finally, render
       renderer
     ).build()

@@ -3,6 +3,7 @@ package net.abesto.labyrinth
 import enumeratum._
 
 import scala.collection.immutable.IndexedSeq
+import scala.language.implicitConversions
 import scala.util.Random
 
 object Tiles {
