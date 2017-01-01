@@ -1,7 +1,6 @@
 package net.abesto.labyrinth.ui
 
 import java.awt.event.KeyEvent
-import javax.swing.KeyStroke
 
 import com.artemis.World
 import com.artemis.managers.TagManager
@@ -16,27 +15,25 @@ import squidpony.squidmath.Coord
 import scala.language.implicitConversions
 
 object InputMap {
-  type InputMapKey = Seq[KeyStroke]
+  type InputMapKey = Seq[Char]
   type InputMapValue = (World => Event)
   type InputMap = Map[InputMapKey, InputMapValue]
   type InputMapEntry = (InputMapKey, InputMapValue)
 
-  val leftArrow: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.VK_UNDEFINED)
-  val rightArrow: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.VK_UNDEFINED)
-  val upArrow: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.VK_UNDEFINED)
-  val downArrow: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.VK_UNDEFINED)
-  val space: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.VK_UNDEFINED)
-  val enter: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.VK_UNDEFINED)
-  val escape: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.VK_UNDEFINED)
-  val backspace: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.VK_UNDEFINED)
-  val delete: KeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.VK_UNDEFINED)
-
-  implicit def k(c: Char): KeyStroke = KeyStroke.getKeyStroke(c)
+  implicit def int(n: Int): Char = n.toChar
   implicit def ks(c: Char): InputMapKey = Seq(c)
-  implicit def tuC(t: (Char, Event)): InputMapEntry = (ks(t._1), t._2)
-  implicit def tuK(t: (KeyStroke, Event)): InputMapEntry = (Seq(t._1), t._2)
-  implicit def oneToSeq(k: KeyStroke): InputMapKey = Seq(k)
   implicit def e(evt: Event): InputMapValue = (w: World) => evt
+  implicit def tu(t: (Char, Event)): InputMapEntry = (t._1, t._2)
+
+  val leftArrow: Char = KeyEvent.VK_LEFT
+  val rightArrow: Char = KeyEvent.VK_RIGHT
+  val upArrow: Char = KeyEvent.VK_UP
+  val downArrow: Char = KeyEvent.VK_DOWN
+  val space: Char = KeyEvent.VK_SPACE
+  val enter: Char = KeyEvent.VK_ENTER
+  val escape: Char = KeyEvent.VK_ESCAPE
+  val backspace: Char = KeyEvent.VK_BACK_SPACE
+  val delete: Char = KeyEvent.VK_DELETE
 
   protected def walk(x: Int, y: Int): (World) => Event =
     (w: World) => TryWalkingEvent(
@@ -51,10 +48,10 @@ object InputMap {
 
   protected val rawInputMap: Map[State, InputMap] = Map(
     States[GameMazeState] -> Map(
-      Seq(leftArrow, k('h')) -> walk(-1, 0),
-      Seq(rightArrow, k('l')) -> walk(1, 0),
-      Seq(downArrow, k('j')) -> walk(0, 1),
-      Seq(upArrow, k('k')) -> walk(0, -1),
+      Seq(leftArrow, 'h') -> walk(-1, 0),
+      Seq(rightArrow, 'l') -> walk(1, 0),
+      Seq(downArrow, 'j') -> walk(0, 1),
+      Seq(upArrow, 'k') -> walk(0, -1),
       'z' -> new SpellInputStartEvent
     ),
     States[GamePopupState] -> Map(
@@ -79,7 +76,7 @@ object InputMap {
     )
   )
 
-  val inputMap: Map[State, Map[KeyStroke, (World) => Event]] =
+  val inputMap: Map[State, Map[Char, (World) => Event]] =
     (rawInputMap ++ editorActionsInputMap).mapValues(_.flatMap(p => p._1.map(_ -> p._2)))
 
   protected def dispatchEvent(e: Event): (World) => Unit =

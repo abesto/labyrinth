@@ -1,6 +1,5 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.BaseSystem
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
 import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent, GenerateMazeEvent}
@@ -14,7 +13,7 @@ import squidpony.squidmath.Coord
 
 @InStates(Array(classOf[EditorState]))
 @DeferredEventHandlerSystem
-class EditorSystem extends BaseSystem {
+class EditorSystem extends InstrumentedSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
 

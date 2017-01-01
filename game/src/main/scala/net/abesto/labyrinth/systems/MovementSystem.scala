@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, TryWalkingEvent}
@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 @InStates(Array(classOf[GameMazeState]))
 @DeferredEventHandlerSystem
-class MovementSystem extends BaseSystem {
+class MovementSystem extends InstrumentedSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent, WetComponent}
 import net.abesto.labyrinth.events.{HasWalkedEvent, MessageEvent}
@@ -13,7 +13,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 @DeferredEventHandlerSystem
 @InStates(Array(classOf[GameMazeState]))
-class ShallowWaterMakesWet extends BaseSystem {
+class ShallowWaterMakesWet extends InstrumentedSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

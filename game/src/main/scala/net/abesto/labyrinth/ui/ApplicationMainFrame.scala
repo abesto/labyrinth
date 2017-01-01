@@ -4,7 +4,7 @@ import java.awt.event.{KeyListener, KeyEvent => AwtKeyEvent}
 import javax.swing.{JFrame, SwingUtilities}
 
 import com.artemis.World
-import net.abesto.labyrinth.events.KeyEvent
+import net.abesto.labyrinth.events.KeyPressedEvent
 import net.abesto.labyrinth.fsm.Transitions.MainMenuQuitEvent
 import net.abesto.labyrinth.render.Renderer
 import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
@@ -30,16 +30,17 @@ class ApplicationMainFrame(world: World, renderer: Renderer) extends JFrame {
   }
 
   def dispatchKeyEvent(e: AwtKeyEvent): Unit = {
-    world.getSystem(classOf[EventSystem]).dispatch(KeyEvent(e))
+    val c = if (e.getKeyChar == AwtKeyEvent.CHAR_UNDEFINED) e.getExtendedKeyCode.toChar else e.getKeyChar
+    eventSystem.dispatch(KeyPressedEvent(c))
     world.setDelta(1)
     world.process()
   }
 
   def setupKeyListener(): Unit = {
     addKeyListener(new KeyListener {
-      override def keyTyped(e: AwtKeyEvent): Unit = dispatchKeyEvent(e)
+      override def keyTyped(e: AwtKeyEvent): Unit = ()
       override def keyPressed(e: AwtKeyEvent): Unit = dispatchKeyEvent(e)
-      override def keyReleased(e: AwtKeyEvent): Unit = dispatchKeyEvent(e)
+      override def keyReleased(e: AwtKeyEvent): Unit = ()
     })
   }
 

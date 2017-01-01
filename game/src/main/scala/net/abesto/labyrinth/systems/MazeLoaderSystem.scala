@@ -1,8 +1,8 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.{TagManager, WorldSerializationManager}
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.LoadMazeEvent
 import net.abesto.labyrinth.fsm.Transitions.NewGameEvent
@@ -14,7 +14,7 @@ import squidpony.squidmath.Coord
 
 
 @DeferredEventHandlerSystem
-class MazeLoaderSystem extends BaseSystem {
+class MazeLoaderSystem extends InstrumentedSystem {
   var tagManager: TagManager = _
   var serializationManager: WorldSerializationManager = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.SpellTarget
 import net.abesto.labyrinth.components.SpellInputComponent
@@ -17,7 +17,7 @@ import scala.util.Random
 
 @InStates(Array(classOf[GameSpellInputState]))
 @DeferredEventHandlerSystem
-class SpellInputSystem(parser: SpellParser) extends BaseSystem {
+class SpellInputSystem(parser: SpellParser) extends InstrumentedSystem {
   var tagManager: TagManager = _
   var eventSystem: EventSystem = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _

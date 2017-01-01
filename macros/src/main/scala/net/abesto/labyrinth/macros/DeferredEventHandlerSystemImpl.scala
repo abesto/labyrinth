@@ -1,6 +1,7 @@
 package net.abesto.labyrinth.macros
 
 import com.artemis.BaseSystem
+import com.typesafe.scalalogging.Logger
 import net.mostlyoriginal.api.event.common.Event
 
 import scala.collection.immutable.Queue
@@ -11,9 +12,12 @@ trait DeferredEventHandlerSystemImpl extends BaseSystem {
   var handlers: mutable.Map[Manifest[_], Handler[_]] = mutable.Map()
 
   class Handler[T <: Event](f: T => Unit) {
+    val outer: DeferredEventHandlerSystemImpl = DeferredEventHandlerSystemImpl.this
+    val logger = Logger(outer.getClass)
     var inbox: Queue[T] = Queue()
 
     def enqueue(e: T): Unit = {
+      logger.trace(s"Enqueued event: $e")
       inbox :+= e
     }
 
@@ -21,6 +25,7 @@ trait DeferredEventHandlerSystemImpl extends BaseSystem {
       while (inbox.nonEmpty) {
         val (e, _inbox) = inbox.dequeue
         inbox = _inbox
+        logger.trace(s"Processing event: $e")
         f(e)
       }
     }
@@ -36,5 +41,10 @@ trait DeferredEventHandlerSystemImpl extends BaseSystem {
     handlers(mf).asInstanceOf[Handler[T]].enqueue(e)
   }
 
-  override def processSystem(): Unit = handlers.values.foreach(_.processEvents())
+  override def checkProcessing(): Boolean = handlers.values.exists(_.inbox.nonEmpty)
+
+  abstract override def processSystem(): Unit = {
+    super.processSystem()
+    handlers.values.foreach(_.processEvents())
+  }
 }

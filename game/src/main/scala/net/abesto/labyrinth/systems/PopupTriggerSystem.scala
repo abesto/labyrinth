@@ -2,7 +2,7 @@ package net.abesto.labyrinth.systems
 
 import com.artemis.annotations.AspectDescriptor
 import com.artemis.managers.TagManager
-import com.artemis.{Aspect, BaseSystem, ComponentMapper}
+import com.artemis.{Aspect, ComponentMapper}
 import net.abesto.labyrinth.components.{PopupTriggerComponent, PositionComponent}
 import net.abesto.labyrinth.events.HasWalkedEvent
 import net.abesto.labyrinth.fsm.Transitions
@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import scala.io.Source
 
 @DeferredEventHandlerSystem
-class PopupTriggerSystem extends BaseSystem {
+class PopupTriggerSystem extends InstrumentedSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

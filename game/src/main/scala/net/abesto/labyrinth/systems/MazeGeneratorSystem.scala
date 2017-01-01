@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.GenerateMazeEvent
@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidgrid.mapping.DungeonUtility
 
 @DeferredEventHandlerSystem
-class MazeGeneratorSystem extends BaseSystem {
+class MazeGeneratorSystem extends InstrumentedSystem {
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

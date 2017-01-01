@@ -8,7 +8,11 @@ libraryDependencies ++= Seq(
   "com.beachape" %% "enumeratum" % "1.5.4",  // Enums that happen to play well with artemis-odb-serializer (after some coercing)
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4",  // For parsing spells
   "org.reflections" % "reflections" % "0.9.10",  // Magic
-  "org.scala-lang" % "scala-reflect" % scalaVersion.value  // More magic
+  "org.scala-lang" % "scala-reflect" % scalaVersion.value,  // More magic
+
+  // Logging
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
+  "ch.qos.logback" % "logback-classic" % "1.1.7"
 )
 
 // Macro paradise \o/  a.k.a. Even more magic

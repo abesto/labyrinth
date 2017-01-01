@@ -1,17 +1,15 @@
 package net.abesto.labyrinth
 
-import javax.swing.KeyStroke
-
+import com.artemis.World
+import net.abesto.labyrinth.Tiles.Kind._
 import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent}
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
+import net.abesto.labyrinth.maze.{FloorTile, ShallowWaterTile, WallTile}
+import net.abesto.labyrinth.ui.InputMap._
 import net.mostlyoriginal.api.event.common.Event
 import squidpony.squidmath.Coord
-import net.abesto.labyrinth.ui.InputMap._
-import Tiles.Kind._
-import com.artemis.World
-import net.abesto.labyrinth.maze.{FloorTile, ShallowWaterTile, WallTile}
 
 
 object Constants {
@@ -44,8 +42,8 @@ object Constants {
     "Quit" -> new MainMenuQuitEvent
   )
 
-  case class EditorAction(tile: Tiles.Kind, key: KeyStroke, description: String, event: Event) {
-    def asInputMapEntry: (Seq[KeyStroke], (World) => Event) = Seq(key) -> ((_: World) => event)
+  case class EditorAction(tile: Tiles.Kind, key: Char, description: String, event: Event) {
+    def asInputMapEntry: (Seq[Char], (World) => Event) = Seq(key) -> ((_: World) => event)
   }
 
   lazy val cursorMazeActions: Seq[EditorAction] = Seq(
@@ -66,9 +64,9 @@ object Constants {
       EditorAction(AlphaNum('q'), 'q', "Quit to Main Menu", new CloseEditorEvent)
     )),
     States[TileEditorState] -> (cursorMazeActions ++ Seq(
-      EditorAction(AlphaNum('w'), 'w', "Wall", new EditorChangeTileEvent[HashWallTile]),
+      EditorAction(WallHash, '#', "Wall", new EditorChangeTileEvent[HashWallTile]),
       EditorAction(SmoothFloor, '.', "Smooth Floor", new EditorChangeTileEvent[SmoothFloorTile]),
-      EditorAction(AlphaNum('s'), 's', "Shallow Water", new EditorChangeTileEvent[DefaultShallowWaterTile]),
+      EditorAction(ShallowWater, '~', "Shallow Water", new EditorChangeTileEvent[DefaultShallowWaterTile]),
       EditorAction(AlphaNum('q'), 'q', "Back", new CloseTileEditorEvent)
     ))
   )

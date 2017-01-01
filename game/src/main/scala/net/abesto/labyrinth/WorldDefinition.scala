@@ -17,12 +17,12 @@ object WorldDefinition {
       new TagManager(),
       new EventSystem(),
       new Helpers(),
-      // State transition
-      new StateTransitionSystem(),
-      new StateSystemsManager(),
       // Handle user input
       new InputHandlerSystem(),
+      // State transition
       new MainMenuSystem(),
+      new StateTransitionSystem(),
+      new StateSystemsManager(),
       // The Level Editor
       new EditorSystem(),
       new MazeGeneratorSystem(),

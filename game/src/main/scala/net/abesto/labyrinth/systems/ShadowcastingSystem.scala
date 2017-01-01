@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.managers.TagManager
-import com.artemis.{BaseSystem, ComponentMapper}
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.fsm.InStates
@@ -9,12 +9,13 @@ import net.abesto.labyrinth.fsm.States.GameState
 import squidpony.squidgrid.FOV
 
 @InStates(Array(classOf[GameState]))
-class ShadowcastingSystem extends BaseSystem {
+class ShadowcastingSystem extends InstrumentedSystem {
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _
   var tagManager: TagManager = _
 
   override def processSystem(): Unit = {
+    super.processSystem()
     val playerEntityId = tagManager.getEntityId(Constants.Tags.player)
     val playerPosition = positionMapper.get(playerEntityId)
     val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)

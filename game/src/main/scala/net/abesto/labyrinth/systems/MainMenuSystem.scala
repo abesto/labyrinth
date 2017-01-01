@@ -1,16 +1,13 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.BaseSystem
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.events.{MainMenuMoveEvent, MainMenuSelectedEvent}
-import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.MainMenuState
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
 
-@InStates(Array(classOf[MainMenuState]))
 @DeferredEventHandlerSystem
-class MainMenuSystem extends BaseSystem {
+class MainMenuSystem extends InstrumentedSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
 

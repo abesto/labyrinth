@@ -1,12 +1,11 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.BaseSystem
 import net.abesto.labyrinth.fsm.States.State
 import net.abesto.labyrinth.fsm.Transition
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 
 @DeferredEventHandlerSystem
-class StateTransitionSystem extends BaseSystem {
+class StateTransitionSystem extends InstrumentedSystem {
   var helpers: Helpers = _
 
   @SubscribeDeferred
