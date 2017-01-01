@@ -7,7 +7,7 @@ import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
 import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, OpenEditorEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
-import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
 import squidpony.squidmath.Coord
 
 @InStates(Array(classOf[EditorState]))
@@ -21,7 +21,7 @@ class EditorSystem extends LabyrinthBaseSystem {
     helpers.highlight.set(EditorMazeCursor, Seq(Coord.get(Constants.mazeWidth / 2, Constants.mazeHeight / 2)))
   }
 
-  @SubscribeDeferred
+  @Subscribe
   def closeEditor(e: CloseEditorEvent): Unit = {
     helpers.highlight.clear(EditorMazeCursor)
   }
