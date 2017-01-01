@@ -52,43 +52,27 @@ class MazeBuilder(protected var maze: Maze) {
 
 object MazeBuilder {
 
-  import Tiles.Kind._
-
-  def charToMazeTile(tileset: Tiles.Tileset, c: Char, x: Int, y: Int): MazeTile = {
-    tileset.toKind(c) match {
-      case SmoothFloor | RoughFloor => new FloorTile(x, y, c)
-      case Player => new FloorTile(x, y, tileset.toChar(SmoothFloor))
-      case WallCornerNorthWest | WallEastWestTNorth | WallCornerNorthEast |
-           WallNorthSouthTWest | WallHash           | WallNorthSouthTEast |
-           WallCornerSouthWest | WallEastWestTSouth | WallCornerSouthEast |
-           WallNorthSouth | WallEastWest | WallCross => new WallTile(x, y, c)
-      case StairsDown => new StaircaseDownTile(x, y, c)
-      case Water => new WaterTile(x, y, c)
-      case ShallowWater => new ShallowWaterTile(x, y, c)
-    }
-  }
-
   def random(): MazeBuilder = {
     val tileset = Tiles.squidlib // Because we're using the output of squidlib
-    new MazeBuilder(Maze(tileset,
-      new DungeonGenerator(Constants.mazeWidth, Constants.mazeHeight).generate().zipWithIndex.map {
-        case (column, x) => column.zipWithIndex.map {
-          case (c, y) => charToMazeTile(tileset, c, x, y)
-        }
+    val maze = Maze.empty(tileset)
+    new DungeonGenerator(Constants.mazeWidth, Constants.mazeHeight).generate().zipWithIndex.foreach {
+      case (column, x) => column.zipWithIndex.foreach {
+        case (c, y) => maze.update(x, y, c)
       }
-    ))
+    }
+    new MazeBuilder(maze)
   }
 
   def fromFile(name: String, tileCallback: (Tiles.Kind, Int, Int) => Unit = (_, _, _) => Unit): MazeBuilder = {
     val tileset = Tiles.squidlib // Because maps are stored in unicode - easier to work with
-    new MazeBuilder(Maze(tileset,
-      Source.fromURL(getClass.getResource(s"/maps/$name")).getLines().zipWithIndex.map {
-        case (line, y) => line.zipWithIndex.map {
-          case (char, x) =>
-            tileCallback(tileset.toKind(char), x, y)
-            charToMazeTile(tileset, char, x, y)
-        }.toArray
-      }.toArray.transpose
-    ))
+    val maze = Maze.empty(tileset)
+    Source.fromURL(getClass.getResource(s"/maps/$name")).getLines().zipWithIndex.foreach {
+      case (line, y) => line.zipWithIndex.foreach {
+        case (char, x) =>
+          tileCallback(tileset.toKind(char), x, y)
+          maze.update(x, y, char)
+      }
+    }
+    new MazeBuilder(maze)
   }
 }

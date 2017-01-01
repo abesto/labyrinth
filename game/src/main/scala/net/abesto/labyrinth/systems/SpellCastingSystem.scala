@@ -8,7 +8,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 @InStates(Array(classOf[GameSpellInputState]))
 @DeferredEventHandlerSystem
-class SpellCastingSystem extends InstrumentedSystem {
+class SpellCastingSystem extends LabyrinthBaseSystem {
   var eventSystem: EventSystem = _
   var helpers: Helpers = _
 

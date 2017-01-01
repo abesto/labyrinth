@@ -13,7 +13,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 @DeferredEventHandlerSystem
 @InStates(Array(classOf[GameMazeState]))
-class ShallowWaterMakesWet extends InstrumentedSystem {
+class ShallowWaterMakesWet extends LabyrinthBaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

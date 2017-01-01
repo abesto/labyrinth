@@ -13,16 +13,14 @@ import squidpony.squidmath.Coord
 object WorldDefinition {
   protected def worldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
     .`with`(
+      new StateTransitionSystem(),
       new WorldSerializationManager(),
       new TagManager(),
       new EventSystem(),
       new Helpers(),
       // Handle user input
       new InputHandlerSystem(),
-      // State transition
       new MainMenuSystem(),
-      new StateTransitionSystem(),
-      new StateSystemsManager(),
       // The Level Editor
       new EditorSystem(),
       new MazeGeneratorSystem(),
@@ -37,7 +35,6 @@ object WorldDefinition {
       new PopupTriggerSystem(),
       new ShadowcastingSystem(),
       // -- END OF GAME SYSTEMS -- //
-      // Finally, render
       renderer
     ).build()
 

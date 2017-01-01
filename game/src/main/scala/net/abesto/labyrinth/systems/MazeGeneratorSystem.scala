@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidgrid.mapping.DungeonUtility
 
 @DeferredEventHandlerSystem
-class MazeGeneratorSystem extends InstrumentedSystem {
+class MazeGeneratorSystem extends LabyrinthBaseSystem {
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

@@ -5,6 +5,8 @@ import com.artemis.io.SaveFileFormat
 import com.artemis.managers.{TagManager, WorldSerializationManager}
 import net.abesto.labyrinth.components.{MazeComponent, PositionComponent}
 import net.abesto.labyrinth.events.LoadMazeEvent
+import net.abesto.labyrinth.fsm.InStates
+import net.abesto.labyrinth.fsm.States.{EditorState, GameState}
 import net.abesto.labyrinth.fsm.Transitions.NewGameEvent
 import net.abesto.labyrinth.macros._
 import net.abesto.labyrinth.maze._
@@ -13,8 +15,9 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
 
+@InStates(Array(classOf[GameState], classOf[EditorState]))
 @DeferredEventHandlerSystem
-class MazeLoaderSystem extends InstrumentedSystem {
+class MazeLoaderSystem extends LabyrinthBaseSystem {
   var tagManager: TagManager = _
   var serializationManager: WorldSerializationManager = _
   var mazeMapper: ComponentMapper[MazeComponent] = _

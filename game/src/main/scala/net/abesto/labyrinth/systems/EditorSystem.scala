@@ -7,13 +7,12 @@ import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
 import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, OpenEditorEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
-import net.abesto.labyrinth.maze.MazeTile
 import net.mostlyoriginal.api.event.common.EventSystem
 import squidpony.squidmath.Coord
 
 @InStates(Array(classOf[EditorState]))
 @DeferredEventHandlerSystem
-class EditorSystem extends InstrumentedSystem {
+class EditorSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
 
@@ -41,9 +40,9 @@ class EditorSystem extends InstrumentedSystem {
   }
 
   @SubscribeDeferred
-  def changeTile(e: EditorChangeTileEvent[_ <: MazeTile]): Unit = {
+  def changeTile(e: EditorChangeTileEvent): Unit = {
     helpers.highlight.get(EditorMazeCursor).foreach(
-      coord => helpers.maze.update(e.makeTile(coord.getX, coord.getY))
+      coord => helpers.maze.update(coord.getX, coord.getY, e.kind)
     )
   }
 }

@@ -17,7 +17,7 @@ import scala.util.Random
 
 @InStates(Array(classOf[GameSpellInputState]))
 @DeferredEventHandlerSystem
-class SpellInputSystem(parser: SpellParser) extends InstrumentedSystem {
+class SpellInputSystem(parser: SpellParser) extends LabyrinthBaseSystem {
   var tagManager: TagManager = _
   var eventSystem: EventSystem = _
   var spellInputMapper: ComponentMapper[SpellInputComponent] = _

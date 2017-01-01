@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 @InStates(Array(classOf[GameMazeState]))
 @DeferredEventHandlerSystem
-class MovementSystem extends InstrumentedSystem {
+class MovementSystem extends LabyrinthBaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

@@ -6,7 +6,6 @@ import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEve
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
-import net.abesto.labyrinth.maze.{FloorTile, ShallowWaterTile, WallTile}
 import net.abesto.labyrinth.ui.InputMap._
 import net.mostlyoriginal.api.event.common.Event
 import squidpony.squidmath.Coord
@@ -53,10 +52,6 @@ object Constants {
     EditorAction(RightArrow, rightArrow, "Maze cursor right", EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0))))
   )
 
-  class HashWallTile(x: Int, y: Int) extends WallTile(x, y, '#')
-  class SmoothFloorTile(x: Int, y: Int) extends FloorTile(x, y, '.')
-  class DefaultShallowWaterTile(x: Int, y: Int) extends ShallowWaterTile(x, y, '~')
-
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
     States[EditorState] -> (cursorMazeActions ++ Seq(
       EditorAction(AlphaNum('g'), 'g', "Generate new maze", new EditorGenerateMazeEvent),
@@ -64,9 +59,9 @@ object Constants {
       EditorAction(AlphaNum('q'), 'q', "Quit to Main Menu", new CloseEditorEvent)
     )),
     States[TileEditorState] -> (cursorMazeActions ++ Seq(
-      EditorAction(WallHash, '#', "Wall", new EditorChangeTileEvent[HashWallTile]),
-      EditorAction(SmoothFloor, '.', "Smooth Floor", new EditorChangeTileEvent[SmoothFloorTile]),
-      EditorAction(ShallowWater, '~', "Shallow Water", new EditorChangeTileEvent[DefaultShallowWaterTile]),
+      EditorAction(WallHash, '#', "Wall", EditorChangeTileEvent(WallHash)),
+      EditorAction(SmoothFloor, '.', "Smooth Floor", EditorChangeTileEvent(SmoothFloor)),
+      EditorAction(ShallowWater, '~', "Shallow Water", EditorChangeTileEvent(ShallowWater)),
       EditorAction(AlphaNum('q'), 'q', "Back", new CloseTileEditorEvent)
     ))
   )

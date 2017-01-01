@@ -2,13 +2,12 @@ package net.abesto.labyrinth.systems
 
 import net.abesto.labyrinth.fsm.States.State
 import net.abesto.labyrinth.fsm.Transition
-import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
+import net.mostlyoriginal.api.event.common.Subscribe
 
-@DeferredEventHandlerSystem
-class StateTransitionSystem extends InstrumentedSystem {
+class StateTransitionSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
 
-  @SubscribeDeferred
+  @Subscribe
   def transition(t: Transition[_ <: State, _ <: State]): Unit = {
     helpers.state.current = t(helpers.state.current)
   }

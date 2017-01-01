@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import scala.io.Source
 
 @DeferredEventHandlerSystem
-class PopupTriggerSystem extends InstrumentedSystem {
+class PopupTriggerSystem extends LabyrinthBaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _

@@ -7,7 +7,7 @@ import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferre
 import net.mostlyoriginal.api.event.common.EventSystem
 
 @DeferredEventHandlerSystem
-class MainMenuSystem extends InstrumentedSystem {
+class MainMenuSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
 

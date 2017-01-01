@@ -41,10 +41,12 @@ trait DeferredEventHandlerSystemImpl extends BaseSystem {
     handlers(mf).asInstanceOf[Handler[T]].enqueue(e)
   }
 
-  override def checkProcessing(): Boolean = handlers.values.exists(_.inbox.nonEmpty)
+  def handlersWithNonEmptyInboxes: Iterable[Handler[_]] = handlers.values.filter(_.inbox.nonEmpty)
 
   abstract override def processSystem(): Unit = {
     super.processSystem()
-    handlers.values.foreach(_.processEvents())
+    while (handlersWithNonEmptyInboxes.nonEmpty) {
+      handlersWithNonEmptyInboxes.foreach(_.processEvents())
+    }
   }
 }

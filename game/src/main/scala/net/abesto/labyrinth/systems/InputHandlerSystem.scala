@@ -6,7 +6,7 @@ import net.abesto.labyrinth.ui.InputMap
 import net.mostlyoriginal.api.event.common.EventSystem
 
 @DeferredEventHandlerSystem
-class InputHandlerSystem extends InstrumentedSystem {
+class InputHandlerSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
 

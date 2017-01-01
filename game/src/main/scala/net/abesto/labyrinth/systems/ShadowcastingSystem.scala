@@ -9,7 +9,8 @@ import net.abesto.labyrinth.fsm.States.GameState
 import squidpony.squidgrid.FOV
 
 @InStates(Array(classOf[GameState]))
-class ShadowcastingSystem extends InstrumentedSystem {
+class ShadowcastingSystem extends LabyrinthBaseSystem {
+  var helpers: Helpers = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var mazeMapper: ComponentMapper[MazeComponent] = _
   var tagManager: TagManager = _
