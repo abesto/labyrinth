@@ -53,7 +53,7 @@ object Tiles {
 
     // Alphanumeric
     case class AlphaNum(char: Char) extends Kind {
-      assert(char.isLetterOrDigit)
+      assert(char.isLetterOrDigit || ":".contains(char))
     }
   }
 
@@ -74,12 +74,7 @@ object Tiles {
         }
     }
 
-    def toKind(char: Char): Kind =
-      if (char.isLetterOrDigit) {
-        AlphaNum(char)
-      } else {
-        charToKind(char)
-      }
+    def toKind(char: Char): Kind = charToKind.getOrElse(char, AlphaNum(char))
 
     def translate(char: Char, to: Tileset): Char = {
       val kind = toKind(char)

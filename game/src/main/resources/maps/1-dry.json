@@ -1,43 +1,71 @@
 {
-	"entities": {
-		"0": {
-			"archetype": 0,
-			"components": {
-				"LayerComponent": {
-					"layer": {
-						"class": "net.abesto.labyrinth.components.LayerComponent$Layer$Item$"
-					}
-				},
-				"PopupTriggerComponent": {
-					"source": "/books/1-dry"
-				},
-				"PositionComponent": {
-					"x": 35,
-					"y": 10
-				},
-				"TileComponent": {
-					"kind": {
-						"class": "net.abesto.labyrinth.Tiles$Kind$Book$"
-					}
+"entities": {
+	"1": {
+		"archetype": 6,
+		"tag": "PLAYER",
+		"components": {
+			"LayerComponent": {
+				"layer": {
+					"class": "net.abesto.labyrinth.components.LayerComponent$Layer$Creature$"
+				}
+			},
+			"PositionComponent": {
+				"x": 21,
+				"y": 16
+			},
+			"TileComponent": {
+				"kind": {
+					"class": "net.abesto.labyrinth.Tiles$Kind$Player$"
 				}
 			}
 		}
 	},
-	"archetypes": {
-		"0": [
-			"PositionComponent",
-			"PopupTriggerComponent",
-			"LayerComponent",
-			"TileComponent"
-		]
-	},
-	"componentIdentifiers": {
-		"net.abesto.labyrinth.components.PopupTriggerComponent": "PopupTriggerComponent",
-		"net.abesto.labyrinth.components.LayerComponent": "LayerComponent",
-		"net.abesto.labyrinth.components.TileComponent": "TileComponent",
-		"net.abesto.labyrinth.components.PositionComponent": "PositionComponent"
-	},
-	"metadata": {
-		"version": 1
+	"4": {
+		"archetype": 9,
+		"components": {
+			"LayerComponent": {
+				"layer": {
+					"class": "net.abesto.labyrinth.components.LayerComponent$Layer$Item$"
+				}
+			},
+			"PopupTriggerComponent": {
+				"source": "/books/1-dry"
+			},
+			"PositionComponent": {
+				"x": 35,
+				"y": 10
+			},
+			"TileComponent": {
+				"kind": {
+					"class": "net.abesto.labyrinth.Tiles$Kind$Book$"
+				}
+			}
+		}
 	}
+},
+"archetypes": {
+	"6": [
+		"PositionComponent",
+		"LayerComponent",
+		"TileComponent",
+		"PersistInMazeMarker"
+	],
+	"9": [
+		"PositionComponent",
+		"LayerComponent",
+		"PopupTriggerComponent",
+		"TileComponent",
+		"PersistInMazeMarker"
+	]
+},
+"componentIdentifiers": {
+	"net.abesto.labyrinth.components.TileComponent": "TileComponent",
+	"net.abesto.labyrinth.components.LayerComponent": "LayerComponent",
+	"net.abesto.labyrinth.components.PositionComponent": "PositionComponent",
+	"net.abesto.labyrinth.components.PopupTriggerComponent": "PopupTriggerComponent",
+	"net.abesto.labyrinth.components.PersistInMazeMarker": "PersistInMazeMarker"
+},
+"metadata": {
+	"version": 1
+}
 }

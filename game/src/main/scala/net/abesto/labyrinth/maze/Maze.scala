@@ -44,6 +44,14 @@ case class Maze(var tileset: Tiles.Tileset, var tiles: Array[Array[MazeTile]]) {
       transform(tile => tile.withChar(oldTileset.translate(tile.char.character, tileset)))
     }
   }
+
+  def withTileset[T](ts: Tiles.Tileset, f: (Maze) => T): T = {
+    val originalTileset = tileset
+    translate(ts)
+    val retval = f(this)
+    translate(originalTileset)
+    retval
+  }
 }
 
 object Maze {

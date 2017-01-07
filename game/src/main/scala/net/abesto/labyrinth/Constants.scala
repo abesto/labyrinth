@@ -54,10 +54,9 @@ object Constants {
 
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
     States[EditorState] -> (cursorMazeActions ++ Seq(
-      EditorAction(AlphaNum('o'), 'o', "Open maze", new EditorOpenMazeEvent),
+      EditorAction(AlphaNum(':'), ':', "vi-like ex mode (:w, :e, :q)", new EditorOpenExtendedModeEvent),
       EditorAction(AlphaNum('g'), 'g', "Generate new maze", new EditorGenerateMazeEvent),
-      EditorAction(AlphaNum('t'), 't', "Edit Tiles", new OpenTileEditorEvent),
-      EditorAction(AlphaNum('q'), 'q', "Quit to Main Menu", new CloseEditorEvent)
+      EditorAction(AlphaNum('t'), 't', "Edit Tiles", new OpenTileEditorEvent)
     )),
     States[TileEditorState] -> (cursorMazeActions ++ Seq(
       EditorAction(WallHash, '#', "Wall", EditorChangeTileEvent(WallHash)),

@@ -64,6 +64,7 @@ object WorldDefinition {
       .add(new PositionComponent())
       .add(new LayerComponent(LayerComponent.Layer.Creature))
       .add(new TileComponent(Tiles.Kind.Player))
+      .add(new PersistInMazeMarker)
   }
 
   protected def prompt(world: World): Unit = {

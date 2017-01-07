@@ -25,7 +25,7 @@ class PopupTriggerSystem extends LabyrinthBaseSystem {
   @SubscribeDeferred
   def processHasWalked(e: HasWalkedEvent) {
     val position = positionMapper.get(e.entityId).coord
-    helpers.entityIds(popupTriggerAspect)
+    helpers.entityIdsSeq(popupTriggerAspect)
       .find(id => positionMapper.get(id).coord == position)
       .foreach(entityId => {
         val trigger = popupTriggerMapper.get(entityId)

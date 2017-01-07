@@ -33,7 +33,7 @@ class SpellInputSystem(parser: SpellParser) extends LabyrinthBaseSystem {
   @SubscribeDeferred
   def startCasting(e: SpellInputStartEvent): Unit = {
     reset()
-    prompt.prompt = randomPrompt
+    prompt.prompt = randomPrompt + ": "
   }
 
   @SubscribeDeferred

@@ -6,6 +6,7 @@ import com.artemis._
 import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.JsonArtemisSerializer
 import com.artemis.managers.TagManager
+import com.artemis.utils.IntBag
 import com.esotericsoftware.jsonbeans.{Json, JsonSerializer, JsonValue}
 import net.abesto.labyrinth.components.LayerComponent.Layer
 import net.abesto.labyrinth.components._
@@ -31,15 +32,20 @@ class Helpers extends BaseSystem {
   protected var positionLayerAspect: Aspect.Builder = _
   protected var aspectSubscriptionManager: AspectSubscriptionManager = _
 
+  def entityIds(aspectBuilder: Aspect.Builder): IntBag = aspectSubscriptionManager.get(aspectBuilder).getEntities
 
-  def entityIds(aspectBuilder: Aspect.Builder): IndexedSeq[Int] = {
-    val entityIdsBag = aspectSubscriptionManager.get(aspectBuilder).getEntities
+  def entityIdsSeq(aspectBuilder: Aspect.Builder): IndexedSeq[Int] = {
+    val entityIdsBag = entityIds(aspectBuilder)
     0.until(entityIdsBag.size).map(entityIdsBag.get)
   }
 
   def entityIdsAtPosition(layer: Layer, coord: Coord): Seq[Int] = {
-    entityIds(positionLayerAspect).filter(
-      id => layerMapper.get(id).layer == layer && positionMapper.get(id).coord.equals(coord)
+    entityIdsSeq(positionLayerAspect).filter(
+      id => try {
+        layerMapper.get(id).layer == layer && positionMapper.get(id).coord.equals(coord)
+      } catch {
+        case _: NullPointerException => false
+      }
     )
   }
 

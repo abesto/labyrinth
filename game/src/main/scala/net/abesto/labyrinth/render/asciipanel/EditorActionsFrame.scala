@@ -3,7 +3,7 @@ package net.abesto.labyrinth.render.asciipanel
 import java.awt.Color
 
 import asciiPanel.AsciiPanel
-import net.abesto.labyrinth.Constants
+import net.abesto.labyrinth.{Constants, Tiles}
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
 import net.abesto.labyrinth.systems.Helpers
@@ -21,7 +21,7 @@ class EditorActionsFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) 
     clear(topLeft.add(1), bottomRight.subtract(1), Color.black)
     Constants.editorActions.getOrElse(helpers.state.current.asInstanceOf[EditorState], Seq.empty).zipWithIndex.foreach {
       case (action, idx) =>
-        write(helpers.maze.tileset.toChar(action.tile), marginLeft, marginTop + idx * lineHeight, AsciiPanel.brightWhite, AsciiPanel.black)
+        write(Tiles.dwarfFortress.toChar(action.tile), marginLeft, marginTop + idx * lineHeight, AsciiPanel.brightWhite, AsciiPanel.black)
         write(s": ${action.description}", marginLeft + 1, marginTop + idx * lineHeight, AsciiPanel.white, AsciiPanel.black)
     }
   }

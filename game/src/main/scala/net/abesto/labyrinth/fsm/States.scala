@@ -11,7 +11,7 @@ object States {
 
   sealed class EditorState extends State
   sealed class TileEditorState extends EditorState
-  sealed class EditorOpenMazeState extends EditorState with PromptState
+  sealed class EditorExtendedModeState extends EditorState with PromptState
 
   sealed class GameState extends State
   sealed class GameMazeState extends GameState
@@ -51,10 +51,10 @@ object Transitions {
   // Editor - Tile editor
   class OpenTileEditorEvent extends Transition[EditorState, TileEditorState]
   class CloseTileEditorEvent extends Transition[TileEditorState, EditorState]
-  // Editor - open a maze
-  class EditorOpenMazeEvent extends Transition[EditorState, EditorOpenMazeState]
-  class EditorAbortOpenMazeEvent extends Transition[EditorOpenMazeState, EditorState]
-  class EditorExecuteOpenMazeEvent extends Transition[EditorOpenMazeState, EditorState]
+  // Editor - extended mode
+  class EditorOpenExtendedModeEvent extends Transition[EditorState, EditorExtendedModeState]
+  class EditorAbortExtendedModeEvent extends Transition[EditorExtendedModeState, EditorState]
+  class EditorExecuteExtendedModeEvent extends Transition[EditorExtendedModeState, EditorState]
 
   // Casting spells
   class SpellInputStartEvent extends Transition[GameMazeState, GameSpellInputState]

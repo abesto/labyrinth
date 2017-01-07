@@ -1,12 +1,19 @@
 package net.abesto.labyrinth.systems
 
-import net.abesto.labyrinth.Constants
+import java.io._
+
+import com.artemis.Aspect
+import com.artemis.annotations.AspectDescriptor
+import com.artemis.io.SaveFileFormat
+import com.artemis.managers.WorldSerializationManager
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
+import net.abesto.labyrinth.components.PersistInMazeMarker
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
-import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, EditorExecuteOpenMazeEvent, EditorOpenMazeEvent, OpenEditorEvent}
+import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, EditorExecuteExtendedModeEvent, EditorOpenExtendedModeEvent, OpenEditorEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
+import net.abesto.labyrinth.{Constants, Tiles}
 import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
 import squidpony.squidmath.Coord
 
@@ -15,6 +22,10 @@ import squidpony.squidmath.Coord
 class EditorSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
+  var serialization: WorldSerializationManager = _
+
+  @AspectDescriptor(all=Array(classOf[PersistInMazeMarker]))
+  var entitiesToSerialize: Aspect.Builder = _
 
   @SubscribeDeferred
   def openEditor(e: OpenEditorEvent): Unit = {
@@ -47,13 +58,42 @@ class EditorSystem extends LabyrinthBaseSystem {
   }
 
   @SubscribeDeferred
-  def openPrompt(e: EditorOpenMazeEvent): Unit = {
-    helpers.prompt.prompt = "Open maze"
+  def openPrompt(e: EditorOpenExtendedModeEvent): Unit = {
+    helpers.prompt.prompt = ":"
+  }
+
+  def write(filename: String, content: String): Unit = {
   }
 
   @SubscribeDeferred
-  def open(e: EditorExecuteOpenMazeEvent): Unit = {
-    eventSystem.dispatch(LoadMazeEvent(helpers.prompt.input))
+  def open(e: EditorExecuteExtendedModeEvent): Unit = {
+    val parts = helpers.prompt.input.split(" ", 2)
+    parts.head match {
+      case "e" => eventSystem.dispatch(LoadMazeEvent(parts(1)))
+      case "q" => eventSystem.dispatch(new CloseEditorEvent)
+      case "w" =>
+        val mazeName = parts(1)
+        // Write the maze layout
+        val mazePw = new PrintWriter(mazeName)
+        mazePw.write(
+          helpers.maze.withTileset(Tiles.squidlib,
+            _.tiles.transpose.map(
+              _.map(_.char.character).mkString
+            ).mkString("\n")
+          )
+        )
+        mazePw.close()
+        // Write entities
+        val jsonOutputStream = new BufferedOutputStream(new FileOutputStream(s"$mazeName.json"))
+        serialization.save(
+          jsonOutputStream,
+          new SaveFileFormat(helpers.entityIds(entitiesToSerialize))
+        )
+        jsonOutputStream.close()
+        // Notify user
+        eventSystem.dispatch(MessageEvent(s"Saved ${parts(1)}"))
+      case cmd => eventSystem.dispatch(MessageEvent(s"Unknown command: $cmd"))
+    }
     helpers.prompt.reset()
   }
 }

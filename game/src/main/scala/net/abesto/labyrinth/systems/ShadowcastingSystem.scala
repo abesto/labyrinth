@@ -17,8 +17,7 @@ class ShadowcastingSystem extends LabyrinthBaseSystem {
 
   override def processSystem(): Unit = {
     super.processSystem()
-    val playerEntityId = tagManager.getEntityId(Constants.Tags.player)
-    val playerPosition = positionMapper.get(playerEntityId)
+    val playerPosition = positionMapper.get(helpers.playerEntityId)
     val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
     val maze = mazeMapper.get(mazeEntityId).maze
     val fov = new FOV()

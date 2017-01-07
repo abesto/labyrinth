@@ -71,9 +71,9 @@ object InputMap {
       enter -> new SpellInputFinishEvent,
       escape -> new SpellInputAbortEvent
     ),
-    States[EditorOpenMazeState] -> promptInputMap(
-      enter -> new EditorExecuteOpenMazeEvent,
-      escape -> new EditorAbortOpenMazeEvent
+    States[EditorExtendedModeState] -> promptInputMap(
+      enter -> new EditorExecuteExtendedModeEvent,
+      escape -> new EditorAbortExtendedModeEvent
     ),
     States[MainMenuState] -> Map(
       upArrow -> MainMenuMoveEvent(_ - 1),

@@ -17,8 +17,8 @@ class PromptFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends
   def render(): Unit = {
     val input: PromptComponent = spellInputMapper.get(tagManger.getEntityId(Constants.Tags.prompt))
     clear(Color.black)
-    write(s"${input.prompt}: ${input.input}", 0, 0, Color.white, Color.black)
+    write(s"${input.prompt}${input.input}", 0, 0, Color.white, Color.black)
     val charUnderCursor = if (input.cursorPosition >= input.input.length) ' ' else input.input(input.cursorPosition)
-    write(charUnderCursor, input.prompt.length + 2 + input.cursorPosition, 0, Color.white, Color.darkGray)
+    write(charUnderCursor, input.prompt.length + input.cursorPosition, 0, Color.white, Color.darkGray)
   }
 }

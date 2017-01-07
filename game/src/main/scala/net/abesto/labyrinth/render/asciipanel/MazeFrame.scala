@@ -25,17 +25,17 @@ class MazeFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends F
   var helpers: Helpers = _
 
   def render(): Unit = {
-    val maze = helpers.maze
     val highlight = helpers.highlight.highlight _
     def backgroundColor(c: Coord): Color = highlight(c).getOrElse(AsciiPanel.black)
 
-    maze.translate(Tiles.dwarfFortress)
-    maze.tiles.foreach(_.foreach(t => write(
-      coalesceChar(maze, t),
-      t.x, t.y,
-      t.foregroundColorWithShadow,
-      backgroundColor(t.coord)
-    )))
+    helpers.maze.withTileset(Tiles.dwarfFortress, maze => {
+      maze.tiles.foreach(_.foreach(t => write(
+        coalesceChar(maze, t),
+        t.x, t.y,
+        t.foregroundColorWithShadow,
+        backgroundColor(t.coord)
+      )))
+    })
   }
 
   def coalesceChar(m: Maze, t: MazeTile): Char =
