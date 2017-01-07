@@ -7,10 +7,10 @@ import com.artemis.managers.TagManager
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.PromptComponent
 import net.abesto.labyrinth.fsm.InStates
-import net.abesto.labyrinth.fsm.States.GameSpellInputState
+import net.abesto.labyrinth.fsm.States.PromptState
 
-@InStates(Array(classOf[GameSpellInputState]))
-class SpellInputFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends Frame(topLeftX, topLeftY, width, height) {
+@InStates(Array(classOf[PromptState]))
+class PromptFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) extends Frame(topLeftX, topLeftY, width, height) {
   var tagManger: TagManager = _
   var spellInputMapper: ComponentMapper[PromptComponent] = _
 

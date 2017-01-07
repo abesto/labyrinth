@@ -12,7 +12,7 @@ class InputHandlerSystem extends LabyrinthBaseSystem {
 
   @SubscribeDeferred
   def input(e: KeyPressedEvent): Unit = {
-    val inputMap = InputMap.inputMap(helpers.state.current  )
+    val inputMap = InputMap.inputMap(helpers.state.current)
     inputMap.get(e.char).foreach(
       f => eventSystem.dispatch(f(world))
     )

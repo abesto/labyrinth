@@ -44,7 +44,8 @@ class Helpers extends BaseSystem {
   }
 
   def mazeEntityId: Int = tagManager.getEntityId(Constants.Tags.maze)
-  def maze: Maze = mazeMapper.get(mazeEntityId).maze
+  def mazeComponent: MazeComponent = mazeMapper.get(mazeEntityId)
+  def maze: Maze = mazeComponent.maze
   def highlight: MazeHighlightComponent = highlightMapper.get(mazeEntityId)
 
   def playerEntityId: Int = tagManager.getEntityId(Constants.Tags.player)

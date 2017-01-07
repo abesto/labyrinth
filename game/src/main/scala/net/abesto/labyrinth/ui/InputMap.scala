@@ -8,7 +8,7 @@ import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.States
 import net.abesto.labyrinth.fsm.States._
-import net.abesto.labyrinth.fsm.Transitions.{HidePopupEvent, SpellInputAbortEvent, SpellInputFinishEvent, SpellInputStartEvent}
+import net.abesto.labyrinth.fsm.Transitions._
 import net.mostlyoriginal.api.event.common.{Event, EventSystem}
 import squidpony.squidmath.Coord
 
@@ -46,6 +46,16 @@ object InputMap {
       p => p._1 -> p._2.map(_.asInputMapEntry).toMap
     )
 
+  protected def promptInputMap(ps: (InputMapKey, InputMapValue)*): Map[InputMapKey, InputMapValue] = ps.toMap ++ (
+    ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ', '-') ++ '0'.to('9')).map(c => ks(c) ->
+      e(PromptInputEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
+    ).toMap ++ Map[InputMapKey, InputMapValue](
+      backspace -> PromptInputEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),
+      leftArrow -> PromptInputEvent((s, cp) => (s, cp - 1)),
+      rightArrow -> PromptInputEvent((s, cp) => (s, cp + 1)),
+      delete -> PromptInputEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
+    ))
+
   protected val rawInputMap: Map[State, InputMap] = Map(
     States[GameMazeState] -> Map(
       Seq(leftArrow, 'h') -> walk(-1, 0),
@@ -57,17 +67,13 @@ object InputMap {
     States[GamePopupState] -> Map(
       space -> new HidePopupEvent
     ),
-    States[GameSpellInputState] -> (
-      ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ')).map(c => ks(c) ->
-        e(PromptInputEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
-      ).toMap ++ Map[InputMapKey, InputMapValue](
-        enter -> new SpellInputFinishEvent,
-        escape -> new SpellInputAbortEvent,
-        backspace -> PromptInputEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),
-        leftArrow -> PromptInputEvent((s, cp) => (s, cp - 1)),
-        rightArrow -> PromptInputEvent((s, cp) => (s, cp + 1)),
-        delete -> PromptInputEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
-      )
+    States[GameSpellInputState] -> promptInputMap(
+      enter -> new SpellInputFinishEvent,
+      escape -> new SpellInputAbortEvent
+    ),
+    States[EditorOpenMazeState] -> promptInputMap(
+      enter -> new EditorExecuteOpenMazeEvent,
+      escape -> new EditorAbortOpenMazeEvent
     ),
     States[MainMenuState] -> Map(
       upArrow -> MainMenuMoveEvent(_ - 1),

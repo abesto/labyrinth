@@ -2,10 +2,10 @@ package net.abesto.labyrinth.systems
 
 import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
-import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent, GenerateMazeEvent}
+import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
-import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, OpenEditorEvent}
+import net.abesto.labyrinth.fsm.Transitions.{CloseEditorEvent, EditorExecuteOpenMazeEvent, EditorOpenMazeEvent, OpenEditorEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.{EventSystem, Subscribe}
 import squidpony.squidmath.Coord
@@ -44,5 +44,16 @@ class EditorSystem extends LabyrinthBaseSystem {
     helpers.highlight.get(EditorMazeCursor).foreach(
       coord => helpers.maze.update(coord.getX, coord.getY, e.kind)
     )
+  }
+
+  @SubscribeDeferred
+  def openPrompt(e: EditorOpenMazeEvent): Unit = {
+    helpers.prompt.prompt = "Open maze"
+  }
+
+  @SubscribeDeferred
+  def open(e: EditorExecuteOpenMazeEvent): Unit = {
+    eventSystem.dispatch(LoadMazeEvent(helpers.prompt.input))
+    helpers.prompt.reset()
   }
 }

@@ -10,7 +10,7 @@ class Renderer() extends RendererImpl(
     0, 0,
     Constants.fullWidth, Constants.messageAreaHeight),
   new Popup,
-  new SpellInputFrame(
+  new PromptFrame(
     0, Constants.fullHeight - Constants.castingPromptHeight,
     Constants.fullWidth, Constants.castingPromptHeight),
   new MainMenuFrame(0, 0, Constants.fullWidth, Constants.fullHeight),
