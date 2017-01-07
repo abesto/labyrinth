@@ -7,13 +7,14 @@ object States {
   sealed class MainMenuState extends State {
     var selectedItem: Int = 0
   }
+  sealed trait PromptState extends State
 
   sealed class EditorState extends State
   sealed class TileEditorState extends EditorState
 
   sealed class GameState extends State
   sealed class GameMazeState extends GameState
-  sealed class GameSpellInputState extends GameState
+  sealed class GameSpellInputState extends GameState with PromptState
   sealed class GamePopupState extends GameState
 
   // Iterate over all the states and generate one instance per class
@@ -23,7 +24,8 @@ object States {
     val direct: Set[ClassSymbol] = cs.knownDirectSubclasses.map(_.asInstanceOf[ClassSymbol])
     direct ++ direct.flatMap(allKnownSublasses)
   }
-  private val instances: Map[Class[_ <: State], State] = allKnownSublasses(rum.reflectClass(rum.typeOf[State].typeSymbol.asClass).symbol).map(
+  private val instances: Map[Class[_ <: State], State] = allKnownSublasses(rum.reflectClass(rum.typeOf[State].typeSymbol.asClass).symbol)
+    .filterNot(_.isTrait).map(
     symbol => {
       val cls = rum.runtimeClass(symbol).asSubclass(classOf[State])
       cls -> cls.newInstance()

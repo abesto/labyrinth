@@ -21,6 +21,7 @@ object WorldDefinition {
       // Handle user input
       new InputHandlerSystem(),
       new MainMenuSystem(),
+      new PromptSystem(),
       // The Level Editor
       new EditorSystem(),
       new MazeGeneratorSystem(),
@@ -65,10 +66,10 @@ object WorldDefinition {
       .add(new TileComponent(Tiles.Kind.Player))
   }
 
-  protected def spellInput(world: World): Unit = {
+  protected def prompt(world: World): Unit = {
     val entity = world.createEntity()
-    world.getSystem(classOf[TagManager]).register(Constants.Tags.spellInput, entity)
-    entity.edit().add(new SpellInputComponent)
+    world.getSystem(classOf[TagManager]).register(Constants.Tags.prompt, entity)
+    entity.edit().add(new PromptComponent)
   }
 
   protected def state(world: World): Unit = {
@@ -84,7 +85,7 @@ object WorldDefinition {
     world.getSystem(classOf[Helpers]).setSerializer(serializer)
     maze(world)
     player(world)
-    spellInput(world)
+    prompt(world)
     state(world)
     world
   }

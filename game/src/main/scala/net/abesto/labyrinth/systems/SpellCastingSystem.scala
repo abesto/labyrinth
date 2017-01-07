@@ -2,11 +2,11 @@ package net.abesto.labyrinth.systems
 
 import net.abesto.labyrinth.events.{MessageEvent, SpellCastEvent}
 import net.abesto.labyrinth.fsm.InStates
-import net.abesto.labyrinth.fsm.States.GameSpellInputState
+import net.abesto.labyrinth.fsm.States.GameState
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
 
-@InStates(Array(classOf[GameSpellInputState]))
+@InStates(Array(classOf[GameState]))
 @DeferredEventHandlerSystem
 class SpellCastingSystem extends LabyrinthBaseSystem {
   var eventSystem: EventSystem = _

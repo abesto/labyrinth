@@ -31,7 +31,7 @@ object Constants {
     val state = "STATE"
     val maze = "MAZE"
     val player = "PLAYER"
-    val spellInput = "SPELL_INPUT"
+    val prompt = "PROMPT"
   }
 
   val mainMenuItems: Seq[(String, Transition[_, _])] = Seq(

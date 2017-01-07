@@ -59,14 +59,14 @@ object InputMap {
     ),
     States[GameSpellInputState] -> (
       ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ')).map(c => ks(c) ->
-        e(SpellInputOperationEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
+        e(PromptInputEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
       ).toMap ++ Map[InputMapKey, InputMapValue](
         enter -> new SpellInputFinishEvent,
         escape -> new SpellInputAbortEvent,
-        backspace -> SpellInputOperationEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),
-        leftArrow -> SpellInputOperationEvent((s, cp) => (s, cp - 1)),
-        rightArrow -> SpellInputOperationEvent((s, cp) => (s, cp + 1)),
-        delete -> SpellInputOperationEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
+        backspace -> PromptInputEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),
+        leftArrow -> PromptInputEvent((s, cp) => (s, cp - 1)),
+        rightArrow -> PromptInputEvent((s, cp) => (s, cp + 1)),
+        delete -> PromptInputEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
       )
     ),
     States[MainMenuState] -> Map(

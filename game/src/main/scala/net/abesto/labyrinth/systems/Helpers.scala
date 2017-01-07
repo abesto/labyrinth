@@ -25,6 +25,7 @@ class Helpers extends BaseSystem {
   protected var mazeMapper: ComponentMapper[MazeComponent] = _
   protected var stateMapper: ComponentMapper[StateComponent] = _
   protected var highlightMapper: ComponentMapper[MazeHighlightComponent] = _
+  protected var promptMapper: ComponentMapper[PromptComponent] = _
 
   @AspectDescriptor(all=Array(classOf[PositionComponent], classOf[LayerComponent]))
   protected var positionLayerAspect: Aspect.Builder = _
@@ -48,6 +49,8 @@ class Helpers extends BaseSystem {
 
   def playerEntityId: Int = tagManager.getEntityId(Constants.Tags.player)
   def state: StateComponent = stateMapper.get(tagManager.getEntityId(Constants.Tags.state))
+
+  def prompt: PromptComponent = promptMapper.get(tagManager.getEntityId(Constants.Tags.prompt))
 
   protected var serializer: JsonArtemisSerializer = _
 

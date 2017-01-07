@@ -1,55 +1,44 @@
 package net.abesto.labyrinth.systems
 
-import com.artemis.ComponentMapper
-import com.artemis.managers.TagManager
-import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.SpellTarget
-import net.abesto.labyrinth.components.SpellInputComponent
+import net.abesto.labyrinth.components.PromptComponent
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.InStates
-import net.abesto.labyrinth.fsm.States.GameSpellInputState
+import net.abesto.labyrinth.fsm.States.GameState
 import net.abesto.labyrinth.fsm.Transitions.{SpellInputAbortEvent, SpellInputFinishEvent, SpellInputStartEvent}
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
-import net.abesto.labyrinth.magic.SpellParser
+import net.abesto.labyrinth.magic.{Spell, SpellParser}
 import net.mostlyoriginal.api.event.common.EventSystem
 
 import scala.util.Random
 
-@InStates(Array(classOf[GameSpellInputState]))
+@InStates(Array(classOf[GameState]))
 @DeferredEventHandlerSystem
 class SpellInputSystem(parser: SpellParser) extends LabyrinthBaseSystem {
-  var tagManager: TagManager = _
   var eventSystem: EventSystem = _
-  var spellInputMapper: ComponentMapper[SpellInputComponent] = _
   var helpers: Helpers = _
 
-  def spellInputEntityId: Int = tagManager.getEntityId(Constants.Tags.spellInput)
-  def spellInput: SpellInputComponent = spellInputMapper.get(spellInputEntityId)
+  def prompt: PromptComponent = helpers.prompt
 
   val promptOptions: Seq[String] = Seq("Cast", "Invoke", "Mumble", "Incant", "Whisper", "Chant")
   def randomPrompt: String = promptOptions(Random.nextInt(promptOptions.length))
 
   def reset(): Unit = {
-    spellInput.input = ""
-    spellInput.cursorPosition = 0
-    spellInput.spell = None
+    prompt.reset()
     helpers.highlight.clear(SpellTarget)
   }
 
+  def parseSpell(): Option[Spell] = parser.parse(prompt.input)
+
   @SubscribeDeferred
   def startCasting(e: SpellInputStartEvent): Unit = {
-    spellInput.prompt = randomPrompt
     reset()
+    prompt.prompt = randomPrompt
   }
 
   @SubscribeDeferred
-  def applyOperation(e: SpellInputOperationEvent): Unit = {
-    val p = e.op(spellInput.input, spellInput.cursorPosition)
-    spellInput.input = p._1
-    spellInput.cursorPosition = math.min(spellInput.input.length, math.max(0, p._2))
-    spellInput.spell = parser.parse(spellInput.input)
-
-   spellInput.spell match {
+  def applyOperation(e: PromptInputEvent): Unit = {
+    parseSpell() match {
      case Some(spell) => helpers.highlight.set(SpellTarget, spell.target.affectedTiles(world))
      case None => helpers.highlight.clear(SpellTarget)
    }
@@ -62,7 +51,7 @@ class SpellInputSystem(parser: SpellParser) extends LabyrinthBaseSystem {
 
   @SubscribeDeferred
   def finish(e: SpellInputFinishEvent): Unit = {
-    eventSystem.dispatch(SpellCastEvent(helpers.playerEntityId, spellInput.spell))
+    eventSystem.dispatch(SpellCastEvent(helpers.playerEntityId, parseSpell()))
     reset()
   }
 }

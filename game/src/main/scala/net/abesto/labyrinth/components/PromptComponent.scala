@@ -5,10 +5,15 @@ import com.artemis.annotations.Transient
 import net.abesto.labyrinth.magic.Spell
 
 @Transient
-class SpellInputComponent extends Component {
+class PromptComponent extends Component {
   var prompt: String = ""
   var input: String = ""
   var cursorPosition: Int = 0
-  var spell: Option[Spell] = None
+
+  def reset(): Unit = {
+    prompt = ""
+    input = ""
+    cursorPosition = 0
+  }
 }
 
