@@ -49,6 +49,10 @@ class Helpers extends BaseSystem {
     )
   }
 
+  def entitiesAtPosition(layer: Layer, coord: Coord): Seq[Entity] = {
+    entityIdsAtPosition(layer, coord).map(world.getEntity)
+  }
+
   def mazeEntityId: Int = tagManager.getEntityId(Constants.Tags.maze)
   def mazeComponent: MazeComponent = mazeMapper.get(mazeEntityId)
   def maze: Maze = mazeComponent.maze

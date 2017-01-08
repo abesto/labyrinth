@@ -14,6 +14,7 @@ object States {
   sealed class TileEditorState extends EditorState
   sealed class EditorExtendedModeState extends EditorState with PromptState
   sealed class ItemEditorState extends EditorState
+  sealed class PopupTitleEditorState extends EditorState with PromptState
 
   sealed class GameState extends State
   sealed class GameMazeState extends GameState

@@ -1,12 +1,14 @@
 package net.abesto.labyrinth
 
-import com.artemis.{ArchetypeBuilder, World}
+import com.artemis.{ArchetypeBuilder, Component, World}
 import net.abesto.labyrinth.Tiles.Kind._
-import net.abesto.labyrinth.components.{LayerComponent, PositionComponent}
+import net.abesto.labyrinth.components.LayerComponent.Layer
+import net.abesto.labyrinth.components.{LayerComponent, PopupTriggerComponent, PositionComponent}
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
+import net.abesto.labyrinth.systems.{EditorNoopEvent, EditorSystem}
 import net.abesto.labyrinth.ui.InputMap._
 import net.mostlyoriginal.api.event.common.Event
 import squidpony.squidmath.Coord
@@ -44,8 +46,13 @@ object Constants {
     "Quit" -> new MainMenuQuitEvent
   )
 
-  case class EditorAction(tiles: Seq[Tiles.Kind], key: Char, description: String, event: Event) {
-    def asInputMapEntry: (Seq[Char], (World) => Event) = Seq(key) -> ((_: World) => event)
+  case class EditorAction(tiles: Seq[Tiles.Kind], key: Char, description: String, event: Event, enabled: EditorSystem => Boolean = _ => true) {
+    def asInputMapEntry: (Seq[Char], (World) => Event) = Seq(key) -> ((w: World) =>
+      if (enabled(w.getSystem(classOf[EditorSystem]))) {
+        event
+      } else {
+        new EditorNoopEvent
+      })
   }
   def ExModeAction(tiles: Seq[Tiles.Kind], description: String) = EditorAction(tiles, 0, description, null)
   implicit def oneKindToSeq(k: Tiles.Kind): Seq[Tiles.Kind] = Seq(k)
@@ -58,6 +65,13 @@ object Constants {
     EditorAction(LeftArrow, leftArrow, "Maze cursor left", EditorMoveMazeCursorEvent(_.add(Coord.get(-1, 0)))),
     EditorAction(RightArrow, rightArrow, "Maze cursor right", EditorMoveMazeCursorEvent(_.add(Coord.get(1, 0))))
   )
+
+  def hasItem(es: EditorSystem): Boolean = es.helpers.entityIdsAtPosition(Layer.Item, es.cursorSingleTile).nonEmpty
+  def hasNoItem(es: EditorSystem): Boolean = !hasItem(es)
+  def hasItemWith(cs: Class[_ <: Component]*)(es: EditorSystem): Boolean =
+    es.helpers.entitiesAtPosition(Layer.Item, es.cursorSingleTile).exists(
+      entity => cs.forall(entity.getComponent(_) != null)
+    )
 
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
     States[EditorState] -> (cursorMazeActions ++ Seq(
@@ -74,8 +88,8 @@ object Constants {
       EditorAction("ESC", 27, "Back", new CloseTileEditorEvent)
     )),
     States[ItemEditorState] -> (cursorMazeActions ++ Seq(
-      EditorAction('b', 'b', "Place book", EditorPlaceItemEvent(_.book)),
-      EditorAction('x', 'x', "Remove item", new EditorRemoveItemEvent),
+      EditorAction('b', 'b', "Place book", EditorPlaceItemEvent(_.book), hasNoItem),
+      EditorAction('x', 'x', "Remove item", new EditorRemoveItemEvent, hasItem),
       EditorAction("ESC", 27, "Back", new CloseItemEditorEvent)
     )),
     States[EditorExtendedModeState] -> Seq(

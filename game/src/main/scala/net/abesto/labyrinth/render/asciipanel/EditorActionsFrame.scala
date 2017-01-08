@@ -24,7 +24,9 @@ class EditorActionsFrame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) 
   }
 
   protected def actions(): Unit = {
-    Constants.editorActions.getOrElse(helpers.state.current.asInstanceOf[EditorState], Seq.empty).zipWithIndex.foreach {
+    Constants.editorActions.getOrElse(helpers.state.current.asInstanceOf[EditorState], Seq.empty)
+      .filter(_.enabled(editorSystem))
+      .zipWithIndex.foreach {
       case (action, idx) =>
         val tileString: String = action.tiles.map(Tiles.dwarfFortress.toChar).mkString
         write(tileString, marginLeft, marginTop + idx * lineHeight, AsciiPanel.brightWhite, Color.gray)
