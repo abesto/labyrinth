@@ -4,15 +4,12 @@ import java.io.{BufferedInputStream, File, FileInputStream}
 
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.{TagManager, WorldSerializationManager}
-import net.abesto.labyrinth.events.{LoadMazeEvent, MazeLoadedEvent, MessageEvent}
+import net.abesto.labyrinth.events.{EditorMazeLoadedEvent, LoadMazeEvent, MessageEvent}
+import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.{EditorState, GameState}
-import net.abesto.labyrinth.fsm.Transitions.NewGameEvent
-import net.abesto.labyrinth.fsm.{InStates, States}
 import net.abesto.labyrinth.macros._
 import net.abesto.labyrinth.maze._
 import net.mostlyoriginal.api.event.common.EventSystem
-
-import scala.io.Source
 
 
 @InStates(Array(classOf[GameState], classOf[EditorState]))
@@ -47,19 +44,14 @@ class MazeLoaderSystem extends LabyrinthBaseSystem {
         world.delete(oldPlayerEntityId)
         helpers.mazeComponent.maze = maze
 
-        eventSystem.dispatch(MazeLoadedEvent(actualPath, maze, saveFileFormat.entities.size))
+        if (helpers.state.isActive[EditorState]) {
+          eventSystem.dispatch(EditorMazeLoadedEvent(actualPath, maze, saveFileFormat.entities.size))
+        }
       }
     } catch {
       case exc: Exception =>
         logger.error(s"Failed to load map ${e.name}", exc)
         eventSystem.dispatch(MessageEvent(s"Failed to load map ${e.name}. Maybe misspelled?"))
     }
-  }
-
-  @SubscribeDeferred
-  def newGame(e: NewGameEvent): Unit = {
-    eventSystem.dispatch(LoadMazeEvent(
-      getClass.getResource("/maps/1-dry").getPath
-    ))
   }
 }

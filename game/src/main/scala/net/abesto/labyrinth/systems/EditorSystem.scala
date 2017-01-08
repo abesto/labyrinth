@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import asciiPanel.AsciiPanel
-import com.artemis.{Aspect, ComponentMapper}
 import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.WorldSerializationManager
+import com.artemis.{Aspect, ComponentMapper}
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
 import net.abesto.labyrinth.components.{PersistInMazeMarker, PositionComponent}
 import net.abesto.labyrinth.events._
@@ -172,7 +172,7 @@ class EditorSystem extends LabyrinthBaseSystem {
   }
 
   @Subscribe
-  def opened(e: MazeLoadedEvent): Unit = {
+  def opened(e: EditorMazeLoadedEvent): Unit = {
     status(
       '"' + e.path + '"' + s" ${e.maze.width}x${e.maze.height} maze, ${e.entityCount} entities"
     )

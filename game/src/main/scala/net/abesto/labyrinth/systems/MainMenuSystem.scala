@@ -1,7 +1,7 @@
 package net.abesto.labyrinth.systems
 
 import net.abesto.labyrinth.Constants
-import net.abesto.labyrinth.events.{MainMenuMoveEvent, MainMenuSelectedEvent}
+import net.abesto.labyrinth.events.{LoadMazeEvent, MainMenuMoveEvent, MainMenuSelectedEvent}
 import net.abesto.labyrinth.fsm.States.MainMenuState
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -20,8 +20,10 @@ class MainMenuSystem extends LabyrinthBaseSystem {
     selectedItem = math.min(Constants.mainMenuItems.length - 1, math.max(0, e.op(selectedItem)) )
 
   @SubscribeDeferred
-  def select(e: MainMenuSelectedEvent): Unit =
+  def select(e: MainMenuSelectedEvent): Unit = {
     eventSystem.dispatch(
       Constants.mainMenuItems(selectedItem)._2
     )
+    eventSystem.dispatch(LoadMazeEvent("/maps/1-dry"))
+  }
 }
