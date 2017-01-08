@@ -29,7 +29,7 @@ class EditorSystem extends LabyrinthBaseSystem {
   var mazeLoaderSystem: MazeLoaderSystem = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var serialization: WorldSerializationManager = _
-  var itemFactory: ItemFactory = _
+  var entityFactory: EntityFactory = _
 
   // Transient state
   var filename: Option[String] = None
@@ -200,7 +200,7 @@ class EditorSystem extends LabyrinthBaseSystem {
 
   @SubscribeDeferred
   def placeItem(e: EditorPlaceItemEvent): Unit = {
-    e.factoryMethod(itemFactory)(cursorSingleTile)
+    e.factoryMethod(entityFactory)(cursorSingleTile)
   }
 
   @SubscribeDeferred

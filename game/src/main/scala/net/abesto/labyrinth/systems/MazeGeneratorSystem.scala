@@ -13,21 +13,20 @@ import squidpony.squidgrid.mapping.DungeonUtility
 
 @DeferredEventHandlerSystem
 class MazeGeneratorSystem extends LabyrinthBaseSystem {
-  var tagManager: TagManager = _
+  var helpers: Helpers = _
   var positionMapper: ComponentMapper[PositionComponent] = _
-  var mazeMapper: ComponentMapper[MazeComponent] = _
   var eventSystem: EventSystem = _
+  var mazeLoaderSystem: MazeLoaderSystem = _
+  var entityFactory: EntityFactory = _
 
   @SubscribeDeferred
   def generate(e: GenerateMazeEvent): Unit = {
     val builder = MazeBuilder.random().hashesToLines().smoothFloor()
     val startPos = new DungeonUtility().randomFloor(builder.get.chars)
 
-    val playerEntityId = tagManager.getEntityId(Constants.Tags.player)
-    positionMapper.get(playerEntityId).coord = startPos
-
-    val mazeEntityId = tagManager.getEntityId(Constants.Tags.maze)
-    mazeMapper.get(mazeEntityId).maze = builder.roughFloor().get
+    mazeLoaderSystem.unload()
+    entityFactory.player(startPos)
+    helpers.mazeComponent.maze = builder.roughFloor().get
   }
 
   @SubscribeDeferred

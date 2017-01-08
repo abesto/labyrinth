@@ -20,7 +20,7 @@ object WorldDefinition {
       // Custom base systems
       new EventSystem(),
       new Helpers(),
-      new ItemFactory(),
+      new EntityFactory(),
       // Handle user input
       new InputHandlerSystem(),
       new MainMenuSystem(),
@@ -60,16 +60,6 @@ object WorldDefinition {
     world.getSystem(classOf[TagManager]).register(Constants.Tags.maze, maze)
   }
 
-  protected def player(world: World): Unit = {
-    val player = world.createEntity()
-    world.getSystem(classOf[TagManager]).register(Constants.Tags.player, player)
-    player.edit()
-      .add(new PositionComponent())
-      .add(new LayerComponent(LayerComponent.Layer.Creature))
-      .add(new TileComponent(Tiles.Kind.Player))
-      .add(new PersistInMazeMarker)
-  }
-
   protected def prompt(world: World): Unit = {
     val entity = world.createEntity()
     world.getSystem(classOf[TagManager]).register(Constants.Tags.prompt, entity)
@@ -88,7 +78,6 @@ object WorldDefinition {
     world.getSystem(classOf[WorldSerializationManager]).setSerializer(serializer.asInstanceOf[WorldSerializationManager.ArtemisSerializer[_]])
     world.getSystem(classOf[Helpers]).setSerializer(serializer)
     maze(world)
-    player(world)
     prompt(world)
     state(world)
     world

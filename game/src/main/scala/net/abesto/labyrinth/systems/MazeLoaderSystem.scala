@@ -2,8 +2,11 @@ package net.abesto.labyrinth.systems
 
 import java.io.{BufferedInputStream, File, FileInputStream}
 
+import com.artemis.Aspect
+import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.{TagManager, WorldSerializationManager}
+import net.abesto.labyrinth.components.PersistInMazeMarker
 import net.abesto.labyrinth.events.{EditorMazeLoadedEvent, LoadMazeEvent, MessageEvent}
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.{EditorState, GameState}
@@ -20,6 +23,9 @@ class MazeLoaderSystem extends LabyrinthBaseSystem {
   var serializationManager: WorldSerializationManager = _
   var eventSystem: EventSystem = _
 
+  @AspectDescriptor(all=Array(classOf[PersistInMazeMarker]))
+  var mazeEntitiesAspectBuilder: Aspect.Builder = _
+
   def path(filename: String): String =
     if (helpers.state.isActive[EditorState]) {
       filename
@@ -34,16 +40,14 @@ class MazeLoaderSystem extends LabyrinthBaseSystem {
     try {
       if (exists(e.name)) {
         val actualPath: String = path(e.name)
-        val maze = MazeBuilder.fromFile(actualPath).hashesToLines().get
-        val oldPlayerEntityId = helpers.playerEntityId
+        val maze = MazeBuilder.fromFile(actualPath).get
 
         val inputStream = new BufferedInputStream(new FileInputStream(s"$actualPath.json"))
         val saveFileFormat = serializationManager.load(inputStream, classOf[SaveFileFormat])
         inputStream.close()
 
-        world.delete(oldPlayerEntityId)
+        unload()
         helpers.mazeComponent.maze = maze
-
         if (helpers.state.isActive[EditorState]) {
           eventSystem.dispatch(EditorMazeLoadedEvent(actualPath, maze, saveFileFormat.entities.size))
         }
@@ -53,5 +57,10 @@ class MazeLoaderSystem extends LabyrinthBaseSystem {
         logger.error(s"Failed to load map ${e.name}", exc)
         eventSystem.dispatch(MessageEvent(s"Failed to load map ${e.name}. Maybe misspelled?"))
     }
+  }
+
+  def unload(): Unit = {
+    val mazeEntities = helpers.entityIdsSeq(mazeEntitiesAspectBuilder)
+    mazeEntities.foreach(world.delete)
   }
 }
