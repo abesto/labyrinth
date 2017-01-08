@@ -13,11 +13,14 @@ import squidpony.squidmath.Coord
 object WorldDefinition {
   protected def worldConfiguration(renderer: Renderer): WorldConfiguration = new WorldConfigurationBuilder()
     .`with`(
+      // Artemis base systems
       new StateTransitionSystem(),
       new WorldSerializationManager(),
       new TagManager(),
+      // Custom base systems
       new EventSystem(),
       new Helpers(),
+      new ItemFactory(),
       // Handle user input
       new InputHandlerSystem(),
       new MainMenuSystem(),

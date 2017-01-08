@@ -28,6 +28,7 @@ class EditorSystem extends LabyrinthBaseSystem {
   var mazeLoaderSystem: MazeLoaderSystem = _
   var positionMapper: ComponentMapper[PositionComponent] = _
   var serialization: WorldSerializationManager = _
+  var itemFactory: ItemFactory = _
 
   // Transient state
   var filename: Option[String] = None
@@ -178,14 +179,31 @@ class EditorSystem extends LabyrinthBaseSystem {
     )
   }
 
+  def cursorSingleTile: Coord = helpers.highlight.get(EditorMazeCursor).ensuring(_.length == 1).head
+
   @SubscribeDeferred
   def setPlayerPosition(e: EditorSetPlayerPositionEvent): Unit = {
-    val pos = helpers.highlight.get(EditorMazeCursor).ensuring(_.length == 1).head
+    val pos = cursorSingleTile
     val posComponent = positionMapper.get(helpers.playerEntityId)
     if (!posComponent.coord.equals(pos)) {
       positionMapper.get(helpers.playerEntityId).coord = pos
       status(s"Set player starting position to $pos")
       modified = true
     }
+  }
+
+  @SubscribeDeferred
+  def openItemEditor(e: OpenItemEditorEvent): Unit = {
+    mode("ITEMS")
+  }
+
+  @SubscribeDeferred
+  def placeItem(e: EditorPlaceItemEvent): Unit = {
+    e.factoryMethod(itemFactory)(cursorSingleTile)
+  }
+
+  @SubscribeDeferred
+  def closeItemEditor(e: CloseItemEditorEvent): Unit = {
+    helpers.prompt.reset()
   }
 }

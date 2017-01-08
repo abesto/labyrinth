@@ -1,8 +1,9 @@
 package net.abesto.labyrinth
 
-import com.artemis.World
+import com.artemis.{ArchetypeBuilder, World}
 import net.abesto.labyrinth.Tiles.Kind._
-import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent, EditorSetPlayerPositionEvent}
+import net.abesto.labyrinth.components.{LayerComponent, PositionComponent}
+import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
@@ -63,6 +64,7 @@ object Constants {
       EditorAction(':', ':', "vi-like ex mode (:w, :e, :q)", new EditorOpenExtendedModeEvent),
       EditorAction('g', 'g', "Generate new maze", new EditorGenerateMazeEvent),
       EditorAction('t', 't', "Edit Tiles", new OpenTileEditorEvent),
+      EditorAction('i', 'i', "Place / Remove items", new OpenItemEditorEvent),
       EditorAction('@', '@', "Set player starting position", new EditorSetPlayerPositionEvent)
     )),
     States[TileEditorState] -> (cursorMazeActions ++ Seq(
@@ -70,6 +72,10 @@ object Constants {
       EditorAction(SmoothFloor, '.', "Smooth Floor", EditorChangeTileEvent(SmoothFloor)),
       EditorAction(ShallowWater, '~', "Shallow Water", EditorChangeTileEvent(ShallowWater)),
       EditorAction("ESC", 27, "Back", new CloseTileEditorEvent)
+    )),
+    States[ItemEditorState] -> (cursorMazeActions ++ Seq(
+      EditorAction('b', 'b', "Place book", EditorPlaceItemEvent(_.book)),
+      EditorAction("ESC", 27, "Back", new CloseItemEditorEvent)
     )),
     States[EditorExtendedModeState] -> Seq(
       ExModeAction('w', "Save currently open file"),
