@@ -38,7 +38,9 @@ trait DeferredEventHandlerSystemImpl extends BaseSystem {
   }
 
   def enqueue[T <: Event](e: T)(implicit mf: Manifest[T]): Unit = {
-    handlers(mf).asInstanceOf[Handler[T]].enqueue(e)
+    if (isEnabled) {
+      handlers(mf).asInstanceOf[Handler[T]].enqueue(e)
+    }
   }
 
   def handlersWithNonEmptyInboxes: Iterable[Handler[_]] = handlers.values.filter(_.inbox.nonEmpty)

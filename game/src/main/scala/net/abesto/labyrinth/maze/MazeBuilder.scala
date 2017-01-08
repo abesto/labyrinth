@@ -66,7 +66,7 @@ object MazeBuilder {
   def fromFile(name: String): MazeBuilder = {
     val tileset = Tiles.squidlib // Because maps are stored in unicode - easier to work with
     val maze = Maze.empty(tileset)
-    Source.fromURL(getClass.getResource(s"/maps/$name")).getLines().zipWithIndex.foreach {
+    Source.fromFile(name).getLines().zipWithIndex.foreach {
       case (line, y) => line.zipWithIndex.foreach {
         case (char, x) => maze.update(x, y, char)
       }

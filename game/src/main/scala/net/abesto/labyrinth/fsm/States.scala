@@ -8,8 +8,9 @@ object States {
     var selectedItem: Int = 0
   }
   sealed trait PromptState extends State
+  sealed trait PromptAsStatusState extends State
 
-  sealed class EditorState extends State
+  sealed class EditorState extends State with PromptAsStatusState
   sealed class TileEditorState extends EditorState
   sealed class EditorExtendedModeState extends EditorState with PromptState
 

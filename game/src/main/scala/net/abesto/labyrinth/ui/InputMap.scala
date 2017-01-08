@@ -47,7 +47,7 @@ object InputMap {
     )
 
   protected def promptInputMap(ps: (InputMapKey, InputMapValue)*): Map[InputMapKey, InputMapValue] = ps.toMap ++ (
-    ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ', '-') ++ '0'.to('9')).map(c => ks(c) ->
+    ('a'.to('z') ++ 'A'.to('Z') ++ Seq(' ', '-', '/') ++ '0'.to('9')).map(c => ks(c) ->
       e(PromptInputEvent((s, cp) => (s.take(cp) + c + s.drop(cp), cp + 1)))
     ).toMap ++ Map[InputMapKey, InputMapValue](
       backspace -> PromptInputEvent((s, cp) => (s.take(cp - 1) + s.drop(cp), cp - 1)),

@@ -10,6 +10,8 @@ import net.abesto.labyrinth.ui.InputMap._
 import net.mostlyoriginal.api.event.common.Event
 import squidpony.squidmath.Coord
 
+import scala.language.implicitConversions
+
 
 object Constants {
   val mazeWidth = 70
@@ -41,9 +43,12 @@ object Constants {
     "Quit" -> new MainMenuQuitEvent
   )
 
-  case class EditorAction(tile: Tiles.Kind, key: Char, description: String, event: Event) {
+  case class EditorAction(tiles: Seq[Tiles.Kind], key: Char, description: String, event: Event) {
     def asInputMapEntry: (Seq[Char], (World) => Event) = Seq(key) -> ((_: World) => event)
   }
+  implicit def oneKindToSeq(k: Tiles.Kind): Seq[Tiles.Kind] = Seq(k)
+  implicit def charToKinds(c: Char): Seq[Tiles.Kind] = Seq(Tiles.squidlib.toKind(c))
+  implicit def stringToKinds(s: String): Seq[Tiles.Kind] = s.toCharArray.flatMap(charToKinds)
 
   lazy val cursorMazeActions: Seq[EditorAction] = Seq(
     EditorAction(UpArrow, upArrow, "Maze cursor up", EditorMoveMazeCursorEvent(_.add(Coord.get(0, -1)))),
@@ -54,15 +59,15 @@ object Constants {
 
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
     States[EditorState] -> (cursorMazeActions ++ Seq(
-      EditorAction(AlphaNum(':'), ':', "vi-like ex mode (:w, :e, :q)", new EditorOpenExtendedModeEvent),
-      EditorAction(AlphaNum('g'), 'g', "Generate new maze", new EditorGenerateMazeEvent),
-      EditorAction(AlphaNum('t'), 't', "Edit Tiles", new OpenTileEditorEvent)
+      EditorAction(':', ':', "vi-like ex mode (:w, :e, :q)", new EditorOpenExtendedModeEvent),
+      EditorAction('g', 'g', "Generate new maze", new EditorGenerateMazeEvent),
+      EditorAction('t', 't', "Edit Tiles", new OpenTileEditorEvent)
     )),
     States[TileEditorState] -> (cursorMazeActions ++ Seq(
       EditorAction(WallHash, '#', "Wall", EditorChangeTileEvent(WallHash)),
       EditorAction(SmoothFloor, '.', "Smooth Floor", EditorChangeTileEvent(SmoothFloor)),
       EditorAction(ShallowWater, '~', "Shallow Water", EditorChangeTileEvent(ShallowWater)),
-      EditorAction(AlphaNum('q'), 'q', "Back", new CloseTileEditorEvent)
+      EditorAction("ESC", 27, "Back", new CloseTileEditorEvent)
     ))
   )
 }

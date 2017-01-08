@@ -6,6 +6,9 @@ import net.abesto.labyrinth.{Constants, Tiles}
 import squidpony.squidmath.Coord
 
 case class Maze(var tileset: Tiles.Tileset, var tiles: Array[Array[MazeTile]]) {
+  def width: Int = tiles.length
+  def height: Int = tiles(0).length.ensuring(tiles.forall(_.length == tiles(0).length))
+
   def tile(p: PositionComponent): MazeTile = tile(p.coord)
   def tile(c: Coord): MazeTile = tiles(c.x)(c.y)
   def tile(x: Int, y: Int): MazeTile = tiles(x)(y)
