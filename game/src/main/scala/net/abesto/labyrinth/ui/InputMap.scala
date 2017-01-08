@@ -43,7 +43,7 @@ object InputMap {
 
   protected val editorActionsInputMap: Map[State, InputMap] =
     Constants.editorActions.map(
-      p => p._1 -> p._2.map(_.asInputMapEntry).toMap
+      p => p._1 -> p._2.filterNot(_.event == null).map(_.asInputMapEntry).toMap
     )
 
   protected def promptInputMap(ps: (InputMapKey, InputMapValue)*): Map[InputMapKey, InputMapValue] = ps.toMap ++ (
@@ -82,8 +82,16 @@ object InputMap {
     )
   )
 
-  val inputMap: Map[State, Map[Char, (World) => Event]] =
-    (rawInputMap ++ editorActionsInputMap).mapValues(_.flatMap(p => p._1.map(_ -> p._2)))
+  val inputMap: Map[State, Map[Char, (World) => Event]] = {
+    val x = for {
+      state <- rawInputMap.keySet ++ editorActionsInputMap.keySet
+      raw = rawInputMap.getOrElse(state, Map.empty)
+      editor = editorActionsInputMap.getOrElse(state, Map.empty)
+    } yield {
+      state -> (raw ++ editor)
+    }
+    x.toMap.mapValues(_.flatMap(p => p._1.map(_ -> p._2)))
+  }
 
   protected def dispatchEvent(e: Event): (World) => Unit =
     (w: World) => w.getSystem(classOf[EventSystem]).dispatch(e)

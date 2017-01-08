@@ -53,7 +53,7 @@ object Tiles {
 
     // Alphanumeric
     case class AlphaNum(char: Char) extends Kind {
-      assert(char.isLetterOrDigit || ":".contains(char))
+      assert(char.isLetterOrDigit || ": ".contains(char))
     }
   }
 

@@ -46,6 +46,7 @@ object Constants {
   case class EditorAction(tiles: Seq[Tiles.Kind], key: Char, description: String, event: Event) {
     def asInputMapEntry: (Seq[Char], (World) => Event) = Seq(key) -> ((_: World) => event)
   }
+  def ExModeAction(tiles: Seq[Tiles.Kind], description: String) = EditorAction(tiles, 0, description, null)
   implicit def oneKindToSeq(k: Tiles.Kind): Seq[Tiles.Kind] = Seq(k)
   implicit def charToKinds(c: Char): Seq[Tiles.Kind] = Seq(Tiles.squidlib.toKind(c))
   implicit def stringToKinds(s: String): Seq[Tiles.Kind] = s.toCharArray.flatMap(charToKinds)
@@ -68,6 +69,13 @@ object Constants {
       EditorAction(SmoothFloor, '.', "Smooth Floor", EditorChangeTileEvent(SmoothFloor)),
       EditorAction(ShallowWater, '~', "Shallow Water", EditorChangeTileEvent(ShallowWater)),
       EditorAction("ESC", 27, "Back", new CloseTileEditorEvent)
-    ))
+    )),
+    States[EditorExtendedModeState] -> Seq(
+      ExModeAction('w', "Save currently open file"),
+      ExModeAction("w PATH", "Save as PATH"),
+      ExModeAction("e PATH", "Open PATH"),
+      ExModeAction('q', "Quit editor"),
+      ExModeAction("ESC", "Back")
+    )
   )
 }
