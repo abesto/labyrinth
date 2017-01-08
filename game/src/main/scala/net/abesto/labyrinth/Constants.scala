@@ -75,6 +75,7 @@ object Constants {
     )),
     States[ItemEditorState] -> (cursorMazeActions ++ Seq(
       EditorAction('b', 'b', "Place book", EditorPlaceItemEvent(_.book)),
+      EditorAction('x', 'x', "Remove item", new EditorRemoveItemEvent),
       EditorAction("ESC", 27, "Back", new CloseItemEditorEvent)
     )),
     States[EditorExtendedModeState] -> Seq(

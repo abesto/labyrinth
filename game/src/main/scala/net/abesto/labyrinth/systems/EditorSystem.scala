@@ -9,6 +9,7 @@ import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.WorldSerializationManager
 import com.artemis.{Aspect, ComponentMapper}
+import net.abesto.labyrinth.components.LayerComponent.Layer
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
 import net.abesto.labyrinth.components.{PersistInMazeMarker, PositionComponent}
 import net.abesto.labyrinth.events._
@@ -200,6 +201,11 @@ class EditorSystem extends LabyrinthBaseSystem {
   @SubscribeDeferred
   def placeItem(e: EditorPlaceItemEvent): Unit = {
     e.factoryMethod(itemFactory)(cursorSingleTile)
+  }
+
+  @SubscribeDeferred
+  def removeItem(e: EditorRemoveItemEvent): Unit = {
+    helpers.entityIdsAtPosition(Layer.Item, cursorSingleTile).foreach(world.delete)
   }
 
   @SubscribeDeferred
