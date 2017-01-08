@@ -2,7 +2,7 @@ package net.abesto.labyrinth
 
 import com.artemis.World
 import net.abesto.labyrinth.Tiles.Kind._
-import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent}
+import net.abesto.labyrinth.events.{EditorChangeTileEvent, EditorGenerateMazeEvent, EditorMoveMazeCursorEvent, EditorSetPlayerPositionEvent}
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
 import net.abesto.labyrinth.fsm._
@@ -62,7 +62,8 @@ object Constants {
     States[EditorState] -> (cursorMazeActions ++ Seq(
       EditorAction(':', ':', "vi-like ex mode (:w, :e, :q)", new EditorOpenExtendedModeEvent),
       EditorAction('g', 'g', "Generate new maze", new EditorGenerateMazeEvent),
-      EditorAction('t', 't', "Edit Tiles", new OpenTileEditorEvent)
+      EditorAction('t', 't', "Edit Tiles", new OpenTileEditorEvent),
+      EditorAction('@', '@', "Set player starting position", new EditorSetPlayerPositionEvent)
     )),
     States[TileEditorState] -> (cursorMazeActions ++ Seq(
       EditorAction(WallHash, '#', "Wall", EditorChangeTileEvent(WallHash)),

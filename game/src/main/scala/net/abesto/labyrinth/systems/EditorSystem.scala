@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import asciiPanel.AsciiPanel
-import com.artemis.Aspect
+import com.artemis.{Aspect, ComponentMapper}
 import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.WorldSerializationManager
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
-import net.abesto.labyrinth.components.PersistInMazeMarker
+import net.abesto.labyrinth.components.{PersistInMazeMarker, PositionComponent}
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
@@ -26,6 +26,7 @@ class EditorSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
   var mazeLoaderSystem: MazeLoaderSystem = _
+  var positionMapper: ComponentMapper[PositionComponent] = _
   var serialization: WorldSerializationManager = _
 
   // Transient state
@@ -175,5 +176,16 @@ class EditorSystem extends LabyrinthBaseSystem {
     status(
       '"' + e.path + '"' + s" ${e.maze.width}x${e.maze.height} maze, ${e.entityCount} entities"
     )
+  }
+
+  @SubscribeDeferred
+  def setPlayerPosition(e: EditorSetPlayerPositionEvent): Unit = {
+    val pos = helpers.highlight.get(EditorMazeCursor).ensuring(_.length == 1).head
+    val posComponent = positionMapper.get(helpers.playerEntityId)
+    if (!posComponent.coord.equals(pos)) {
+      positionMapper.get(helpers.playerEntityId).coord = pos
+      status(s"Set player starting position to $pos")
+      modified = true
+    }
   }
 }
