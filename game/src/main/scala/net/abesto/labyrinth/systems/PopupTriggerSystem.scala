@@ -3,7 +3,7 @@ package net.abesto.labyrinth.systems
 import com.artemis.annotations.AspectDescriptor
 import com.artemis.managers.TagManager
 import com.artemis.{Aspect, ComponentMapper}
-import net.abesto.labyrinth.components.{PopupTriggerComponent, PositionComponent}
+import net.abesto.labyrinth.components.{PopupComponent, PositionComponent}
 import net.abesto.labyrinth.events.HasWalkedEvent
 import net.abesto.labyrinth.fsm.Transitions
 import net.abesto.labyrinth.macros.{DeferredEventHandlerSystem, SubscribeDeferred}
@@ -16,10 +16,10 @@ class PopupTriggerSystem extends LabyrinthBaseSystem {
   var eventSystem: EventSystem = _
   var tagManager: TagManager = _
   var positionMapper: ComponentMapper[PositionComponent] = _
-  var popupTriggerMapper: ComponentMapper[PopupTriggerComponent] = _
+  var popupMapper: ComponentMapper[PopupComponent] = _
   var helpers: Helpers = _
 
-  @AspectDescriptor(all = Array(classOf[PositionComponent], classOf[PopupTriggerComponent]))
+  @AspectDescriptor(all = Array(classOf[PositionComponent], classOf[PopupComponent]))
   var popupTriggerAspect: Aspect.Builder = _
 
   @SubscribeDeferred
@@ -28,11 +28,7 @@ class PopupTriggerSystem extends LabyrinthBaseSystem {
     helpers.entityIdsSeq(popupTriggerAspect)
       .find(id => positionMapper.get(id).coord == position)
       .foreach(entityId => {
-        val trigger = popupTriggerMapper.get(entityId)
-        val lines = Source.fromURL(getClass.getResource(trigger.source)).getLines()
-        val title = lines.next()
-        val text = lines.mkString("\n")
-        eventSystem.dispatch(new Transitions.ShowPopupEvent(title, text))
+        eventSystem.dispatch(new Transitions.ShowPopupEvent(popupMapper.get(entityId)))
       })
   }
 }

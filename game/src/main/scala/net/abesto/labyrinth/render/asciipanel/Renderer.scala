@@ -9,7 +9,7 @@ class Renderer() extends RendererImpl(
   new MessageAreaFrame(
     0, 0,
     Constants.fullWidth, Constants.messageAreaHeight),
-  new Popup,
+  new PopupFrame,
   new PromptFrame(
     0, Constants.fullHeight - Constants.castingPromptHeight,
     Constants.fullWidth, Constants.castingPromptHeight),
@@ -17,5 +17,6 @@ class Renderer() extends RendererImpl(
   new EditorActionsFrame(
     Constants.mazeWidth, Constants.messageAreaHeight,
     Constants.sidebarWidth, Constants.mazeHeight
-  )
+  ),
+  new PopupEditorFrame
 )

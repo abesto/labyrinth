@@ -1,5 +1,7 @@
 package net.abesto.labyrinth.fsm
 
+import net.abesto.labyrinth.components.PopupComponent
+
 
 object States {
   sealed class State protected ()
@@ -14,7 +16,7 @@ object States {
   sealed class TileEditorState extends EditorState
   sealed class EditorExtendedModeState extends EditorState with PromptState
   sealed class ItemEditorState extends EditorState
-  sealed class PopupTitleEditorState extends EditorState with PromptState
+  sealed class PopupEditorState extends EditorState
 
   sealed class GameState extends State
   sealed class GameMazeState extends GameState
@@ -61,6 +63,9 @@ object Transitions {
   // Editor - item editor
   class OpenItemEditorEvent extends Transition[EditorState, ItemEditorState]
   class CloseItemEditorEvent extends Transition[ItemEditorState, EditorState]
+  // Editor - popup editor
+  class OpenPopupEditorEvent extends Transition[ItemEditorState, PopupEditorState]
+  class ClosePopupEditorEvent extends Transition[PopupEditorState, ItemEditorState]
 
   // Casting spells
   class SpellInputStartEvent extends Transition[GameMazeState, GameSpellInputState]
@@ -68,6 +73,6 @@ object Transitions {
   class SpellInputFinishEvent extends Transition[GameSpellInputState, GameMazeState]
 
   // Popups during game
-  class ShowPopupEvent(var title: String, var text: String) extends Transition[GameMazeState, GamePopupState]
+  class ShowPopupEvent(var popup: PopupComponent) extends Transition[GameMazeState, GamePopupState]
   class HidePopupEvent extends Transition[GamePopupState, GameMazeState]
 }

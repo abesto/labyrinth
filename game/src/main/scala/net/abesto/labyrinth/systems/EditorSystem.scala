@@ -10,8 +10,9 @@ import com.artemis.io.SaveFileFormat
 import com.artemis.managers.WorldSerializationManager
 import com.artemis.{Aspect, ComponentMapper}
 import net.abesto.labyrinth.components.LayerComponent.Layer
+import net.abesto.labyrinth.components.LayerComponent.Layer.Item
 import net.abesto.labyrinth.components.MazeHighlightComponent.Type.EditorMazeCursor
-import net.abesto.labyrinth.components.{PersistInMazeMarker, PositionComponent}
+import net.abesto.labyrinth.components.{PersistInMazeMarker, PopupComponent, PositionComponent}
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.InStates
 import net.abesto.labyrinth.fsm.States.EditorState
@@ -24,16 +25,21 @@ import squidpony.squidmath.Coord
 @InStates(Array(classOf[EditorState]))
 @DeferredEventHandlerSystem
 class EditorSystem extends LabyrinthBaseSystem {
+  import EditorSystem._
+
   var helpers: Helpers = _
   var eventSystem: EventSystem = _
   var mazeLoaderSystem: MazeLoaderSystem = _
   var positionMapper: ComponentMapper[PositionComponent] = _
+  var popupMapper: ComponentMapper[PopupComponent] = _
   var serialization: WorldSerializationManager = _
   var entityFactory: EntityFactory = _
 
-  // Transient state
+  // Transient state - open file
   var filename: Option[String] = None
   var modified: Boolean = false
+  // Transient state - popup editor
+  var popupEditorState: PopupEditorData = _
 
   val dateFormat = new SimpleDateFormat("HH:mm:ss")
   def date: String = dateFormat.format(new Date())
@@ -181,6 +187,7 @@ class EditorSystem extends LabyrinthBaseSystem {
   }
 
   def cursorSingleTile: Coord = helpers.highlight.get(EditorMazeCursor).ensuring(_.length == 1).head
+  def cursorSingleItem: Int = helpers.entityIdsAtPosition(Item, cursorSingleTile).ensuring(_.length == 1).head
 
   @SubscribeDeferred
   def setPlayerPosition(e: EditorSetPlayerPositionEvent): Unit = {
@@ -212,4 +219,29 @@ class EditorSystem extends LabyrinthBaseSystem {
   def closeItemEditor(e: CloseItemEditorEvent): Unit = {
     helpers.prompt.reset()
   }
+
+  def cursorSingleItemPopup: PopupComponent = popupMapper.get(cursorSingleItem)
+
+  @SubscribeDeferred
+  def openPopupEditor(e: OpenPopupEditorEvent): Unit = {
+    popupEditorState = PopupEditorData(new PopupComponent, Coord.get(0, 0), CursorState.Text)
+    popupEditorState.popup.title = cursorSingleItemPopup.title
+    popupEditorState.popup.text = cursorSingleItemPopup.text
+  }
+
+  @SubscribeDeferred
+  def popupEditorOperation(e: PopupEditorInputEvent): Unit = {
+    e.op(popupEditorState)
+  }
+}
+
+object EditorSystem {
+  object CursorState extends Enumeration {
+    type CursorState = Value
+    val Title, Text, Save, Cancel = Value
+  }
+
+  case class PopupEditorData(var popup: PopupComponent,
+                             var cursorPosition: Coord,
+                             var cursorState: CursorState.CursorState)
 }

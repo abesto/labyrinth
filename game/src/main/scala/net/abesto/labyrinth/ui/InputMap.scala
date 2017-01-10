@@ -79,6 +79,11 @@ object InputMap {
       upArrow -> MainMenuMoveEvent(_ - 1),
       downArrow -> MainMenuMoveEvent(_ + 1),
       enter -> new MainMenuSelectedEvent
+    ),
+    States[PopupEditorState] -> Map(
+      'x' -> PopupEditorInputEvent(s => {
+        s.popup.title += 'x'
+      })
     )
   )
 

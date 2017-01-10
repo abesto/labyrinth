@@ -19,7 +19,7 @@ object EventHandlerSystemMacros {
 
     val result = annottees map (_.tree) match {
       // Match a class, and expand.
-      case (q"$mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents { $self => ..$stats }") :: _ =>
+      case (q"$mods class $tpname[..$tparams] $ctorMods(...$paramss) extends { ..$earlydefns } with ..$parents { $self => ..$stats }") :: companions =>
         val newStats = stats.map {
           case q"@SubscribeDeferred def $tname[..$tparams]($arg: $eventType): $tpt = $expr" =>
             val lname = TermName(s"__listen${tname.toString}")
@@ -36,6 +36,7 @@ object EventHandlerSystemMacros {
             import net.mostlyoriginal.api.event.common.Subscribe
             ..$newStats
           }
+          ..$companions
         """
       // Not a class.
       case _ => c.abort(c.enclosingPosition, "Invalid annotation target: not a class")

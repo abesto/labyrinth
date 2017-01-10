@@ -12,7 +12,7 @@ class EntityFactory extends BaseSystem {
   protected lazy val bookArchetype: Archetype = new ArchetypeBuilder().add(
     classOf[PositionComponent],
     classOf[LayerComponent],
-    classOf[PopupTriggerComponent],
+    classOf[PopupComponent],
     classOf[TileComponent],
     classOf[PersistInMazeMarker]
   ).build(world)

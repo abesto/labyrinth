@@ -1,9 +1,9 @@
 package net.abesto.labyrinth
 
-import com.artemis.{ArchetypeBuilder, Component, World}
+import com.artemis.{Component, World}
 import net.abesto.labyrinth.Tiles.Kind._
 import net.abesto.labyrinth.components.LayerComponent.Layer
-import net.abesto.labyrinth.components.{LayerComponent, PopupTriggerComponent, PositionComponent}
+import net.abesto.labyrinth.components.PopupComponent
 import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
@@ -68,9 +68,9 @@ object Constants {
 
   def hasItem(es: EditorSystem): Boolean = es.helpers.entityIdsAtPosition(Layer.Item, es.cursorSingleTile).nonEmpty
   def hasNoItem(es: EditorSystem): Boolean = !hasItem(es)
-  def hasItemWith(cs: Class[_ <: Component]*)(es: EditorSystem): Boolean =
+  def hasItemWith[T <: Component](es: EditorSystem)(implicit mf: Manifest[T]): Boolean =
     es.helpers.entitiesAtPosition(Layer.Item, es.cursorSingleTile).exists(
-      entity => cs.forall(entity.getComponent(_) != null)
+      _.getComponent(mf.runtimeClass.asSubclass(classOf[Component])) != null
     )
 
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
@@ -90,6 +90,7 @@ object Constants {
     States[ItemEditorState] -> (cursorMazeActions ++ Seq(
       EditorAction('b', 'b', "Place book", EditorPlaceItemEvent(_.book), hasNoItem),
       EditorAction('x', 'x', "Remove item", new EditorRemoveItemEvent, hasItem),
+      EditorAction('p', 'p', "Edit popup", new OpenPopupEditorEvent, hasItemWith[PopupComponent]),
       EditorAction("ESC", 27, "Back", new CloseItemEditorEvent)
     )),
     States[EditorExtendedModeState] -> Seq(
