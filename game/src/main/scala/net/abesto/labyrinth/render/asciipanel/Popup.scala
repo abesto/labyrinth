@@ -2,31 +2,24 @@ package net.abesto.labyrinth.render.asciipanel
 
 import java.awt.Color
 
-import net.abesto.labyrinth.fsm.Transitions.{HidePopupEvent, ShowPopupEvent}
+import net.abesto.labyrinth.fsm.InStates
+import net.abesto.labyrinth.fsm.States.GamePopupState
+import net.abesto.labyrinth.fsm.Transitions.ShowPopupEvent
 import net.mostlyoriginal.api.event.common.Subscribe
 import squidpony.squidmath.Coord
 
+@InStates(Array(classOf[GamePopupState]))
 class Popup extends Frame(0, 0, 0, 0) {
-  var show: Boolean = false
   var title: String = ""
   var text: String = ""
 
   @Subscribe
   def show(e: ShowPopupEvent): Unit = {
-    show = true
     title = e.title
     text = e.text
   }
 
-  @Subscribe
-  def hide(e: HidePopupEvent): Unit = {
-    show = false
-  }
-
   def render(): Unit = {
-    if (!show) {
-      return
-    }
     val titleWidth = title.length + 4
     // at least two spaces per side
     val lines = text.replace("\n", "\n\n").split('\n')

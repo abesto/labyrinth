@@ -6,6 +6,7 @@ import com.artemis.Aspect
 import com.artemis.annotations.AspectDescriptor
 import com.artemis.io.SaveFileFormat
 import com.artemis.managers.{TagManager, WorldSerializationManager}
+import net.abesto.labyrinth.Constants
 import net.abesto.labyrinth.components.PersistInMazeMarker
 import net.abesto.labyrinth.events.{EditorMazeLoadedEvent, LoadMazeEvent, MessageEvent}
 import net.abesto.labyrinth.fsm.InStates
@@ -42,11 +43,11 @@ class MazeLoaderSystem extends LabyrinthBaseSystem {
         val actualPath: String = path(e.name)
         val maze = MazeBuilder.fromFile(actualPath).get
 
+        unload()
         val inputStream = new BufferedInputStream(new FileInputStream(s"$actualPath.json"))
         val saveFileFormat = serializationManager.load(inputStream, classOf[SaveFileFormat])
         inputStream.close()
 
-        unload()
         helpers.mazeComponent.maze = maze
         if (helpers.state.isActive[EditorState]) {
           eventSystem.dispatch(EditorMazeLoadedEvent(actualPath, maze, saveFileFormat.entities.size))

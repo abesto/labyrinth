@@ -6,18 +6,18 @@ import asciiPanel.AsciiPanel
 import com.artemis.World
 import squidpony.squidmath.Coord
 
-abstract class Frame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) {
+abstract class Frame(initialTopLeftX: Int, initialTopLeftY: Int, initialWidth: Int, initialHeight: Int) {
   var world: World = _
   var panel: AsciiPanel = _
 
-  var topLeft: Coord = Coord.get(topLeftX, topLeftY)
-  var size: Coord = Coord.get(width, height)
+  var topLeft: Coord = Coord.get(initialTopLeftX, initialTopLeftY)
+  var size: Coord = Coord.get(initialWidth, initialHeight)
   def bottomRight: Coord = topLeft.add(size)
 
   def write(c: Char, x: Int, y: Int, fg: Color, bg: Color): Unit = {
     val pos = topLeft.add(Coord.get(
-      if (x < 0) width + x else x,
-      if (y < 0) height + y else y))
+      if (x < 0) size.x + x else x,
+      if (y < 0) size.y + y else y))
     assert(pos.isWithinRectangle(
       topLeft.getX, topLeft.getY,
       bottomRight.getX, bottomRight.getY))
@@ -35,7 +35,9 @@ abstract class Frame(topLeftX: Int, topLeftY: Int, width: Int, height: Int) {
     }
 
   def clear(tl: Coord, br: Coord, color: Color): Unit = {
-    panel.clear(' ', tl.x, tl.y, br.x - tl.x, br.y - tl.y, color, color)
+    if (size.x > 0 && size.y > 0) {
+      panel.clear(' ', tl.x, tl.y, br.x - tl.x, br.y - tl.y, color, color)
+    }
   }
 
   def clear(color: Color): Unit = {
