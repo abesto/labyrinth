@@ -26,7 +26,7 @@ class PopupEditorFrame extends PopupFrame {
   override def write(c: Char, x: Int, y: Int, fg: Color, bg: Color): Unit = {
     val realBg =
       if (physicalCursorPosition.equals(Coord.get(x, y))) {
-        Color.darkGray
+        Color.white
       } else {
         bg
       }

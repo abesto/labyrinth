@@ -32,6 +32,9 @@ object Constants {
 
   val initialState: MainMenuState = States[MainMenuState]
 
+  val popupTextMaxWidth = 100
+  val popupTextMaxHeight = 30
+
   object Tags {
     val state = "STATE"
     val maze = "MAZE"
@@ -68,10 +71,11 @@ object Constants {
 
   def hasItem(es: EditorSystem): Boolean = es.helpers.entityIdsAtPosition(Layer.Item, es.cursorSingleTile).nonEmpty
   def hasNoItem(es: EditorSystem): Boolean = !hasItem(es)
-  def hasItemWith[T <: Component](es: EditorSystem)(implicit mf: Manifest[T]): Boolean =
-    es.helpers.entitiesAtPosition(Layer.Item, es.cursorSingleTile).exists(
-      _.getComponent(mf.runtimeClass.asSubclass(classOf[Component])) != null
-    )
+  def hasItemWith[T <: Component](p: T => Boolean)(es: EditorSystem)(implicit mf: Manifest[T]): Boolean =
+    es.helpers.entitiesAtPosition(Layer.Item, es.cursorSingleTile).exists(entity => {
+      val component = entity.getComponent(mf.runtimeClass.asSubclass(classOf[Component])).asInstanceOf[T]
+      component != null && p(component)
+    })
 
   lazy val editorActions: Map[EditorState, Seq[EditorAction]] = Map(
     States[EditorState] -> (cursorMazeActions ++ Seq(
@@ -90,7 +94,7 @@ object Constants {
     States[ItemEditorState] -> (cursorMazeActions ++ Seq(
       EditorAction('b', 'b', "Place book", EditorPlaceItemEvent(_.book), hasNoItem),
       EditorAction('x', 'x', "Remove item", new EditorRemoveItemEvent, hasItem),
-      EditorAction('p', 'p', "Edit popup", new OpenPopupEditorEvent, hasItemWith[PopupComponent]),
+      EditorAction('p', 'p', "Edit popup title", new OpenPopupEditorEvent),
       EditorAction("ESC", 27, "Back", new CloseItemEditorEvent)
     )),
     States[EditorExtendedModeState] -> Seq(

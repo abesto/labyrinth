@@ -9,6 +9,7 @@ import net.abesto.labyrinth.events._
 import net.abesto.labyrinth.fsm.States
 import net.abesto.labyrinth.fsm.States._
 import net.abesto.labyrinth.fsm.Transitions._
+import net.abesto.labyrinth.systems.EditorSystem
 import net.mostlyoriginal.api.event.common.{Event, EventSystem}
 import squidpony.squidmath.Coord
 
@@ -56,6 +57,27 @@ object InputMap {
       delete -> PromptInputEvent((s, cp) => (s.take(cp) + s.drop(cp + 1), cp))
     ))
 
+  protected def popupTitleEditorInputMap(ps: (InputMapKey, InputMapValue)*): InputMap =
+    32.to(126).map(_.toChar).map(c => ks(c) -> e(PopupEditorInputEvent(s => {
+      val t = s.popup.title
+      if (t.length < Constants.popupTextMaxWidth) {
+        s.popup.title = t.take(s.cursorPosition.getX) + c + t.drop(s.cursorPosition.getX)
+        s.cursorPosition = s.cursorPosition.setX(s.cursorPosition.getX + 1)
+      }
+    }))).toMap ++ ps.toMap
+
+  protected def popupTextEditorInputMap(ps: (InputMapKey, InputMapValue)*): InputMap =
+    32.to(126).map(_.toChar).map(c => ks(c) -> e(PopupEditorInputEvent(s => {
+      val t = s.popup.text
+      s.popup.text = t.take(s.cursorPosition.getX) + c + t.drop(s.cursorPosition.getX)
+      if (s.cursorPosition.getX == Constants.popupTextMaxWidth && s.cursorPosition.getY < Constants.popupTextMaxHeight) {
+        s.cursorPosition = Coord.get(0, s.cursorPosition.getY + 1)
+        s.popup.text += '\n'
+      } else if (s.cursorPosition.getX < Constants.popupTextMaxWidth) {
+        s.cursorPosition = s.cursorPosition.setX(s.cursorPosition.getX + 1)
+      }
+    }))).toMap ++ ps.toMap
+
   protected val rawInputMap: Map[State, InputMap] = Map(
     States[GameMazeState] -> Map(
       Seq(leftArrow, 'h') -> walk(-1, 0),
@@ -80,9 +102,39 @@ object InputMap {
       downArrow -> MainMenuMoveEvent(_ + 1),
       enter -> new MainMenuSelectedEvent
     ),
-    States[PopupEditorState] -> Map(
-      'x' -> PopupEditorInputEvent(s => {
-        s.popup.title += 'x'
+    States[PopupTitleEditorState] -> popupTitleEditorInputMap(
+      leftArrow -> PopupEditorInputEvent(s => s.cursorPosition = s.cursorPosition.setX(math.max(0, s.cursorPosition.getX - 1))),
+      rightArrow -> PopupEditorInputEvent(s => s.cursorPosition  = s.cursorPosition.setX(math.min(s.popup.title.length, s.cursorPosition.getX + 1))),
+      downArrow -> new PopupEditorTextEvent
+    ),
+    States[PopupTextEditorState] -> popupTextEditorInputMap(
+      leftArrow -> PopupEditorInputEvent(s => s.cursorPosition = s.cursorPosition.setX(math.max(0, s.cursorPosition.getX - 1))),
+      rightArrow -> PopupEditorInputEvent(s => s.cursorPosition  = s.cursorPosition.setX(math.min(s.popup.title.length, s.cursorPosition.getX + 1))),
+      ks(upArrow) -> ((w: World) =>
+        if (w.getSystem(classOf[EditorSystem]).popupEditorState.cursorPosition.getY == 0) {
+          new PopupEditorTitleEvent
+        } else {
+          PopupEditorInputEvent(s => s.cursorPosition = Coord.get(
+            math.min(s.cursorPosition.getX, s.popup.text.lines.drop(s.cursorPosition.getY - 1).next.length),
+            s.cursorPosition.getY - 1
+          ))
+        }
+      ),
+      ks(downArrow) -> ((w: World) => {
+        val s = w.getSystem(classOf[EditorSystem]).popupEditorState
+        if (s.cursorPosition.getY == s.popup.text.lines.length - 1) {
+          // Save button is on the left
+          if (s.cursorPosition.getX <= math.min(Constants.popupTextMaxWidth, s.popup.text.lines.map(_.length).max)) {
+            new PopupEditorHoverSaveEvent
+          } else {
+            new PopupEditorHoverCancelEvent
+          }
+        } else {
+          PopupEditorInputEvent(s => s.cursorPosition = Coord.get(
+            math.min(s.cursorPosition.getX, s.popup.text.lines.drop(s.cursorPosition.getY + 1).next.length),
+            s.cursorPosition.getY + 1
+          ))
+        }
       })
     )
   )

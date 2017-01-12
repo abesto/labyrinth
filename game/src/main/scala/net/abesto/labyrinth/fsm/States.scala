@@ -1,6 +1,7 @@
 package net.abesto.labyrinth.fsm
 
 import net.abesto.labyrinth.components.PopupComponent
+import net.mostlyoriginal.api.event.common.Event
 
 
 object States {
@@ -17,6 +18,11 @@ object States {
   sealed class EditorExtendedModeState extends EditorState with PromptState
   sealed class ItemEditorState extends EditorState
   sealed class PopupEditorState extends EditorState
+
+  sealed class PopupTitleEditorState extends PopupEditorState
+  sealed class PopupTextEditorState extends PopupEditorState
+  sealed class PopupEditorHoverSaveState extends PopupEditorState
+  sealed class PopupEditorHoverCancelState extends PopupEditorState
 
   sealed class GameState extends State
   sealed class GameMazeState extends GameState
@@ -48,7 +54,7 @@ object Transitions {
   // Main menu
   class NewGameEvent extends Transition[MainMenuState, GameMazeState]
   class LoadGameEvent extends Transition[MainMenuState, MainMenuState]  // Not implemented yet, come right back to the menu
-  class MainMenuQuitEvent extends Transition[MainMenuState, MainMenuState]   // Not implemented yet, come right back to the menu
+  class MainMenuQuitEvent extends Transition[MainMenuState, MainMenuState]  // Implemented in ApplicationMainFrame, not really a proper state transition
 
   // Editor - open, close
   class OpenEditorEvent extends Transition[MainMenuState, EditorState]
@@ -64,8 +70,13 @@ object Transitions {
   class OpenItemEditorEvent extends Transition[EditorState, ItemEditorState]
   class CloseItemEditorEvent extends Transition[ItemEditorState, EditorState]
   // Editor - popup editor
-  class OpenPopupEditorEvent extends Transition[ItemEditorState, PopupEditorState]
-  class ClosePopupEditorEvent extends Transition[PopupEditorState, ItemEditorState]
+  class OpenPopupEditorEvent extends Event
+  class PopupEditorTitleEvent extends Transition[EditorState, PopupTitleEditorState]
+  class PopupEditorTextEvent extends Transition[EditorState, PopupTextEditorState]
+  class PopupEditorHoverSaveEvent extends Transition[PopupTextEditorState, PopupEditorHoverSaveState]
+  class PopupEditorHoverCancelEvent extends Transition[PopupTextEditorState, PopupEditorHoverCancelState]
+  class PopupEditorCancelEvent extends Transition[PopupEditorState, ItemEditorState]
+  class PopupEditorSaveEvent extends Transition[PopupEditorState, ItemEditorState]
 
   // Casting spells
   class SpellInputStartEvent extends Transition[GameMazeState, GameSpellInputState]

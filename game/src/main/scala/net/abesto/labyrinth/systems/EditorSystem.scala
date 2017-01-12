@@ -227,6 +227,13 @@ class EditorSystem extends LabyrinthBaseSystem {
     popupEditorState = PopupEditorData(new PopupComponent, Coord.get(0, 0), CursorState.Text)
     popupEditorState.popup.title = cursorSingleItemPopup.title
     popupEditorState.popup.text = cursorSingleItemPopup.text
+    eventSystem.dispatch(
+      if (cursorSingleItemPopup.title.isEmpty) {
+        new PopupEditorTitleEvent
+      } else {
+        new PopupEditorTextEvent
+      }
+    )
   }
 
   @SubscribeDeferred

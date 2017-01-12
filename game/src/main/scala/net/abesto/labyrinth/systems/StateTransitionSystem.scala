@@ -7,10 +7,13 @@ import net.mostlyoriginal.api.event.common.Subscribe
 
 class StateTransitionSystem extends LabyrinthBaseSystem {
   var helpers: Helpers = _
+  var lastState: State = _
 
   @Subscribe
   def transition(t: Transition[_ <: State, _ <: State]): Unit = {
-    helpers.state.current = t(helpers.state.current)
+    val newState = t(helpers.state.current)
+    logger.trace(s"${helpers.state.current} -> $newState")
+    helpers.state.current = newState
     processSystem()
   }
 
